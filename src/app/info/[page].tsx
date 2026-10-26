@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { SmallChips } from '@/components/people';
 import { Body, Button, Card, ChoiceChips, ErrorText, Field, Screen, Title } from '@/components/ui';
 import { LICENSES, legalDoc, type DocId } from '@/data/legal';
-import { auth } from '@/services/auth';
+import { auth, authErrorKind } from '@/services/auth';
 import { support, type InquiryKind } from '@/services/support';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
@@ -119,11 +119,18 @@ function DeleteAccount() {
   const signOut = useApp((s) => s.signOut);
   const [step, setStep] = useState<'explain' | 'confirm' | 'deleting'>('explain');
   const [reason, setReason] = useState('none');
+  const [error, setError] = useState('');
 
   const remove = async () => {
     setStep('deleting');
-    await support.deleteAccount();
-    await auth.signOut();
+    setError('');
+    try {
+      await support.deleteAccount();
+      await auth.deleteAccount();
+    } catch (e) {
+      setStep('confirm');
+      return setError(authErrorKind(e) === 'requires-recent-login' ? t('info.deleteReauth') : t('info.deleteFailed'));
+    }
     signOut();
     router.replace('/welcome');
   };
@@ -145,6 +152,7 @@ function DeleteAccount() {
         <>
           <Body>{t('info.deleteConfirm')}</Body>
           <Button variant="danger" label={t('info.deleteNow')} loading={step === 'deleting'} onPress={remove} />
+          <ErrorText>{error}</ErrorText>
           <Button label={t('common.cancel')} onPress={() => router.back()} />
         </>
       )}

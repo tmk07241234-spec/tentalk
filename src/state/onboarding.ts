@@ -7,6 +7,7 @@ import type { SignInMethod } from '@/services/auth';
 /** Answers collected during account setup. Kept in memory only. */
 interface OnboardingDraft {
   method: SignInMethod | null;
+  uid: string | null;
   email: string | null;
   suggestedName: string;
   native: Lang | null;
@@ -16,7 +17,7 @@ interface OnboardingDraft {
   reset: () => void;
 }
 
-const empty = { method: null, email: null, suggestedName: '', native: null, learn: null, level: 3 as Level };
+const empty = { method: null, uid: null, email: null, suggestedName: '', native: null, learn: null, level: 3 as Level };
 
 export const useOnboarding = create<OnboardingDraft>()((set) => ({
   ...empty,

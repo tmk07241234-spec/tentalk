@@ -17,10 +17,13 @@ const ko: Translation = {
     uiLanguage: '표시 언어',
     signInFailed: '로그인하지 못했어요. 다시 시도해 주세요.',
   },
-  email: { title: '이메일로 계속하기', desc: '로그인용 6자리 코드를 보내 드려요. 비밀번호는 필요 없어요.', label: '이메일 주소', send: '코드 보내기', invalid: '이메일 주소 형식이 올바르지 않아요.' },
-  code: {
-    title: '인증 코드 입력', desc: '{{email}}(으)로 6자리 코드를 보냈어요.', label: '인증 코드', verify: '확인',
-    resend: '코드 다시 보내기', resent: '다시 보냈어요', change: '이메일 주소 변경', invalid: '6자리 숫자를 입력해 주세요.', wrong: '코드가 올바르지 않아요.',
+  email: {
+    title: '이메일로 계속하기', desc: '처음이라면 바로 계정을 만들어요. 계정이 있다면 로그인해요.',
+    label: '이메일 주소', password: '비밀번호', passwordHint: '8자 이상', continue: '계속',
+    invalid: '이메일 주소 형식이 올바르지 않아요.', shortPassword: '비밀번호는 8자 이상이어야 해요.',
+    wrongPassword: '비밀번호가 틀렸어요.', forgot: '비밀번호를 잊었어요', resetNeedEmail: '먼저 이메일 주소를 입력해 주세요.',
+    resetSent: '{{email}}(으)로 비밀번호 재설정 메일을 보냈어요. 메일이 오지 않으면 스팸함도 확인해 주세요.',
+    tooMany: '시도 횟수가 너무 많아요. 잠시 후 다시 시도해 주세요.', network: '인터넷에 연결할 수 없어요. 연결 상태를 확인해 주세요.',
   },
   birthday: {
     title: '생년월일', desc: 'Tentalk는 만 18세 이상만 이용할 수 있어요. 생년월일은 다른 사람에게 표시되지 않아요.',
@@ -157,7 +160,7 @@ const ko: Translation = {
     deleteTitle: '계정 삭제', deleteBody: '프로필, 음성 소개, 통화 기록, 팔로우, 신뢰 점수, 배지가 모두 삭제되며 되돌릴 수 없어요.',
     deleteSubscription: 'Tentalk Plus를 이용 중이라면 계정을 삭제해도 결제는 멈추지 않아요. 먼저 App Store 또는 Google Play의 구독 관리에서 해지해 주세요.',
     deleteReason: '괜찮다면 이유를 알려 주세요 (선택)', reasons: { none: '답하지 않음', noPartners: '상대를 찾을 수 없음', notUseful: '연습이 되지 않음', safety: '안전이 걱정됨', other: '기타' },
-    deleteContinue: '삭제 계속하기', deleteConfirm: '정말 삭제할까요? 이 작업은 되돌릴 수 없어요.', deleteNow: '계정 삭제하기',
+    deleteContinue: '삭제 계속하기', deleteConfirm: '정말 삭제할까요? 이 작업은 되돌릴 수 없어요.', deleteNow: '계정 삭제하기', deleteReauth: '보안을 위해 로그아웃 후 다시 로그인한 다음 삭제해 주세요.', deleteFailed: '삭제하지 못했어요. 잠시 후 다시 시도해 주세요.',
   },
   plus: {
     lead: '학습을 더 편하게. 통화 시간과 매칭은 무료 플랜과 같아요.', active: 'Tentalk Plus를 이용 중이에요. 고마워요!',

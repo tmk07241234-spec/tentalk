@@ -28,9 +28,9 @@ export default function ProfileStep() {
 
   const next = () => {
     if (!name.trim()) return setError(t('profileSetup.nameRequired'));
-    if (!draft.method || !draft.native || !draft.learn) return router.replace('/welcome');
+    if (!draft.method || !draft.uid || !draft.native || !draft.learn) return router.replace('/welcome');
     completeSetup({
-      account: { method: draft.method, email: draft.email },
+      account: { method: draft.method, uid: draft.uid, email: draft.email },
       profile: {
         name: name.trim(), color, photoUri, native: draft.native,
         learning: [{ lang: draft.learn, level: draft.level }], activeLearn: draft.learn,

@@ -87,7 +87,8 @@ export interface Settings {
 interface AppState {
   /** null = follow the device language. */
   uiLang: UiLang | null;
-  account: { method: SignInMethod; email: string | null } | null;
+  /** uid is the Firebase user id; accounts made before Firebase have none. */
+  account: { method: SignInMethod; uid?: string; email: string | null } | null;
   profile: Profile | null;
   onboarded: boolean;
   mode: Mode;

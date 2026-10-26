@@ -17,10 +17,13 @@ const en: Translation = {
     uiLanguage: 'Display language',
     signInFailed: 'Couldn’t sign in. Please try again.',
   },
-  email: { title: 'Continue with email', desc: 'We’ll send you a 6-digit login code. No password needed.', label: 'Email', send: 'Send code', invalid: 'Please enter a valid email address.' },
-  code: {
-    title: 'Enter the code', desc: 'We sent a 6-digit code to {{email}}.', label: 'Code', verify: 'Verify',
-    resend: 'Resend code', resent: 'Code sent again', change: 'Change email', invalid: 'Enter the 6-digit code.', wrong: 'That code is incorrect.',
+  email: {
+    title: 'Continue with email', desc: 'New here? We’ll create your account. Already have one? We’ll sign you in.',
+    label: 'Email', password: 'Password', passwordHint: 'At least 8 characters', continue: 'Continue',
+    invalid: 'Please enter a valid email address.', shortPassword: 'Your password must be at least 8 characters.',
+    wrongPassword: 'That password is incorrect.', forgot: 'Forgot password', resetNeedEmail: 'Enter your email address first.',
+    resetSent: 'We sent a password reset email to {{email}}. If it doesn’t arrive, check your spam folder.',
+    tooMany: 'Too many attempts. Please wait a moment and try again.', network: 'Can’t connect to the internet. Check your connection.',
   },
   birthday: {
     title: 'Date of birth', desc: 'You must be 18 or older to use Tentalk. Your date of birth is never shown to others.',
@@ -157,7 +160,7 @@ const en: Translation = {
     deleteTitle: 'Delete account', deleteBody: 'Your profile, voice intro, call history, follows, trust score, and badges will be deleted. This can’t be undone.',
     deleteSubscription: 'If you have Tentalk Plus, deleting your account does not stop billing. Cancel first in your App Store or Google Play subscription settings.',
     deleteReason: 'If you don’t mind, tell us why (optional)', reasons: { none: 'Prefer not to say', noPartners: 'Can’t find partners', notUseful: 'Not helpful for practice', safety: 'Safety concerns', other: 'Other' },
-    deleteContinue: 'Continue', deleteConfirm: 'Delete your account? This can’t be undone.', deleteNow: 'Delete account',
+    deleteContinue: 'Continue', deleteConfirm: 'Delete your account? This can’t be undone.', deleteNow: 'Delete account', deleteReauth: 'For your security, please log out and log in again, then delete your account.', deleteFailed: 'We couldn’t delete your account. Please try again later.',
   },
   plus: {
     lead: 'Make practice more comfortable. Call time and matching stay the same as the free plan.', active: 'You have Tentalk Plus. Thank you!',

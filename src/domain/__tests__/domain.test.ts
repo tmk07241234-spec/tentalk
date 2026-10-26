@@ -2,7 +2,7 @@ import { uiLangFromDevice } from '../languages';
 import { levelsClose } from '../levels';
 import { isEligible, pickRandomPartner, relation, type Candidate, type MatchPrefs } from '../matching';
 import { callOutcome, formatClock, reportPenalty, shouldShowAd, silenceNudge } from '../callRules';
-import { isAdult, isEmail, isLoginCode, toDate, validateLanguages } from '../validation';
+import { isAdult, isEmail, isPassword, toDate, validateLanguages } from '../validation';
 
 const me = { native: 'ja', learn: 'en' } as const;
 const cand = (over: Partial<Candidate>): Candidate => ({
@@ -89,11 +89,11 @@ describe('call rules', () => {
 });
 
 describe('validation', () => {
-  it('checks email and code format', () => {
+  it('checks email and password format', () => {
     expect(isEmail('a@b.co')).toBe(true);
     expect(isEmail('bad')).toBe(false);
-    expect(isLoginCode('123456')).toBe(true);
-    expect(isLoginCode('12345')).toBe(false);
+    expect(isPassword('12345678')).toBe(true);
+    expect(isPassword('1234567')).toBe(false);
   });
 
   it('rejects impossible dates and under-18s', () => {

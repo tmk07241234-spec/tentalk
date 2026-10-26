@@ -6,8 +6,10 @@ export function isEmail(value: string): boolean {
   return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value.trim());
 }
 
-export function isLoginCode(value: string): boolean {
-  return /^\d{6}$/.test(value);
+export const MIN_PASSWORD_LENGTH = 8;
+
+export function isPassword(value: string): boolean {
+  return value.length >= MIN_PASSWORD_LENGTH;
 }
 
 /** Returns a real date, or null when the parts do not form one (e.g. Feb 30). */

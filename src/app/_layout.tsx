@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 // Importing the i18n module also initialises i18next before any screen renders.
 import { deviceUiLang } from '@/i18n';
+import { auth } from '@/services/auth';
 import { useApp } from '@/state/store';
 import { useColors } from '@/theme/colors';
 
@@ -22,7 +23,9 @@ export default function RootLayout() {
   const c = useColors();
 
   useEffect(() => {
-    i18n.changeLanguage(uiLang ?? deviceUiLang());
+    const lang = uiLang ?? deviceUiLang();
+    i18n.changeLanguage(lang);
+    auth.setLanguage(lang);
   }, [uiLang, i18n]);
 
   if (!hydrated) return null;

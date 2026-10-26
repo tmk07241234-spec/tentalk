@@ -15,10 +15,13 @@ const ja = {
     uiLanguage: '表示言語',
     signInFailed: 'サインインできませんでした。もう一度お試しください。',
   },
-  email: { title: 'メールアドレスで続ける', desc: 'ログイン用の6桁のコードを送ります。パスワードは不要です。', label: 'メールアドレス', send: 'コードを送る', invalid: 'メールアドレスの形式が正しくありません。' },
-  code: {
-    title: '確認コードを入力', desc: '{{email}} に6桁のコードを送りました。', label: '確認コード', verify: '確認する',
-    resend: 'コードを再送信', resent: '再送信しました', change: 'メールアドレスを変更', invalid: '6桁の数字を入力してください。', wrong: 'コードが正しくありません。',
+  email: {
+    title: 'メールアドレスで続ける', desc: 'はじめての方は、このままアカウントを作成します。アカウントがある方はログインします。',
+    label: 'メールアドレス', password: 'パスワード', passwordHint: '8文字以上', continue: '続ける',
+    invalid: 'メールアドレスの形式が正しくありません。', shortPassword: 'パスワードは8文字以上にしてください。',
+    wrongPassword: 'パスワードが違います。', forgot: 'パスワードを忘れた', resetNeedEmail: '先にメールアドレスを入力してください。',
+    resetSent: '{{email}} にパスワード再設定のメールを送りました。届かない場合は迷惑メールフォルダも確認してください。',
+    tooMany: '試行回数が多すぎます。しばらく待ってからお試しください。', network: 'インターネットに接続できません。接続を確認してください。',
   },
   birthday: {
     title: '生年月日', desc: 'Tentalkは18歳以上の方が利用できます。生年月日は他の人には表示されません。',
@@ -155,7 +158,7 @@ const ja = {
     deleteTitle: 'アカウントを削除', deleteBody: 'プロフィール、自己紹介の音声、通話の履歴、フォロー、信頼スコア、バッジがすべて削除され、元に戻せません。',
     deleteSubscription: 'Tentalk Plus に加入している場合、アカウントを削除しても請求は止まりません。先に App Store または Google Play のサブスクリプション管理から解約してください。',
     deleteReason: '差し支えなければ理由を教えてください（任意）', reasons: { none: '答えない', noPartners: '相手が見つからない', notUseful: '練習にならない', safety: '安全面の不安', other: 'その他' },
-    deleteContinue: '削除に進む', deleteConfirm: '本当に削除しますか？この操作は取り消せません。', deleteNow: 'アカウントを削除する',
+    deleteContinue: '削除に進む', deleteConfirm: '本当に削除しますか？この操作は取り消せません。', deleteNow: 'アカウントを削除する', deleteReauth: 'セキュリティのため、一度ログアウトしてログインし直してから削除してください。', deleteFailed: '削除できませんでした。時間をおいてもう一度お試しください。',
   },
   plus: {
     lead: '学習をもっと快適に。通話の時間やマッチングは無料プランと同じです。', active: 'Tentalk Plus に加入しています。ありがとうございます！',

@@ -17,10 +17,13 @@ const es: Translation = {
     uiLanguage: 'Idioma de la app',
     signInFailed: 'No se pudo iniciar sesión. Inténtalo de nuevo.',
   },
-  email: { title: 'Continuar con correo', desc: 'Te enviaremos un código de 6 dígitos para entrar. No necesitas contraseña.', label: 'Correo electrónico', send: 'Enviar código', invalid: 'Introduce un correo electrónico válido.' },
-  code: {
-    title: 'Introduce el código', desc: 'Enviamos un código de 6 dígitos a {{email}}.', label: 'Código', verify: 'Verificar',
-    resend: 'Reenviar código', resent: 'Código reenviado', change: 'Cambiar correo', invalid: 'Introduce el código de 6 dígitos.', wrong: 'El código no es correcto.',
+  email: {
+    title: 'Continuar con correo', desc: '¿Eres nuevo? Crearemos tu cuenta. ¿Ya tienes una? Iniciarás sesión.',
+    label: 'Correo electrónico', password: 'Contraseña', passwordHint: 'Al menos 8 caracteres', continue: 'Continuar',
+    invalid: 'Introduce un correo electrónico válido.', shortPassword: 'La contraseña debe tener al menos 8 caracteres.',
+    wrongPassword: 'La contraseña no es correcta.', forgot: 'Olvidé mi contraseña', resetNeedEmail: 'Primero introduce tu correo electrónico.',
+    resetSent: 'Enviamos un correo para restablecer la contraseña a {{email}}. Si no llega, revisa la carpeta de spam.',
+    tooMany: 'Demasiados intentos. Espera un momento y vuelve a intentarlo.', network: 'No hay conexión a internet. Revisa tu conexión.',
   },
   birthday: {
     title: 'Fecha de nacimiento', desc: 'Debes tener 18 años o más para usar Tentalk. Tu fecha de nacimiento nunca se muestra a otras personas.',
@@ -157,7 +160,7 @@ const es: Translation = {
     deleteTitle: 'Eliminar cuenta', deleteBody: 'Se eliminarán tu perfil, tu presentación de voz, el historial de llamadas, los seguidos, la puntuación de confianza y las insignias. No se puede deshacer.',
     deleteSubscription: 'Si tienes Tentalk Plus, eliminar la cuenta no detiene el cobro. Cancela antes en la gestión de suscripciones de App Store o Google Play.',
     deleteReason: 'Si quieres, cuéntanos por qué (opcional)', reasons: { none: 'Prefiero no decirlo', noPartners: 'No encuentro compañeros', notUseful: 'No me ayuda a practicar', safety: 'Me preocupa la seguridad', other: 'Otro' },
-    deleteContinue: 'Continuar', deleteConfirm: '¿Eliminar tu cuenta? No se puede deshacer.', deleteNow: 'Eliminar cuenta',
+    deleteContinue: 'Continuar', deleteConfirm: '¿Eliminar tu cuenta? No se puede deshacer.', deleteNow: 'Eliminar cuenta', deleteReauth: 'Por seguridad, cierra sesión, vuelve a iniciarla y luego elimina tu cuenta.', deleteFailed: 'No pudimos eliminar tu cuenta. Inténtalo de nuevo más tarde.',
   },
   plus: {
     lead: 'Practica con más comodidad. El tiempo de llamada y el emparejamiento son iguales que en el plan gratuito.', active: 'Tienes Tentalk Plus. ¡Gracias!',
