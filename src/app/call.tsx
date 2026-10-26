@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ import { Pip } from '@/components/Pip';
 import { Badge, Confetti, SpeechBubble } from '@/components/progress';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Title } from '@/components/ui';
-import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, TOPICS } from '@/data/conversation';
+import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, questionsFor } from '@/data/conversation';
 import type { Partner } from '@/data/samplePartners';
 import {
   REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
@@ -53,7 +53,8 @@ export default function Call() {
   const [silence, setSilence] = useState(0);
   const [lang, setLang] = useState<Lang>(() =>
     (chosen ? profile.learning.find((l) => relation({ native: profile.native, learn: l.lang }, chosen))?.lang : undefined) ?? active?.lang ?? 'en');
-  const [topicIndex, setTopicIndex] = useState(0);
+  // The shared question card. The first one appears on its own; after that either person draws the next.
+  const [question, setQuestion] = useState<{ index: number; by: 'auto' | 'me' }>({ index: 0, by: 'auto' });
   const [cueDone, setCueDone] = useState(false);
   const [muted, setMuted] = useState(false);
   const [sheet, setSheet] = useState<null | 'leave' | 'report' | 'help'>(null);
@@ -62,7 +63,6 @@ export default function Call() {
   const [adClosed, setAdClosed] = useState(false);
   const [devSpeed, setDevSpeed] = useState(1);
   const [devSilent, setDevSilent] = useState(false);
-  const autoTopicDone = useRef(false);
 
   const me = { native: profile.native, learn: active?.lang ?? 'en' };
   // A chosen person may relate to any of my learning languages; random calls use the Home mode.
@@ -99,7 +99,7 @@ export default function Call() {
       .then((p) => {
         if (!p) return setPhase('none');
         setPartner(p);
-        setElapsed(0); setSilence(0); setCueDone(false); setTopicIndex(0); setLang(me.learn);
+        setElapsed(0); setSilence(0); setCueDone(false); setQuestion({ index: 0, by: 'auto' }); setLang(me.learn);
         setPhase('connected');
         // TODO(call service): join the audio room for this match here.
       })
@@ -118,16 +118,9 @@ export default function Call() {
     return () => clearInterval(id);
   }, [phase, devSpeed, devSilent]);
 
-  const topics = TOPICS[lang] ?? TOPICS.en!;
   const nudge = silenceNudge(silence);
-  // When silence first reaches 30 s, move to a new topic once.
-  useEffect(() => {
-    if (nudge && !autoTopicDone.current) {
-      autoTopicDone.current = true;
-      setTopicIndex((i) => i + 1);
-    }
-    if (!nudge) autoTopicDone.current = false;
-  }, [nudge]);
+  // TODO(call service): send the drawn question to the partner so both screens show it.
+  const drawQuestion = () => setQuestion((q) => ({ index: q.index + 1, by: 'me' }));
 
   const end = (r: EndReason) => {
     const o = callOutcome({ elapsedSeconds: elapsed, reason: r, kind, todayGain: app.todayGain });
@@ -267,7 +260,12 @@ export default function Call() {
   }
 
   if (!partner) return null;
-  const topic = topics[topicIndex % topics.length];
+  // Deep questions only when whoever is speaking their learning language can handle them.
+  const speakerLevel = lang === me.learn ? active?.level ?? 1 : partner.level;
+  const cards = questionsFor(lang, speakerLevel);
+  const card = cards[question.index % cards.length];
+  // Whoever drew the card answers second, so the other person starts.
+  const order = question.by === 'me' ? [partner.name, t('call.you')] : [t('call.you'), partner.name];
   const showCue = !buddy && app.settings.switchCue && !cueDone && elapsed >= SWITCH_CUE_SECONDS && required && !nudge;
 
   return (
@@ -304,16 +302,27 @@ export default function Call() {
           ) : (
             <>
               <Text style={{ color: '#fff', fontSize: 13 }}>{t('call.current', { lang: ENDONYM[lang] ?? t(`lang.${lang}`) })}</Text>
-              <GlassButton label={t('call.switchTo', { lang: ENDONYM[otherLang] ?? t(`lang.${otherLang}`) })} onPress={() => { setLang(otherLang); setCueDone(true); setTopicIndex(0); }} />
+              <GlassButton label={t('call.switchTo', { lang: ENDONYM[otherLang] ?? t(`lang.${otherLang}`) })} onPress={() => { setLang(otherLang); setCueDone(true); }} />
             </>
           )}
         </View>
 
-        <View style={{ backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 18, padding: space.md, gap: 4 }}>
-          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: '700' }}>{t('call.topic')}</Text>
-          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>{topic.q}</Text>
-          <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{topic.hint}</Text>
-          <View style={{ alignSelf: 'flex-start', marginTop: 6 }}><GlassButton label={t('call.nextTopic')} onPress={() => setTopicIndex((i) => i + 1)} /></View>
+        <View style={{ backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 18, padding: space.md, gap: 6 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm }}>
+            <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: '700' }}>{t('call.question')}</Text>
+            <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, flexShrink: 1 }}>{t('call.order', { first: order[0], second: order[1] })}</Text>
+          </View>
+          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16, lineHeight: 22 }}>{card.q}</Text>
+          {card.options ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+              <OptionChip label={card.options[0]} />
+              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>vs</Text>
+              <OptionChip label={card.options[1]} />
+            </View>
+          ) : null}
+          <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{card.hint}</Text>
+          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>{t('call.questionNote')}</Text>
+          <View style={{ alignSelf: 'flex-start', marginTop: 2 }}><GlassButton label={t('call.nextQuestion')} onPress={drawQuestion} /></View>
         </View>
 
         {kind === 'random' ? (
@@ -325,10 +334,11 @@ export default function Call() {
         ) : null}
 
         {nudge ? (
-          <Nudge text={nudge === 'example' ? t('call.silenceExample', { example: EXAMPLE_QUESTIONS[lang] ?? '' }) : t('call.silenceTopic')} />
+          <Nudge text={nudge === 'example' ? t('call.silenceExample', { example: EXAMPLE_QUESTIONS[lang] ?? '' }) : t('call.silenceTopic')}
+            actions={nudge === 'topic' ? [{ label: t('call.nextQuestion'), onPress: drawQuestion }] : []} />
         ) : showCue ? (
           <Nudge text={t('call.cue', { lang: t(`lang.${otherLang}`) })}
-            actions={[{ label: t('call.cueSwitch'), onPress: () => { setLang(otherLang); setCueDone(true); setTopicIndex(0); } }, { label: t('call.cueKeep'), onPress: () => setCueDone(true) }]} />
+            actions={[{ label: t('call.cueSwitch'), onPress: () => { setLang(otherLang); setCueDone(true); } }, { label: t('call.cueKeep'), onPress: () => setCueDone(true) }]} />
         ) : null}
 
         {__DEV__ ? (
@@ -399,6 +409,10 @@ function GlassButton({ label, onPress }: { label: string; onPress: () => void })
       <Text style={{ color: '#fff', fontWeight: '700', fontSize: 12 }}>{label}</Text>
     </Pressable>
   );
+}
+
+function OptionChip({ label }: { label: string }) {
+  return <Text style={{ color: '#fff', fontWeight: '700', fontSize: 13, backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 99, paddingHorizontal: 12, paddingVertical: 3, overflow: 'hidden' }}>{label}</Text>;
 }
 
 function Nudge({ text, actions = [] }: { text: string; actions?: { label: string; onPress: () => void }[] }) {
