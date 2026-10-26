@@ -46,6 +46,7 @@ const en: Translation = {
     s1: { title: '10 minutes, one on one', body: 'Every call is one on one. The first 10 minutes are required, then talk as long as you like. No chat, no timeline.' },
     s2: { title: 'Two modes', body: '“Practice buddy”: talk only in the language you both learn. “Language exchange”: talk with a native speaker, half in each language.' },
     s3: { title: 'Random or request', body: 'Random starts with one tap. If you both talk for 10 minutes, your profiles open up and you can follow each other. To talk with someone specific, send a request from their profile.' },
+    connect: { title: 'Talk first, then connect', body: 'Tentalk is a learning app for building your speaking skills. There are no likes, comments, or chat. You can follow someone only after a full 10-minute call, so if someone catches your eye, start by requesting a call.' },
     s4: { title: 'Trust score', body: 'It goes up when you finish 10 minutes and down if you hang up early. Only you see the number; others just see “Trusted”.' },
     s5: { title: 'Safe conversations', body: 'People who only want language practice get a “Language only” badge. Reporting and blocking are always one tap away. You must be 18 or older.' },
   },

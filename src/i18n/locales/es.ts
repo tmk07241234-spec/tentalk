@@ -46,6 +46,7 @@ const es: Translation = {
     s1: { title: '10 minutos, uno a uno', body: 'Las llamadas son siempre uno a uno. Los primeros 10 minutos son obligatorios; después, habla todo lo que quieras. Sin chat ni muro.' },
     s2: { title: 'Dos modos', body: '“Compañero de práctica”: habla solo en el idioma que ambos aprenden. “Intercambio”: habla con un nativo, mitad en cada idioma.' },
     s3: { title: 'Aleatorio o solicitud', body: 'Lo aleatorio empieza con un toque. Si los dos hablan 10 minutos, sus perfiles se abren y pueden seguirse. Para hablar con alguien concreto, envía una solicitud desde su perfil.' },
+    connect: { title: 'Primero hablar, luego conectar', body: 'Tentalk es una app para aprender a hablar. No hay «me gusta», comentarios ni chat. Solo puedes seguir a alguien después de una llamada completa de 10 minutos, así que si alguien te interesa, empieza por pedirle una llamada.' },
     s4: { title: 'Puntuación de confianza', body: 'Sube al completar 10 minutos y baja si cuelgas antes. Solo tú ves el número; los demás solo ven “De confianza”.' },
     s5: { title: 'Conversaciones seguras', body: 'Quien solo busca practicar idiomas lleva la insignia “Solo idiomas”. Denunciar y bloquear siempre está a un toque. Debes tener 18 años o más.' },
   },

@@ -13,6 +13,7 @@ const SLIDES: { key: string; pose: PipPose; tone: PipTone; tag: string }[] = [
   { key: 's1', pose: 'wave', tone: 'learn', tag: '10:00' },
   { key: 's2', pose: 'happy', tone: 'buddy', tag: '2' },
   { key: 's3', pose: 'cheer', tone: 'learn', tag: '▶' },
+  { key: 'connect', pose: 'think', tone: 'buddy', tag: '1:1' },
   { key: 's4', pose: 'happy', tone: 'buddy', tag: '+1' },
   { key: 's5', pose: 'listen', tone: 'native', tag: '✓' },
 ];

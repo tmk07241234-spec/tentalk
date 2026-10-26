@@ -39,3 +39,11 @@ Docs: https://docs.expo.dev/eas/index.md
 - If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
 - Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
 - Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+
+## Product principles (Tentalk)
+
+Tentalk is a learning app for speaking practice through 1:1 voice calls, not a social network. Keep every change consistent with these rules:
+
+- Connections are earned by talking: you can follow someone only after finishing a 10-minute call with them (`canFollow` in `src/domain/connections.ts`). From Find, Home or any profile you have not talked with, the only action is a 10-minute call request.
+- No chat, messages, likes, comments, reactions or timelines.
+- New users must be told this in the first-use guide (`src/app/(onboarding)/guide.tsx`, the `connect` slide) and the FAQ (`src/data/legal.ts`). When these rules change, update both in all four languages.
