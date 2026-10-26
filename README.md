@@ -111,7 +111,7 @@ src/
 | development | 開発用（`npm start` の画面をスマホで開く。Expo Go の代わり） | `npx eas-cli@latest build --profile development --platform android` |
 | preview | テスト版の .apk（そのまま端末に入れられる） | `npx eas-cli@latest build --profile preview --platform android` |
 | production | ストア提出用（.aab） | `npx eas-cli@latest build --profile production --platform android` |
-| Web | EAS Hosting に公開 | `npm run deploy:web`（本番の URL にするときは `npx eas-cli@latest deploy --prod`） |
+| Web | EAS Hosting に公開（本番: https://tentalk.expo.app ） | `npm run deploy:web`（本番の URL にするときは `npx eas-cli@latest deploy --prod`） |
 
 最初の1回だけ:
 
