@@ -7,9 +7,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tentalk.app"
     },
     "android": {
+      "package": "com.tentalk.app",
       "adaptiveIcon": {
         "backgroundColor": "#E8EEFF",
         "foregroundImage": "./assets/android-icon-foreground.png",

@@ -15,3 +15,6 @@ export function signInWithGoogle(auth: Auth) {
 export function reauthWithGoogle(user: User) {
   return reauthenticateWithPopup(user, provider());
 }
+
+/** The browser keeps no Google session of its own for the app. */
+export async function signOutOfGoogle() {}

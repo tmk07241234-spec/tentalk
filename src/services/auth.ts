@@ -11,7 +11,7 @@ import {
 } from 'firebase/auth';
 
 import { firebaseAuth } from './firebase';
-import { googleAvailable, reauthWithGoogle, signInWithGoogle } from './firebase/google';
+import { googleAvailable, reauthWithGoogle, signInWithGoogle, signOutOfGoogle } from './firebase/google';
 
 export type SignInMethod = 'apple' | 'google' | 'email';
 
@@ -43,6 +43,7 @@ export function authErrorKind(e: unknown): AuthErrorKind {
     case 'auth/network-request-failed': return 'network';
     case 'auth/popup-closed-by-user':
     case 'auth/cancelled-popup-request':
+    case 'tentalk/cancelled':
       return 'cancelled';
     case 'tentalk/unavailable':
     case 'auth/operation-not-allowed':
@@ -137,10 +138,12 @@ export const auth: AuthService = {
     }
     await removeData(user.uid);
     await deleteUser(user);
+    await signOutOfGoogle();
   },
 
   async signOut() {
     await firebaseSignOut(firebaseAuth);
+    await signOutOfGoogle();
   },
 
   setLanguage(lang) {

@@ -26,7 +26,7 @@
 
 | 部分 | いま | 本番 |
 |---|---|---|
-| サインイン | Firebase Authentication。メールとパスワードは全端末、Google は Web のみ | スマホの Google（開発ビルドが必要）、Apple（Apple Developer Program が必要） |
+| サインイン | Firebase Authentication。メールとパスワードは全端末、Google は Web と Android（`google-services.json` を入れたビルドのみ。`src/services/firebase/google.ts`） | iPhone の Google と Apple（Apple Developer Program が必要） |
 | 相手と相手探し | `src/data/samplePartners.ts` のサンプル、`src/services/matchmaking.ts` | サーバーの言語ペアごとの待機列とプロフィール |
 | リクエスト | `src/services/requests.ts`（オンラインは2.5秒後、オフラインは6秒後に承認） | サーバーとプッシュ通知 |
 | 通話の音声 | つながない（画面と時間だけ） | WebRTC（LiveKit などの通話サービス） |
@@ -102,6 +102,30 @@ src/
 
 ルールを変えたら、リポジトリのファイルとコンソールの両方を更新します。
 
+## EAS（ビルドと Web の公開）
+
+設定は `eas.json`（ビルドの種類）と `app.config.js`（`app.json` に Google ログインを足す）。アプリの ID は iOS / Android とも `com.tentalk.app`（ストアに出したあとは変えられません）。
+
+| 種類 | 使いみち | コマンド |
+|---|---|---|
+| development | 開発用（`npm start` の画面をスマホで開く。Expo Go の代わり） | `npx eas-cli@latest build --profile development --platform android` |
+| preview | テスト版の .apk（そのまま端末に入れられる） | `npx eas-cli@latest build --profile preview --platform android` |
+| production | ストア提出用（.aab） | `npx eas-cli@latest build --profile production --platform android` |
+| Web | EAS Hosting に公開 | `npm run deploy:web`（本番の URL にするときは `npx eas-cli@latest deploy --prod`） |
+
+最初の1回だけ:
+
+1. https://expo.dev/signup でアカウントを作り、`npx eas-cli@latest login`
+2. `npx eas-cli@latest init` でプロジェクトを作る（`app.json` に `extra.eas.projectId` と `owner` が入るのでコミットする）
+3. Android の最初のビルドで署名の鍵を EAS に作らせる（質問に Yes）。できた鍵の SHA-1 は `npx eas-cli@latest credentials -p android` で見られる
+4. Web を公開したら、その URL（`〜.expo.app`）を Firebase コンソールの Authentication → 設定 → 承認済みドメインに足す（足さないと Web の Google ログインが失敗する）
+
+Android の Google ログイン:
+
+1. Firebase コンソール → プロジェクトの設定 → アプリを追加 → Android。パッケージ名は `com.tentalk.app`、SHA-1 は上の手順3の値（Play で配るときは Play Console のアプリ署名鍵の SHA-1 も足す）
+2. ダウンロードした `google-services.json` をリポジトリの直下に置いてコミットする（秘密の値は入っていない）
+3. ビルドし直す。ファイルがあるときだけ Google ログインのプラグインが入り、ボタンが出る。Expo Go ではボタンは出ない
+
 ## 次のマイルストーン
 
 3. Firebase の導入: サインイン、アカウント削除、Firestore と Storage への保存（済）
@@ -109,6 +133,6 @@ src/
 5. 通知（リクエスト、通話タイム）、Tentalk Plus（アプリ内課金）と広告
 6. ストア申請の準備: 規約類、プライバシーの記載、スクリーンショット、TestFlight / 内部テスト
 
-次の作業: Expo のアカウントを作り、EAS で Web 版の公開と Android のテスト版を作る。スマホの Google ログイン（開発ビルドが必要）もここで対応。
+次の作業: 上の「EAS」の最初の1回をやる（アカウント作成、`eas init`、`google-services.json`）→ Web の公開と Android のテスト版（preview）で動作確認。コード側の準備（`eas.json`、開発ビルド、Android の Google ログイン）は済み。その後マイルストーン4へ。
 
 本番に向けて必要になるもの: Apple Developer Program（年額）、Google Play デベロッパー登録、Firebase プロジェクト、通話サービスのアカウント、EAS（Expo のビルドサービス）のアカウント。
