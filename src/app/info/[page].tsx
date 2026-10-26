@@ -118,19 +118,32 @@ function DeleteAccount() {
   const { t } = useTranslation();
   const c = useColors();
   const signOut = useApp((s) => s.signOut);
+  // Email accounts confirm with their password; Firebase requires a recent sign-in to delete.
+  const usesPassword = useApp((s) => s.account?.method === 'email' && !!s.account.uid);
   const [step, setStep] = useState<'explain' | 'confirm' | 'deleting'>('explain');
   const [reason, setReason] = useState('none');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const remove = async () => {
+    if (usesPassword && !password) return setError(t('info.deletePasswordRequired'));
     setStep('deleting');
     setError('');
     try {
-      await support.deleteAccount();
-      await auth.deleteAccount((uid) => cloud.remove(uid));
+      if (usesPassword) await auth.reauthenticate(password);
+      else if (auth.needsReauth()) await auth.reauthenticate();
     } catch (e) {
       setStep('confirm');
-      return setError(authErrorKind(e) === 'requires-recent-login' ? t('info.deleteReauth') : t('info.deleteFailed'));
+      const kind = authErrorKind(e);
+      if (kind === 'cancelled') return;
+      return setError(kind === 'wrong-password' ? t('email.wrongPassword') : kind === 'too-many-requests' ? t('email.tooMany') : t('info.deleteFailed'));
+    }
+    try {
+      await support.deleteAccount();
+      await auth.deleteAccount((uid) => cloud.remove(uid));
+    } catch {
+      setStep('confirm');
+      return setError(t('info.deleteFailed'));
     }
     signOut();
     router.replace('/welcome');
@@ -152,6 +165,10 @@ function DeleteAccount() {
       ) : (
         <>
           <Body>{t('info.deleteConfirm')}</Body>
+          {usesPassword ? (
+            <Field label={t('info.deletePassword')} value={password} onChangeText={(v) => { setPassword(v); setError(''); }}
+              secureTextEntry autoCapitalize="none" autoComplete="current-password" textContentType="password" onSubmitEditing={remove} />
+          ) : null}
           <Button variant="danger" label={t('info.deleteNow')} loading={step === 'deleting'} onPress={remove} />
           <ErrorText>{error}</ErrorText>
           <Button label={t('common.cancel')} onPress={() => router.back()} />

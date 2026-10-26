@@ -1,9 +1,17 @@
-import { GoogleAuthProvider, signInWithPopup, type Auth } from 'firebase/auth';
+import { GoogleAuthProvider, reauthenticateWithPopup, signInWithPopup, type Auth, type User } from 'firebase/auth';
 
 export const googleAvailable = true;
 
+const provider = () => {
+  const p = new GoogleAuthProvider();
+  p.setCustomParameters({ prompt: 'select_account' });
+  return p;
+};
+
 export function signInWithGoogle(auth: Auth) {
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-  return signInWithPopup(auth, provider);
+  return signInWithPopup(auth, provider());
+}
+
+export function reauthWithGoogle(user: User) {
+  return reauthenticateWithPopup(user, provider());
 }

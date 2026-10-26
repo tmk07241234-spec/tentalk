@@ -1,4 +1,4 @@
-import type { Auth, UserCredential } from 'firebase/auth';
+import type { Auth, User, UserCredential } from 'firebase/auth';
 
 /**
  * Native Google sign-in needs the Google Sign-In native module, which only runs in a
@@ -7,6 +7,12 @@ import type { Auth, UserCredential } from 'firebase/auth';
  */
 export const googleAvailable = false;
 
+const unavailable = () => Object.assign(new Error('Google sign-in is not available on this device yet.'), { code: 'tentalk/unavailable' });
+
 export async function signInWithGoogle(_auth: Auth): Promise<UserCredential> {
-  throw Object.assign(new Error('Google sign-in is not available on this device yet.'), { code: 'tentalk/unavailable' });
+  throw unavailable();
+}
+
+export async function reauthWithGoogle(_user: User): Promise<UserCredential> {
+  throw unavailable();
 }

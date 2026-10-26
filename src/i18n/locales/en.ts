@@ -160,7 +160,7 @@ const en: Translation = {
     deleteTitle: 'Delete account', deleteBody: 'Your profile, voice intro, call history, follows, trust score, and badges will be deleted. This can’t be undone.',
     deleteSubscription: 'If you have Tentalk Plus, deleting your account does not stop billing. Cancel first in your App Store or Google Play subscription settings.',
     deleteReason: 'If you don’t mind, tell us why (optional)', reasons: { none: 'Prefer not to say', noPartners: 'Can’t find partners', notUseful: 'Not helpful for practice', safety: 'Safety concerns', other: 'Other' },
-    deleteContinue: 'Continue', deleteConfirm: 'Delete your account? This can’t be undone.', deleteNow: 'Delete account', deleteReauth: 'For your security, please log out and log in again, then delete your account.', deleteFailed: 'We couldn’t delete your account. Please try again later.',
+    deleteContinue: 'Continue', deleteConfirm: 'Delete your account? This can’t be undone.', deleteNow: 'Delete account', deletePassword: 'Password (to confirm it’s you)', deletePasswordRequired: 'Please enter your password.', deleteFailed: 'We couldn’t delete your account. Please try again later.',
   },
   plus: {
     lead: 'Make practice more comfortable. Call time and matching stay the same as the free plan.', active: 'You have Tentalk Plus. Thank you!',

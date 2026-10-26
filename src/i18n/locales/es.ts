@@ -160,7 +160,7 @@ const es: Translation = {
     deleteTitle: 'Eliminar cuenta', deleteBody: 'Se eliminarán tu perfil, tu presentación de voz, el historial de llamadas, los seguidos, la puntuación de confianza y las insignias. No se puede deshacer.',
     deleteSubscription: 'Si tienes Tentalk Plus, eliminar la cuenta no detiene el cobro. Cancela antes en la gestión de suscripciones de App Store o Google Play.',
     deleteReason: 'Si quieres, cuéntanos por qué (opcional)', reasons: { none: 'Prefiero no decirlo', noPartners: 'No encuentro compañeros', notUseful: 'No me ayuda a practicar', safety: 'Me preocupa la seguridad', other: 'Otro' },
-    deleteContinue: 'Continuar', deleteConfirm: '¿Eliminar tu cuenta? No se puede deshacer.', deleteNow: 'Eliminar cuenta', deleteReauth: 'Por seguridad, cierra sesión, vuelve a iniciarla y luego elimina tu cuenta.', deleteFailed: 'No pudimos eliminar tu cuenta. Inténtalo de nuevo más tarde.',
+    deleteContinue: 'Continuar', deleteConfirm: '¿Eliminar tu cuenta? No se puede deshacer.', deleteNow: 'Eliminar cuenta', deletePassword: 'Contraseña (para confirmar que eres tú)', deletePasswordRequired: 'Introduce tu contraseña.', deleteFailed: 'No pudimos eliminar tu cuenta. Inténtalo de nuevo más tarde.',
   },
   plus: {
     lead: 'Practica con más comodidad. El tiempo de llamada y el emparejamiento son iguales que en el plan gratuito.', active: 'Tienes Tentalk Plus. ¡Gracias!',

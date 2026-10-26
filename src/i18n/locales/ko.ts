@@ -160,7 +160,7 @@ const ko: Translation = {
     deleteTitle: '계정 삭제', deleteBody: '프로필, 음성 소개, 통화 기록, 팔로우, 신뢰 점수, 배지가 모두 삭제되며 되돌릴 수 없어요.',
     deleteSubscription: 'Tentalk Plus를 이용 중이라면 계정을 삭제해도 결제는 멈추지 않아요. 먼저 App Store 또는 Google Play의 구독 관리에서 해지해 주세요.',
     deleteReason: '괜찮다면 이유를 알려 주세요 (선택)', reasons: { none: '답하지 않음', noPartners: '상대를 찾을 수 없음', notUseful: '연습이 되지 않음', safety: '안전이 걱정됨', other: '기타' },
-    deleteContinue: '삭제 계속하기', deleteConfirm: '정말 삭제할까요? 이 작업은 되돌릴 수 없어요.', deleteNow: '계정 삭제하기', deleteReauth: '보안을 위해 로그아웃 후 다시 로그인한 다음 삭제해 주세요.', deleteFailed: '삭제하지 못했어요. 잠시 후 다시 시도해 주세요.',
+    deleteContinue: '삭제 계속하기', deleteConfirm: '정말 삭제할까요? 이 작업은 되돌릴 수 없어요.', deleteNow: '계정 삭제하기', deletePassword: '비밀번호 (본인 확인용)', deletePasswordRequired: '비밀번호를 입력해 주세요.', deleteFailed: '삭제하지 못했어요. 잠시 후 다시 시도해 주세요.',
   },
   plus: {
     lead: '학습을 더 편하게. 통화 시간과 매칭은 무료 플랜과 같아요.', active: 'Tentalk Plus를 이용 중이에요. 고마워요!',

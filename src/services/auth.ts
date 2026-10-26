@@ -1,6 +1,8 @@
 import {
   createUserWithEmailAndPassword,
   deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -9,7 +11,7 @@ import {
 } from 'firebase/auth';
 
 import { firebaseAuth } from './firebase';
-import { googleAvailable, signInWithGoogle } from './firebase/google';
+import { googleAvailable, reauthWithGoogle, signInWithGoogle } from './firebase/google';
 
 export type SignInMethod = 'apple' | 'google' | 'email';
 
@@ -58,6 +60,10 @@ export interface AuthService {
   /** Signs in, or creates the account when the address is new. */
   continueWithEmail(email: string, password: string): Promise<SignInResult>;
   sendPasswordReset(email: string): Promise<void>;
+  /** True when Firebase will ask for a fresh sign-in before a sensitive change. */
+  needsReauth(): boolean;
+  /** Confirms the user again: with the password for email accounts, a popup for Google. */
+  reauthenticate(password?: string): Promise<void>;
   /**
    * Deletes the signed-in account, running `removeData` first while still signed in.
    * Fails with 'requires-recent-login', before anything is removed, when the last
@@ -108,11 +114,25 @@ export const auth: AuthService = {
     await sendPasswordResetEmail(firebaseAuth, email);
   },
 
+  needsReauth() {
+    const lastSignIn = Date.parse(firebaseAuth.currentUser?.metadata.lastSignInTime ?? '');
+    return !!firebaseAuth.currentUser && !(Date.now() - lastSignIn < RECENT_LOGIN_MS);
+  },
+
+  async reauthenticate(password) {
+    const user = firebaseAuth.currentUser;
+    if (!user) return;
+    if (password !== undefined && user.email) {
+      await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, password));
+    } else {
+      await reauthWithGoogle(user);
+    }
+  },
+
   async deleteAccount(removeData) {
     const user = firebaseAuth.currentUser;
     if (!user) return;
-    const lastSignIn = Date.parse(user.metadata.lastSignInTime ?? '');
-    if (!(Date.now() - lastSignIn < RECENT_LOGIN_MS)) {
+    if (auth.needsReauth()) {
       throw Object.assign(new Error('Sign in again to delete the account.'), { code: 'auth/requires-recent-login' });
     }
     await removeData(user.uid);

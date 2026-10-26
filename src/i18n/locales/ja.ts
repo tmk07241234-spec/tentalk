@@ -158,7 +158,7 @@ const ja = {
     deleteTitle: 'アカウントを削除', deleteBody: 'プロフィール、自己紹介の音声、通話の履歴、フォロー、信頼スコア、バッジがすべて削除され、元に戻せません。',
     deleteSubscription: 'Tentalk Plus に加入している場合、アカウントを削除しても請求は止まりません。先に App Store または Google Play のサブスクリプション管理から解約してください。',
     deleteReason: '差し支えなければ理由を教えてください（任意）', reasons: { none: '答えない', noPartners: '相手が見つからない', notUseful: '練習にならない', safety: '安全面の不安', other: 'その他' },
-    deleteContinue: '削除に進む', deleteConfirm: '本当に削除しますか？この操作は取り消せません。', deleteNow: 'アカウントを削除する', deleteReauth: 'セキュリティのため、一度ログアウトしてログインし直してから削除してください。', deleteFailed: '削除できませんでした。時間をおいてもう一度お試しください。',
+    deleteContinue: '削除に進む', deleteConfirm: '本当に削除しますか？この操作は取り消せません。', deleteNow: 'アカウントを削除する', deletePassword: 'パスワード（本人確認のため）', deletePasswordRequired: 'パスワードを入力してください。', deleteFailed: '削除できませんでした。時間をおいてもう一度お試しください。',
   },
   plus: {
     lead: '学習をもっと快適に。通話の時間やマッチングは無料プランと同じです。', active: 'Tentalk Plus に加入しています。ありがとうございます！',
