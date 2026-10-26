@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Avatar } from '@/components/Avatar';
+import { Pip } from '@/components/Pip';
+import { Badge, Confetti, SpeechBubble } from '@/components/progress';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Title } from '@/components/ui';
 import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, TOPICS } from '@/data/conversation';
@@ -14,6 +16,7 @@ import {
   REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
 import type { Lang } from '@/domain/languages';
+import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
 import { matchmaking } from '@/services/matchmaking';
 import { useActiveLearning, useApp } from '@/state/store';
 import { CALL_BG, space, useColors } from '@/theme/colors';
@@ -42,7 +45,7 @@ export default function Call() {
   const [muted, setMuted] = useState(false);
   const [sheet, setSheet] = useState<null | 'leave' | 'report' | 'help'>(null);
   const [reason, setReason] = useState<(typeof REASONS)[number] | null>(null);
-  const [outcome, setOutcome] = useState<(CallOutcome & { reason: EndReason }) | null>(null);
+  const [outcome, setOutcome] = useState<(CallOutcome & { reason: EndReason; badges: BadgeId[]; streakUp: number }) | null>(null);
   const [devSpeed, setDevSpeed] = useState(1);
   const [devSilent, setDevSilent] = useState(false);
   const autoTopicDone = useRef(false);
@@ -92,10 +95,14 @@ export default function Call() {
 
   const end = (r: EndReason) => {
     const o = callOutcome({ elapsedSeconds: elapsed, reason: r, kind: 'random', todayGain: app.todayGain });
-    app.applyCallResult({ trustDelta: o.trustDelta, todayGain: o.todayGain });
+    const before = app.callLog;
+    const after = [...before, { date: dayKey(new Date()), minutes: Math.round(elapsed / 60), completed: o.completedRequired }];
+    // The streak only goes up on the first completed call of the day.
+    const streakUp = o.completedRequired && !calledToday(before, new Date()) ? currentStreak(after, new Date()) : 0;
+    app.applyCallResult({ trustDelta: o.trustDelta, todayGain: o.todayGain, minutes: Math.round(elapsed / 60), completed: o.completedRequired });
     if (r === 'report' && partner) app.block(partner.id);
     // TODO(call service): leave the audio room; send the report with the reason to the server.
-    setOutcome({ ...o, reason: r });
+    setOutcome({ ...o, reason: r, badges: newBadges(before, after), streakUp });
     setSheet(null);
     setPhase('result');
   };
@@ -109,12 +116,14 @@ export default function Call() {
       <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
         {phase === 'searching' ? (
           <>
-            <ActivityIndicator size="large" color={c.learn} />
+            <View style={{ alignItems: 'center' }}><Pip pose="listen" tone={buddy ? 'buddy' : 'learn'} size={130} motion="bounce" /></View>
             <Title>{t('call.searching')}</Title>
+            <Body>{t('pip.searching')}</Body>
             <Body muted>{buddy ? t('call.condBuddy', { lang: t(`lang.${me.learn}`), native: t(`lang.${me.native}`) }) : t('call.condExchange', { learn: t(`lang.${me.learn}`), native: t(`lang.${me.native}`) })}</Body>
           </>
         ) : (
           <>
+            <View style={{ alignItems: 'center' }}><Pip pose="sleepy" tone={buddy ? 'buddy' : 'learn'} size={130} /></View>
             <Title>{t('call.noPartner')}</Title>
             <Body muted>{t('call.noPartnerBody')}</Body>
             <Button variant="primary" label={t('call.retry')} onPress={() => setPhase('searching')} />
@@ -128,11 +137,32 @@ export default function Call() {
   if (phase === 'result' && outcome && partner) {
     const titleKey = outcome.reason === 'report' ? 'call.resultReport' : outcome.trustDelta < 0 ? 'call.resultEarly' : 'call.resultDone';
     const following = app.following.includes(partner.id);
+    const celebrate = outcome.completedRequired && outcome.reason !== 'report';
+    const pipLine = outcome.reason === 'report' ? t('pip.report') : celebrate ? t('pip.done') : t('pip.early');
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }}>
-        <View style={{ padding: space.lg, gap: space.md }}>
+        {celebrate ? <Confetti /> : null}
+        <ScrollView contentContainerStyle={{ padding: space.lg, gap: space.md }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+            <Pip pose={outcome.reason === 'report' ? 'listen' : celebrate ? 'cheer' : 'wave'} tone={buddy ? 'buddy' : 'learn'} size={88} motion={celebrate ? 'bounce' : 'idle'} />
+            <SpeechBubble text={pipLine} />
+          </View>
           <Body small muted>{formatClock(elapsed)}</Body>
           <Title>{t(titleKey)}</Title>
+          {outcome.streakUp > 0 ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start', backgroundColor: c.nativeSoft, borderRadius: 99, paddingHorizontal: 12, paddingVertical: 5 }}>
+              <Ionicons name="flame" size={16} color={c.native} />
+              <Text style={{ color: c.native, fontWeight: '700' }}>{t('progress.streakUp', { n: outcome.streakUp })}</Text>
+            </View>
+          ) : null}
+          {outcome.badges.length ? (
+            <Card style={{ alignItems: 'center' }}>
+              <Body>{t('pip.newBadge')}</Body>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: space.md }}>
+                {outcome.badges.map((b) => <Badge key={b} id={b} earned size={64} />)}
+              </View>
+            </Card>
+          ) : null}
           <Body muted>
             {outcome.reason === 'report' ? t('call.resultReportBody')
               : outcome.trustDelta < 0 ? t('call.resultCooldown')
@@ -154,7 +184,7 @@ export default function Call() {
             <Button variant="primary" label={t('call.talkAgain')} onPress={() => setPhase('searching')} />
           ) : null}
           <Button label={t('call.home')} onPress={() => router.back()} />
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -294,7 +324,8 @@ function GlassButton({ label, onPress }: { label: string; onPress: () => void })
 
 function Nudge({ text, actions = [] }: { text: string; actions?: { label: string; onPress: () => void }[] }) {
   return (
-    <View accessibilityLiveRegion="polite" style={{ backgroundColor: '#FFD166', borderRadius: 14, padding: space.md, flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+    <View accessibilityLiveRegion="polite" style={{ backgroundColor: '#FFD166', borderRadius: 14, padding: space.sm, paddingRight: space.md, flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+      <Pip pose="think" size={40} motion="none" />
       <Text style={{ color: '#3a2a00', fontWeight: '700', fontSize: 12, flex: 1 }}>{text}</Text>
       {actions.map((a) => (
         <Pressable key={a.label} accessibilityRole="button" onPress={a.onPress} style={{ backgroundColor: '#3a2a00', borderRadius: 99, paddingHorizontal: 10, paddingVertical: 4 }}>

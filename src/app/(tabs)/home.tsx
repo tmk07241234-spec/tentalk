@@ -5,25 +5,34 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { LevelBars } from '@/components/level';
+import { Pip, type PipPose } from '@/components/Pip';
+import { GoalBar, SpeechBubble, WeekDots } from '@/components/progress';
 import { Body, Card, Eyebrow, Screen, Segmented, Title } from '@/components/ui';
 import type { Mode } from '@/domain/matching';
+import { WEEKLY_GOAL, currentStreak, homeMood, weekDays, weekSummary, type MascotMood } from '@/domain/progress';
 import { matchmaking } from '@/services/matchmaking';
 import { useActiveLearning, useApp } from '@/state/store';
-import { radius, space, useColors } from '@/theme/colors';
+import { CALL_BG, radius, space, useColors } from '@/theme/colors';
 
 /** Rough online counts per mode until the server reports real numbers. */
 const SAMPLE_ONLINE: Record<Mode, { count: number; wait: number }> = { buddy: { count: 2140, wait: 5 }, exchange: { count: 58, wait: 20 } };
 
+const MOOD_POSE: Record<MascotMood, PipPose> = { welcome: 'wave', done_today: 'happy', keep_streak: 'wave', goal_met: 'cheer', invite: 'think' };
+
 export default function Home() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, mode, setMode, setActiveLearn, settings, blocked } = useApp();
+  const { profile, mode, setMode, setActiveLearn, settings, blocked, callLog } = useApp();
   const active = useActiveLearning();
   if (!profile || !active) return null;
 
   const learn = t(`lang.${active.lang}`);
   const native = t(`lang.${profile.native}`);
   const buddy = mode === 'buddy';
+  const today = new Date();
+  const mood = homeMood(callLog, today);
+  const streak = currentStreak(callLog, today);
+  const week = weekSummary(callLog, today);
   const suggestions = matchmaking.onlineSuggestions(
     { native: profile.native, learn: active.lang },
     { mode, myLevel: active.level, languageOnlyPartners: settings.languageOnlyPartners, matchLevel: false, blocked: new Set(blocked) },
@@ -32,6 +41,11 @@ export default function Home() {
   return (
     <Screen>
       <Title>{t('home.hello', { name: profile.name })}</Title>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+        <Pip pose={MOOD_POSE[mood]} tone={buddy ? 'buddy' : 'learn'} size={76} />
+        <SpeechBubble text={t(`pip.${mood}`, { n: streak })} />
+      </View>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, flexWrap: 'wrap' }}>
         <Body small muted>{t('home.learning')}</Body>
@@ -58,7 +72,7 @@ export default function Home() {
       />
 
       <Pressable accessibilityRole="button" accessibilityLabel={t('home.startNow')} onPress={() => router.push({ pathname: '/call', params: { kind: 'random' } })}
-        style={({ pressed }) => ({ backgroundColor: buddy ? c.buddy : c.learn, borderRadius: radius.xl, padding: space.lg, gap: 4, transform: [{ scale: pressed ? 0.99 : 1 }] })}>
+        style={({ pressed }) => ({ backgroundColor: buddy ? CALL_BG.buddy : CALL_BG.learn, borderRadius: radius.xl, padding: space.lg, gap: 4, transform: [{ scale: pressed ? 0.99 : 1 }] })}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 99, paddingHorizontal: 8, overflow: 'hidden' }}>{t('home.random')}</Text>
           <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700', opacity: 0.9 }}>
@@ -79,13 +93,20 @@ export default function Home() {
         </Card>
       ) : null}
 
-      <Card style={{ flexDirection: 'row' }}>
-        {[[0, 'home.statCalls'], [0, 'home.statMinutes'], [0, 'home.statStreak']].map(([value, key]) => (
-          <View key={key} style={{ flex: 1, alignItems: 'center' }}>
-            <Text style={{ color: c.ink, fontSize: 20, fontWeight: '700' }}>{value}</Text>
-            <Text style={{ color: c.muted, fontSize: 11, textAlign: 'center' }}>{t(String(key))}</Text>
+      <Card style={{ gap: space.md }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Eyebrow>{t('progress.thisWeek')}</Eyebrow>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: streak ? c.nativeSoft : c.surface2, borderRadius: 99, paddingHorizontal: 10, paddingVertical: 3 }}>
+            <Ionicons name="flame" size={14} color={streak ? c.native : c.muted} />
+            <Text style={{ color: streak ? c.native : c.muted, fontWeight: '700', fontSize: 12 }}>{t('progress.streak', { n: streak })}</Text>
           </View>
-        ))}
+        </View>
+        <WeekDots days={weekDays(callLog, today)} />
+        <GoalBar value={week.completedCalls} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Body small muted>{t('progress.goal', { done: Math.min(week.completedCalls, WEEKLY_GOAL), goal: WEEKLY_GOAL })}</Body>
+          <Body small muted>{t('progress.minutes', { n: week.minutes })}</Body>
+        </View>
       </Card>
 
       <Card>

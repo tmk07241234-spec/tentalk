@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { LevelTag } from '@/components/level';
+import { Badge } from '@/components/progress';
 import { Body, Button, Card, ChoiceChips, Eyebrow, Screen, Title } from '@/components/ui';
 import { UI_LANGS, type UiLang } from '@/domain/languages';
+import { BADGES, earnedBadges } from '@/domain/progress';
 import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
 import { useApp } from '@/state/store';
@@ -16,7 +18,7 @@ type UiChoice = UiLang | 'device';
 export default function Me() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, trust, account, uiLang, setUiLang, signOut } = useApp();
+  const { profile, trust, account, uiLang, setUiLang, signOut, callLog, seedDemoProgress } = useApp();
   if (!profile) return null;
 
   const logout = async () => {
@@ -48,6 +50,14 @@ export default function Me() {
         <Eyebrow>{t('me.trust')}</Eyebrow>
         <Text style={{ color: c.ink, fontSize: 32, fontWeight: '700' }}>{trust}</Text>
         <Body small muted>{t('me.trustNote')}</Body>
+      </Card>
+
+      <Card>
+        <Eyebrow>{t('progress.badges')}</Eyebrow>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, justifyContent: 'space-between' }}>
+          {BADGES.map((b) => <Badge key={b} id={b} earned={earnedBadges(callLog).has(b)} size={48} />)}
+        </View>
+        {__DEV__ ? <Button small variant="ghost" label={t('progress.devSeed')} onPress={seedDemoProgress} /> : null}
       </Card>
 
       <Card>

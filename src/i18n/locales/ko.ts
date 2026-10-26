@@ -52,7 +52,6 @@ const ko: Translation = {
     random: '랜덤', online: '지금 {{people}}명 · 대기 약 {{seconds}}초', startNow: '랜덤으로 바로 시작',
     buddyWho: '{{lang}}를 배우는, 모국어가 다른 사람과 10분', exchangeWho: '{{native}}를 배우는 {{learn}} 원어민과 10분', cta: '눌러서 통화 시작',
     nudge: '프로필을 완성해 보세요. 취미, 대화 가능한 시간, 음성 소개를 추가하면 상대를 찾기 쉬워져요.', nudgeButton: '프로필 편집',
-    statCalls: '이번 주 통화', statMinutes: '이번 주 분', statStreak: '연속 일수',
     theme: '이번 주 테마', themeTitle: '추천하고 싶은 영화', themeSub: '이번 주 통화의 첫 번째 주제가 돼요',
     suggestedBuddy: '추천 (지금 대화 가능한 연습 친구)', suggestedExchange: '추천 (지금 대화 가능한 언어 교환 상대)', noOnline: '지금 온라인인 사람이 없어요',
   },
@@ -90,6 +89,18 @@ const ko: Translation = {
     account: '계정', signedInWith: '로그인 방법: {{method}}', logout: '로그아웃', deleteAccount: '계정 삭제', legal: '약관 및 정책',
     terms: '이용약관', privacy: '개인정보처리방침', guidelines: '커뮤니티 가이드라인', comingSoon: '다음 단계에서 구현해요',
   },
+  pip: {
+    name: '핍', welcome: '안녕, 나는 핍이야! 첫 10분, 같이 해 보자.', done_today: '오늘도 10분 대화했네. 이대로 계속 가자!',
+    keep_streak: '{{n}}일 연속 중! 오늘도 한 번 대화해서 기록을 이어 가자.', goal_met: '이번 주 목표 달성! 대화가 습관이 되어 가고 있어.',
+    invite: '이번 주 테마는 “추천하고 싶은 영화”야. 누군가에게 이야기해 볼래?', searching: '딱 맞는 상대를 찾고 있어…',
+    noPartner: '지금은 상대가 적은 것 같아. 조금 있다가 다시 해 보자.', done: '10분 완주! 정말 잘했어.', early: '다음엔 분명 10분 채울 수 있어.',
+    report: '알려 줘서 고마워. 나머지는 맡겨 줘.', newBadge: '배지를 얻었어!',
+  },
+  progress: {
+    thisWeek: '이번 주', goal: '목표 {{done}} / {{goal}}회', streak: '{{n}}일 연속', minutes: '{{n}}분', weekdays: '월,화,수,목,금,토,일',
+    weekA11y: '이번 주에 {{done}}일 대화했어요', badges: '배지', locked: '미획득', streakUp: '{{n}}일 연속 달성!', devSeed: '개발용: 진행 샘플 넣기',
+  },
+  badges: { first_call: '첫 10분', calls_10: '10회 완주', calls_50: '50회 완주', streak_3: '3일 연속', streak_7: '7일 연속', streak_30: '30일 연속', hour_1: '총 1시간', hours_10: '총 10시간' },
   placeholder: { body: '이 화면은 다음 단계에서 구현해요.' },
 };
 

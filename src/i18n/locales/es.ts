@@ -52,7 +52,6 @@ const es: Translation = {
     random: 'Aleatorio', online: '{{people}} en línea · espera ~{{seconds}} s', startNow: 'Empieza ya una llamada aleatoria',
     buddyWho: '10 min con otra persona que aprende {{lang}}', exchangeWho: '10 min con un nativo de {{learn}} que aprende {{native}}', cta: 'Toca para empezar la llamada',
     nudge: 'Completa tu perfil. Añade aficiones, horario y una presentación de voz para encontrar compañeros más fácilmente.', nudgeButton: 'Editar perfil',
-    statCalls: 'Llamadas esta semana', statMinutes: 'Minutos esta semana', statStreak: 'Días seguidos',
     theme: 'Tema de la semana', themeTitle: 'Una película que recomiendes', themeSub: 'Será el primer tema de las llamadas de esta semana',
     suggestedBuddy: 'Sugerencias (compañeros en línea ahora)', suggestedExchange: 'Sugerencias (intercambios en línea ahora)', noOnline: 'No hay nadie en línea ahora',
   },
@@ -90,6 +89,18 @@ const es: Translation = {
     account: 'Cuenta', signedInWith: 'Sesión iniciada con {{method}}', logout: 'Cerrar sesión', deleteAccount: 'Eliminar cuenta', legal: 'Términos y políticas',
     terms: 'Términos del servicio', privacy: 'Política de privacidad', guidelines: 'Normas de la comunidad', comingSoon: 'Llegará en la próxima etapa',
   },
+  pip: {
+    name: 'Pip', welcome: '¡Hola, soy Pip! Probemos juntos tus primeros 10 minutos.', done_today: 'Hoy ya hablaste 10 minutos. ¡Sigue así!',
+    keep_streak: '¡Llevas {{n}} días seguidos! Habla una vez hoy para no perder la racha.', goal_met: '¡Objetivo semanal cumplido! Hablar se está volviendo un hábito.',
+    invite: 'El tema de esta semana es “una película que recomiendes”. ¿Se lo cuentas a alguien?', searching: 'Buscando a la persona adecuada…',
+    noPartner: 'Ahora hay poca gente. Probemos un poco más tarde.', done: '¡10 minutos completados! Muy bien hecho.', early: 'La próxima vez llegarás a los 10 minutos.',
+    report: 'Gracias por avisarnos. Nosotros nos encargamos.', newBadge: '¡Ganaste una insignia!',
+  },
+  progress: {
+    thisWeek: 'Esta semana', goal: 'Objetivo {{done}} / {{goal}} llamadas', streak: '{{n}} días seguidos', minutes: '{{n}} min', weekdays: 'L,M,X,J,V,S,D',
+    weekA11y: 'Hablaste {{done}} días esta semana', badges: 'Insignias', locked: 'sin conseguir', streakUp: '¡Racha de {{n}} días!', devSeed: 'Dev: añadir progreso de ejemplo',
+  },
+  badges: { first_call: 'Primeros 10 minutos', calls_10: '10 llamadas', calls_50: '50 llamadas', streak_3: '3 días seguidos', streak_7: '7 días seguidos', streak_30: '30 días seguidos', hour_1: '1 hora en total', hours_10: '10 horas en total' },
   placeholder: { body: 'Esta pantalla llegará en la próxima etapa.' },
 };
 

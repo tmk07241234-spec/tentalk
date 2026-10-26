@@ -6,6 +6,7 @@ import { clampTrust } from '@/domain/callRules';
 import type { Lang, UiLang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import type { Mode } from '@/domain/matching';
+import { dayKey, type CallLogEntry } from '@/domain/progress';
 import type { SignInMethod } from '@/services/auth';
 
 export interface LearningLang {
@@ -44,6 +45,8 @@ interface AppState {
   trust: number;
   todayGain: number;
   callCount: number;
+  /** One entry per call; drives streaks, the weekly goal and badges. */
+  callLog: CallLogEntry[];
   following: string[];
   blocked: string[];
   settings: Settings;
@@ -53,7 +56,9 @@ interface AppState {
   finishGuide: () => void;
   setMode: (mode: Mode) => void;
   setActiveLearn: (lang: Lang) => void;
-  applyCallResult: (input: { trustDelta: number; todayGain: number }) => void;
+  applyCallResult: (input: { trustDelta: number; todayGain: number; minutes: number; completed: boolean }) => void;
+  /** Development only: fills the call log with a few days of calls. */
+  seedDemoProgress: () => void;
   follow: (id: string) => void;
   block: (id: string) => void;
   signOut: () => void;
@@ -68,6 +73,7 @@ const initial = {
   trust: 80,
   todayGain: 0,
   callCount: 0,
+  callLog: [] as CallLogEntry[],
   following: [] as string[],
   blocked: [] as string[],
   settings: { languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false },
@@ -82,8 +88,22 @@ export const useApp = create<AppState>()(
       finishGuide: () => set({ onboarded: true }),
       setMode: (mode) => set({ mode }),
       setActiveLearn: (lang) => set((s) => (s.profile ? { profile: { ...s.profile, activeLearn: lang } } : s)),
-      applyCallResult: ({ trustDelta, todayGain }) =>
-        set((s) => ({ trust: clampTrust(s.trust + trustDelta), todayGain, callCount: s.callCount + 1 })),
+      applyCallResult: ({ trustDelta, todayGain, minutes, completed }) =>
+        set((s) => ({
+          trust: clampTrust(s.trust + trustDelta),
+          todayGain,
+          callCount: s.callCount + 1,
+          callLog: [...s.callLog, { date: dayKey(new Date()), minutes, completed }],
+        })),
+      seedDemoProgress: () =>
+        set(() => {
+          const days = [1, 2, 3, 4, 8, 9].map((ago) => {
+            const d = new Date();
+            d.setDate(d.getDate() - ago);
+            return { date: dayKey(d), minutes: 14, completed: true };
+          });
+          return { callLog: days, callCount: days.length };
+        }),
       follow: (id) => set((s) => (s.following.includes(id) ? s : { following: [...s.following, id] })),
       block: (id) =>
         set((s) => ({ blocked: s.blocked.includes(id) ? s.blocked : [...s.blocked, id], following: s.following.filter((f) => f !== id) })),
@@ -93,7 +113,7 @@ export const useApp = create<AppState>()(
     {
       name: 'tentalk-app',
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: ({ setUiLang, completeSetup, finishGuide, setMode, setActiveLearn, applyCallResult, follow, block, signOut, ...data }) => data,
+      partialize: ({ setUiLang, completeSetup, finishGuide, setMode, setActiveLearn, applyCallResult, seedDemoProgress, follow, block, signOut, ...data }) => data,
     },
   ),
 );

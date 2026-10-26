@@ -4,17 +4,18 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Pip, type PipPose, type PipTone } from '@/components/Pip';
 import { Button } from '@/components/ui';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
-const SLIDES = [
-  { key: 's1', mark: '10:00', color: '#2D55E0' },
-  { key: 's2', mark: '2', color: '#13836A' },
-  { key: 's3', mark: '▶', color: '#7B4BC9' },
-  { key: 's4', mark: '+1', color: '#1F8A5B' },
-  { key: 's5', mark: '✓', color: '#D6402A' },
-] as const;
+const SLIDES: { key: string; pose: PipPose; tone: PipTone; tag: string }[] = [
+  { key: 's1', pose: 'wave', tone: 'learn', tag: '10:00' },
+  { key: 's2', pose: 'happy', tone: 'buddy', tag: '2' },
+  { key: 's3', pose: 'cheer', tone: 'learn', tag: '▶' },
+  { key: 's4', pose: 'happy', tone: 'buddy', tag: '+1' },
+  { key: 's5', pose: 'listen', tone: 'native', tag: '✓' },
+];
 
 /** Shown once after sign-up, and again from Me → How to use. */
 export default function Guide() {
@@ -36,9 +37,10 @@ export default function Guide() {
         <Text style={{ color: c.muted, textDecorationLine: 'underline' }}>{t('common.skip')}</Text>
       </Pressable>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={{ width: 180, height: 180, borderRadius: 90, backgroundColor: slide.color + '24', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: slide.color + '40', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: slide.color, fontSize: slide.mark.length > 2 ? 36 : 44, fontWeight: '700' }}>{slide.mark}</Text>
+        <View style={{ width: 220, height: 220, borderRadius: 110, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center' }}>
+          <Pip key={slide.key} pose={slide.pose} tone={slide.tone} size={160} />
+          <View style={{ position: 'absolute', right: 8, top: 18, backgroundColor: c.ink, borderRadius: 99, paddingHorizontal: 10, paddingVertical: 3 }}>
+            <Text style={{ color: c.bg, fontWeight: '700', fontSize: 13 }}>{slide.tag}</Text>
           </View>
         </View>
       </View>

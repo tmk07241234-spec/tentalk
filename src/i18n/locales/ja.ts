@@ -50,7 +50,6 @@ const ja = {
     random: 'ランダム', online: 'いま{{people}}人・待ち時間 約{{seconds}}秒', startNow: 'ランダムですぐに開始',
     buddyWho: '{{lang}}を学ぶ、母語が違う人と10分', exchangeWho: '{{learn}}ネイティブで{{native}}を学ぶ人と10分', cta: 'タップして通話を始める',
     nudge: 'プロフィールを完成させましょう。趣味、話せる時間帯、自己紹介の音声を追加すると、相手が見つかりやすくなります。', nudgeButton: 'プロフィールを編集',
-    statCalls: '今週の通話', statMinutes: '今週の分数', statStreak: '連続日数',
     theme: '今週のテーマ', themeTitle: 'おすすめの映画', themeSub: '今週の通話では最初のトピックになります',
     suggestedBuddy: 'おすすめ（いま話せる練習仲間）', suggestedExchange: 'おすすめ（いま話せる言語交換の相手）', noOnline: 'いまオンラインの人はいません',
   },
@@ -88,6 +87,18 @@ const ja = {
     account: 'アカウント', signedInWith: 'ログイン方法: {{method}}', logout: 'ログアウト', deleteAccount: 'アカウントを削除', legal: '規約とポリシー',
     terms: '利用規約', privacy: 'プライバシーポリシー', guidelines: 'コミュニティガイドライン', comingSoon: '次の段階で実装します',
   },
+  pip: {
+    name: 'ピップ', welcome: 'はじめまして、ピップです！最初の10分、いっしょに行ってみよう。', done_today: '今日も10分話せたね。この調子！',
+    keep_streak: '{{n}}日連続中！今日も1回話して記録をのばそう。', goal_met: '今週の目標クリア！話すのが習慣になってきたね。',
+    invite: '今週のテーマは「おすすめの映画」。誰かに話してみない？', searching: 'ぴったりの相手を探してるよ…',
+    noPartner: 'いまは相手が少ないみたい。少し時間をおいてみよう。', done: '10分完走！よくがんばったね。', early: '次はきっと10分いけるよ。',
+    report: '知らせてくれてありがとう。あとはまかせてね。', newBadge: 'バッジをゲットしたよ！',
+  },
+  progress: {
+    thisWeek: '今週', goal: '目標 {{done}} / {{goal}} 回', streak: '{{n}}日連続', minutes: '{{n}}分', weekdays: '月,火,水,木,金,土,日',
+    weekA11y: '今週は{{done}}日話しました', badges: 'バッジ', locked: '未獲得', streakUp: '連続 {{n}}日に！', devSeed: '開発用: 進捗のサンプルを入れる',
+  },
+  badges: { first_call: 'はじめての10分', calls_10: '10回完走', calls_50: '50回完走', streak_3: '3日連続', streak_7: '7日連続', streak_30: '30日連続', hour_1: '合計1時間', hours_10: '合計10時間' },
   placeholder: { body: 'この画面は次の段階で実装します。' },
 };
 

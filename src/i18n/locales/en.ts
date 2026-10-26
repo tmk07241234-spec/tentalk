@@ -52,7 +52,6 @@ const en: Translation = {
     random: 'Random', online: '{{people}} online · ~{{seconds}}s wait', startNow: 'Start a random call now',
     buddyWho: '10 min with a fellow {{lang}} learner', exchangeWho: '10 min with a native {{learn}} speaker learning {{native}}', cta: 'Tap to start a call',
     nudge: 'Complete your profile. Add hobbies, available hours, and a voice intro to find partners more easily.', nudgeButton: 'Edit profile',
-    statCalls: 'Calls this week', statMinutes: 'Minutes this week', statStreak: 'Day streak',
     theme: 'This week’s theme', themeTitle: 'A movie you’d recommend', themeSub: 'It’s the first topic in this week’s calls',
     suggestedBuddy: 'Suggested (practice buddies online now)', suggestedExchange: 'Suggested (exchange partners online now)', noOnline: 'No one is online right now',
   },
@@ -90,6 +89,18 @@ const en: Translation = {
     account: 'Account', signedInWith: 'Signed in with {{method}}', logout: 'Log out', deleteAccount: 'Delete account', legal: 'Terms and policies',
     terms: 'Terms of Service', privacy: 'Privacy Policy', guidelines: 'Community guidelines', comingSoon: 'Coming in the next stage',
   },
+  pip: {
+    name: 'Pip', welcome: 'Hi, I’m Pip! Let’s try your first 10 minutes together.', done_today: 'You talked for 10 minutes today. Keep it up!',
+    keep_streak: '{{n}}-day streak! Talk once today to keep it going.', goal_met: 'Weekly goal done! Talking is becoming a habit.',
+    invite: 'This week’s theme is “a movie you’d recommend.” Want to tell someone?', searching: 'Looking for the right partner…',
+    noPartner: 'Not many people around right now. Let’s try again a bit later.', done: '10 minutes done! Great job.', early: 'You’ll make it to 10 minutes next time.',
+    report: 'Thanks for telling us. We’ll take it from here.', newBadge: 'You earned a badge!',
+  },
+  progress: {
+    thisWeek: 'This week', goal: 'Goal {{done}} / {{goal}} calls', streak: '{{n}}-day streak', minutes: '{{n}} min', weekdays: 'M,T,W,T,F,S,S',
+    weekA11y: 'You talked on {{done}} days this week', badges: 'Badges', locked: 'not earned yet', streakUp: 'Streak: {{n}} days!', devSeed: 'Dev: add sample progress',
+  },
+  badges: { first_call: 'First 10 minutes', calls_10: '10 calls', calls_50: '50 calls', streak_3: '3-day streak', streak_7: '7-day streak', streak_30: '30-day streak', hour_1: '1 hour total', hours_10: '10 hours total' },
   placeholder: { body: 'This screen comes in the next stage.' },
 };
 

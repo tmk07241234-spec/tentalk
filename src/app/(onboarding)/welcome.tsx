@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
-import { AppMark } from '@/components/AppMark';
+import { Pip } from '@/components/Pip';
 import { Body, ChoiceChips, ErrorText, Screen, Title } from '@/components/ui';
 import { UI_LANGS, type UiLang } from '@/domain/languages';
 import { auth, type SignInResult } from '@/services/auth';
@@ -49,7 +49,7 @@ export default function Welcome() {
         onChange={setUiLang}
       />
       <View style={{ alignItems: 'center', paddingVertical: space.xl, gap: space.md }}>
-        <AppMark size={88} />
+        <Pip pose="wave" size={130} />
         <Title>{t('welcome.title')}</Title>
         <Body muted style={{ textAlign: 'center' }}>{t('welcome.tagline')}</Body>
       </View>
