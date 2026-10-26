@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { clampTrust } from '@/domain/callRules';
+import { canFollow } from '@/domain/connections';
 import type { Lang, UiLang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import type { Mode } from '@/domain/matching';
@@ -100,6 +101,11 @@ export interface AppState {
   /** One entry per call; drives streaks, the weekly goal and badges. */
   callLog: CallLogEntry[];
   following: string[];
+  /**
+   * People who follow me. Comes from the server once it exists; until then the call
+   * stand-in fills it (`src/services/connections.ts`).
+   */
+  followers: string[];
   blocked: string[];
   settings: Settings;
   history: HistoryEntry[];
@@ -120,8 +126,10 @@ export interface AppState {
   applyCallResult: (input: { trustDelta: number; todayGain: number; minutes: number; completed: boolean; cooldownMinutes: number }) => void;
   /** Development only: fills the call log with a few days of calls. */
   seedDemoProgress: () => void;
+  /** Only works for someone I finished a 10-minute call with (see canFollow). */
   follow: (id: string) => void;
   unfollow: (id: string) => void;
+  addFollower: (id: string) => void;
   block: (id: string) => void;
   unblock: (id: string) => void;
   updateProfile: (patch: Partial<Profile>) => void;
@@ -147,6 +155,7 @@ const initial = {
   callCount: 0,
   callLog: [] as CallLogEntry[],
   following: [] as string[],
+  followers: [] as string[],
   blocked: [] as string[],
   settings: { languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false } as Settings,
   history: [] as HistoryEntry[],
@@ -192,12 +201,14 @@ export const useApp = create<AppState>()(
           });
           return { callLog: days, callCount: days.length };
         }),
-      follow: (id) => set((s) => (s.following.includes(id) ? s : { following: [...s.following, id] })),
+      follow: (id) => set((s) => (s.following.includes(id) || !canFollow(s.history, id) ? s : { following: [...s.following, id] })),
       unfollow: (id) => set((s) => ({ following: s.following.filter((f) => f !== id) })),
+      addFollower: (id) => set((s) => (s.followers.includes(id) || s.blocked.includes(id) ? s : { followers: [...s.followers, id] })),
       block: (id) =>
         set((s) => ({
           blocked: s.blocked.includes(id) ? s.blocked : [...s.blocked, id],
           following: s.following.filter((f) => f !== id),
+          followers: s.followers.filter((f) => f !== id),
           requests: s.requests.filter((r) => r.partnerId !== id),
         })),
       unblock: (id) => set((s) => ({ blocked: s.blocked.filter((b) => b !== id) })),

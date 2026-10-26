@@ -4,7 +4,7 @@ const es: Translation = {
   common: { next: 'Siguiente', back: 'Atrás', skip: 'Omitir', start: 'Empezar', close: 'Cerrar', cancel: 'Cancelar', save: 'Guardar', step: 'Paso {{n}} de {{total}}' },
   lang: { ja: 'japonés', en: 'inglés', ko: 'coreano', es: 'español', pt: 'portugués', vi: 'vietnamita', de: 'alemán' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
-  tabs: { home: 'Inicio', find: 'Buscar', notifications: 'Avisos', history: 'Historial', me: 'Yo' },
+  tabs: { home: 'Inicio', find: 'Buscar', connections: 'Contactos', notifications: 'Avisos', history: 'Historial', me: 'Yo' },
   welcome: {
     title: 'Te damos la bienvenida a Tentalk',
     tagline: 'Aprende a hablar con llamadas uno a uno de 10 minutos',
@@ -51,7 +51,6 @@ const es: Translation = {
   },
   home: {
     paused: 'Como colgaste antes de tiempo, las llamadas aleatorias están en pausa {{m}} min más. Las solicitudes desde perfiles siguen funcionando.',
-    following: 'Siguiendo', noFollowing: 'Aquí aparecen las personas que sigas tras una llamada aleatoria de 10 minutos o desde Buscar.',
     hello: 'Buenas noches, {{name}}', learning: 'Aprendiendo', add: '+ Añadir',
     buddy: 'Compañero de práctica', exchange: 'Intercambio', buddySub: 'Solo en {{lang}}', exchangeSub: 'Mitad {{learn}}, mitad {{native}}',
     random: 'Aleatorio', online: '{{people}} en línea · espera ~{{seconds}} s', startNow: 'Empieza ya una llamada aleatoria',
@@ -116,6 +115,7 @@ const es: Translation = {
     note: 'Sin número de seguidores ni rankings de popularidad. No se muestra a quien está en una llamada.',
   },
   profileView: {
+    followAfterCall: 'Solo puedes seguir a alguien después de una llamada completa de 10 minutos. Empieza hablando.',
     offline: 'Desconectado', nextAvailable: 'Disponible: {{hours}}', localTime: 'Hora local {{time}}', learning: 'Aprendiendo', hours: 'Horario disponible', hoursMine: '{{hours}} (tu hora)',
     calls: '{{n}} llamadas completadas', commonHobbies: 'Aficiones en común', modeBuddy: 'Como compañeros de práctica, hablarán solo en {{lang}} durante 10 minutos.', modeExchange: 'Como intercambio, hablarán mitad en {{learn}} y mitad en {{native}}.',
     requestOnline: 'Pedir una llamada de 10 minutos', requestOffline: 'Enviar solicitud', requested: 'Solicitud enviada',
@@ -132,6 +132,13 @@ const es: Translation = {
     followed: '{{name}} empezó a seguirte', accepted: '{{name}} aceptó tu solicitud', call: 'Llamar', incoming: '{{name}} quiere hablar 10 minutos',
     accept: 'Aceptar y llamar', decline: 'Ahora no', expired: 'Caducada', done: 'Atendida', reportResult: 'Revisamos tu denuncia. Se confirmó una infracción y tomamos medidas.',
     justNow: 'Ahora mismo', minutes: 'hace {{n}} min', hours: 'hace {{n}} h', days: 'hace {{n}} d', devIncoming: 'Dev: recibir una solicitud',
+  },
+  connections: {
+    title: 'Contactos', note: 'Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos: tus contactos crecen hablando.',
+    mutual: 'Mutuos', following: 'Siguiendo', followers: 'Seguidores', mutualTag: 'Mutuo',
+    empty_mutual: 'Aquí aparecen las personas que se siguen contigo.',
+    empty_following: 'Sigue a alguien tras una llamada completa de 10 minutos y aparecerá aquí.',
+    empty_followers: 'Aquí aparecen las personas que te siguen.',
   },
   history: {
     title: 'Historial', empty: 'Todavía no has hecho llamadas.', note: 'Si en una llamada aleatoria hablaron 10 minutos o más, aquí puedes ver su perfil y seguirle cuando quieras.',

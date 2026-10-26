@@ -11,6 +11,7 @@ type IconName = ComponentProps<typeof Ionicons>['name'];
 const TABS: { name: string; label: string; icon: IconName }[] = [
   { name: 'home', label: 'tabs.home', icon: 'call-outline' },
   { name: 'find', label: 'tabs.find', icon: 'search' },
+  { name: 'connections', label: 'tabs.connections', icon: 'people-outline' },
   { name: 'notifications', label: 'tabs.notifications', icon: 'notifications-outline' },
   { name: 'history', label: 'tabs.history', icon: 'time-outline' },
   { name: 'me', label: 'tabs.me', icon: 'person-outline' },

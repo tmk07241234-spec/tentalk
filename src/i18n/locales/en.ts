@@ -4,7 +4,7 @@ const en: Translation = {
   common: { next: 'Next', back: 'Back', skip: 'Skip', start: 'Get started', close: 'Close', cancel: 'Cancel', save: 'Save', step: 'Step {{n}} of {{total}}' },
   lang: { ja: 'Japanese', en: 'English', ko: 'Korean', es: 'Spanish', pt: 'Portuguese', vi: 'Vietnamese', de: 'German' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
-  tabs: { home: 'Home', find: 'Find', notifications: 'Alerts', history: 'History', me: 'Me' },
+  tabs: { home: 'Home', find: 'Find', connections: 'People', notifications: 'Alerts', history: 'History', me: 'Me' },
   welcome: {
     title: 'Welcome to Tentalk',
     tagline: 'Learn to speak through 10-minute, one-on-one calls',
@@ -51,7 +51,6 @@ const en: Translation = {
   },
   home: {
     paused: 'Because you ended a call early, random calls are paused for {{m}} more min. Requests from profiles still work.',
-    following: 'Following', noFollowing: 'People you follow after a 10-minute random call, or from Find, appear here.',
     hello: 'Good evening, {{name}}', learning: 'Learning', add: '+ Add',
     buddy: 'Practice buddy', exchange: 'Language exchange', buddySub: 'Only {{lang}}', exchangeSub: 'Half {{learn}}, half {{native}}',
     random: 'Random', online: '{{people}} online · ~{{seconds}}s wait', startNow: 'Start a random call now',
@@ -116,6 +115,7 @@ const en: Translation = {
     note: 'No follower counts or popularity rankings. People in a call are hidden.',
   },
   profileView: {
+    followAfterCall: 'You can follow someone only after a full 10-minute call. Start by talking.',
     offline: 'Offline', nextAvailable: 'Next available: {{hours}}', localTime: 'Local time {{time}}', learning: 'Learning', hours: 'Available hours', hoursMine: '{{hours}} (your time)',
     calls: '{{n}} completed calls', commonHobbies: 'Hobbies you share', modeBuddy: 'As practice buddies, you’ll talk only in {{lang}} for 10 minutes.', modeExchange: 'As a language exchange, you’ll talk half in {{learn}} and half in {{native}}.',
     requestOnline: 'Request a 10-minute call', requestOffline: 'Send a request', requested: 'Request sent',
@@ -132,6 +132,13 @@ const en: Translation = {
     followed: '{{name}} followed you', accepted: '{{name}} accepted your request', call: 'Call', incoming: '{{name}} wants to talk for 10 minutes',
     accept: 'Accept and call', decline: 'Not now', expired: 'Expired', done: 'Done', reportResult: 'We reviewed your report. A violation was confirmed and we took action.',
     justNow: 'Just now', minutes: '{{n}} min ago', hours: '{{n}} h ago', days: '{{n}} d ago', devIncoming: 'Dev: receive a request',
+  },
+  connections: {
+    title: 'Connections', note: 'You can follow only people you finished a 10-minute call with, so connections grow by talking.',
+    mutual: 'Mutual', following: 'Following', followers: 'Followers', mutualTag: 'Mutual',
+    empty_mutual: 'People who follow each other with you appear here.',
+    empty_following: 'Follow someone after a full 10-minute call and they appear here.',
+    empty_followers: 'People who follow you appear here.',
   },
   history: {
     title: 'History', empty: 'No calls yet.', note: 'If you both talked for 10 minutes or more in a random call, you can open their profile and follow them from here anytime.',

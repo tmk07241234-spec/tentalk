@@ -9,6 +9,7 @@ import { LevelTag } from '@/components/level';
 import { hoursForMe, Pill, useNow } from '@/components/people';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Eyebrow, Screen, Title } from '@/components/ui';
+import { canFollow } from '@/domain/connections';
 import { commonHobbies } from '@/domain/discovery';
 import { relation } from '@/domain/matching';
 import { clockAt, requestExpiresAt } from '@/domain/schedule';
@@ -19,7 +20,7 @@ import { space, useColors } from '@/theme/colors';
 
 /**
  * Someone's profile. There is no messaging: the only way to reach them is a
- * 10-minute call request. Random-call partners are reachable here only after
+ * 10-minute call request. Follow appears only after a finished 10-minute call with them. Random-call partners are reachable here only after
  * both stayed 10 minutes (the History tab links here in that case).
  */
 export default function PersonScreen() {
@@ -45,6 +46,8 @@ export default function PersonScreen() {
   const rel = myLearn ? relation({ native: profile.native, learn: myLearn.lang }, person) : null;
   const shared = commonHobbies(profile.hobbies, person.hobbies);
   const following = app.following.includes(person.id);
+  // Following is earned by finishing a 10-minute call, so strangers only get the request button.
+  const followable = following || canFollow(app.history, person.id);
   const requested = app.requests.some((r) => r.partnerId === person.id && r.expiresAt > now);
   const L = (code: string) => t(`lang.${code}`);
 
@@ -60,16 +63,21 @@ export default function PersonScreen() {
 
   return (
     <Screen footer={
-      <View style={{ flexDirection: 'row', gap: space.sm }}>
-        <View style={{ flex: 1 }}>
-          <Button label={following ? t('profileView.following') : t('profileView.follow')} onPress={() => (following ? app.unfollow(person.id) : app.follow(person.id))}
-            icon={<Ionicons name={following ? 'checkmark' : 'add'} size={18} color={c.ink} />} />
+      <View style={{ gap: space.sm }}>
+        <View style={{ flexDirection: 'row', gap: space.sm }}>
+          {followable ? (
+            <View style={{ flex: 1 }}>
+              <Button label={following ? t('profileView.following') : t('profileView.follow')} onPress={() => (following ? app.unfollow(person.id) : app.follow(person.id))}
+                icon={<Ionicons name={following ? 'checkmark' : 'add'} size={18} color={c.ink} />} />
+            </View>
+          ) : null}
+          <View style={{ flex: 1.6 }}>
+            <Button variant="primary" disabled={requested || !rel}
+              label={requested ? t('profileView.requested') : online ? t('profileView.requestOnline') : t('profileView.requestOffline')}
+              onPress={request} icon={<Ionicons name="call" size={16} color="#FFFFFF" />} />
+          </View>
         </View>
-        <View style={{ flex: 1.6 }}>
-          <Button variant="primary" disabled={requested || !rel}
-            label={requested ? t('profileView.requested') : online ? t('profileView.requestOnline') : t('profileView.requestOffline')}
-            onPress={request} icon={<Ionicons name="call" size={16} color="#FFFFFF" />} />
-        </View>
+        {followable ? null : <Body small muted style={{ textAlign: 'center' }}>{t('profileView.followAfterCall')}</Body>}
       </View>
     }>
       <Pressable accessibilityRole="button" accessibilityLabel={t('common.close')} onPress={() => router.back()} style={{ alignSelf: 'flex-end', padding: 4 }}>

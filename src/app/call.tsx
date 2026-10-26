@@ -15,13 +15,15 @@ import type { Partner } from '@/data/samplePartners';
 import {
   REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
+import { canFollow } from '@/domain/connections';
 import type { Lang } from '@/domain/languages';
 import { relation } from '@/domain/matching';
 import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
 import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
+import { connections } from '@/services/connections';
 import { findSamplePartner, matchmaking } from '@/services/matchmaking';
 import { requests, type RequestAnswer } from '@/services/requests';
-import { useActiveLearning, useApp } from '@/state/store';
+import { useActiveLearning, useApp, type HistoryEntry } from '@/state/store';
 import { CALL_BG, space, useColors } from '@/theme/colors';
 
 type Phase = 'searching' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
@@ -135,7 +137,9 @@ export default function Call() {
     const streakUp = o.completedRequired && !calledToday(before, new Date()) ? currentStreak(after, new Date()) : 0;
     app.applyCallResult({ trustDelta: o.trustDelta, todayGain: o.todayGain, minutes: Math.round(elapsed / 60), completed: o.completedRequired, cooldownMinutes: o.randomCooldownMinutes });
     if (partner) {
-      app.addHistory({ partnerId: partner.id, kind, endedAt: Date.now(), seconds: Math.round(elapsed), completed: o.completedRequired, unlocked: o.profileUnlocked });
+      const record: Omit<HistoryEntry, 'id'> = { partnerId: partner.id, kind, endedAt: Date.now(), seconds: Math.round(elapsed), completed: o.completedRequired, unlocked: o.profileUnlocked };
+      app.addHistory(record);
+      if (r !== 'report' && canFollow([record], partner.id)) connections.afterCompletedCall(partner.id);
       if (r === 'report') app.block(partner.id);
     }
     // TODO(call service): leave the audio room; send the report with the reason to the server.

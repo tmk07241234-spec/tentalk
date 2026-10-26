@@ -4,7 +4,7 @@ const ko: Translation = {
   common: { next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
   lang: { ja: '일본어', en: '영어', ko: '한국어', es: '스페인어', pt: '포르투갈어', vi: '베트남어', de: '독일어' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
-  tabs: { home: '홈', find: '찾기', notifications: '알림', history: '기록', me: '나' },
+  tabs: { home: '홈', find: '찾기', connections: '연결', notifications: '알림', history: '기록', me: '나' },
   welcome: {
     title: 'Tentalk에 오신 것을 환영해요',
     tagline: '1대1 10분 통화로 말하기가 느는 어학 앱',
@@ -51,7 +51,6 @@ const ko: Translation = {
   },
   home: {
     paused: '통화를 중간에 끝내서 랜덤 통화는 {{m}}분 동안 이용할 수 없어요. 프로필에서 요청은 할 수 있어요.',
-    following: '팔로잉', noFollowing: '랜덤 통화에서 10분 대화한 상대나 찾기 탭의 상대를 팔로우하면 여기에 표시돼요.',
     hello: '안녕하세요, {{name}}님', learning: '학습 중', add: '+ 추가',
     buddy: '연습 친구', exchange: '언어 교환', buddySub: '{{lang}}로만 대화', exchangeSub: '{{learn}} · {{native}} 반반',
     random: '랜덤', online: '지금 {{people}}명 · 대기 약 {{seconds}}초', startNow: '랜덤으로 바로 시작',
@@ -116,6 +115,7 @@ const ko: Translation = {
     note: '팔로워 수나 인기순은 없어요. 통화 중인 사람은 표시되지 않아요.',
   },
   profileView: {
+    followAfterCall: '팔로우는 10분 대화를 끝까지 한 상대만 할 수 있어요. 먼저 대화해 보세요.',
     offline: '오프라인', nextAvailable: '다음 대화 가능: {{hours}}', localTime: '현지 시각 {{time}}', learning: '학습 중', hours: '대화 가능한 시간', hoursMine: '{{hours}} (내 시간 기준)',
     calls: '완료한 통화 {{n}}회', commonHobbies: '공통 취미', modeBuddy: '연습 친구로서 10분 동안 {{lang}}로만 대화해요.', modeExchange: '언어 교환으로 {{learn}}와 {{native}}를 반씩 사용해요.',
     requestOnline: '10분 통화 요청', requestOffline: '요청 보내기', requested: '요청함',
@@ -132,6 +132,13 @@ const ko: Translation = {
     followed: '{{name}}님이 나를 팔로우했어요', accepted: '{{name}}님이 요청을 수락했어요', call: '통화하기', incoming: '{{name}}님이 10분 대화하고 싶대요',
     accept: '수락하고 통화', decline: '지금은 안 돼요', expired: '만료됨', done: '처리됨', reportResult: '신고 검토가 끝났어요. 위반이 확인되어 상대에게 조치했어요.',
     justNow: '방금', minutes: '{{n}}분 전', hours: '{{n}}시간 전', days: '{{n}}일 전', devIncoming: '개발용: 요청 받기',
+  },
+  connections: {
+    title: '연결', note: '팔로우는 10분 대화를 끝까지 한 상대만 할 수 있어요. 연결은 대화로 늘어나요.',
+    mutual: '맞팔로우', following: '팔로잉', followers: '팔로워', mutualTag: '맞팔로우',
+    empty_mutual: '서로 팔로우한 사람이 여기에 표시돼요.',
+    empty_following: '10분 대화를 끝까지 한 상대를 팔로우하면 여기에 표시돼요.',
+    empty_followers: '나를 팔로우한 사람이 여기에 표시돼요.',
   },
   history: {
     title: '기록', empty: '아직 통화하지 않았어요.', note: '랜덤 통화에서 둘 다 10분 이상 대화한 상대는 여기서 언제든 프로필을 보고 팔로우할 수 있어요.',

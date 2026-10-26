@@ -12,7 +12,7 @@ import { RANDOM_COOLDOWN_MINUTES } from '@/domain/callRules';
 import type { Mode } from '@/domain/matching';
 import { isProfileComplete } from '@/domain/profile';
 import { WEEKLY_GOAL, currentStreak, homeMood, weekDays, weekSummary, type MascotMood } from '@/domain/progress';
-import { findSamplePartner, matchmaking } from '@/services/matchmaking';
+import { matchmaking } from '@/services/matchmaking';
 import { useActiveLearning, useApp } from '@/state/store';
 import { CALL_BG, radius, space, useColors } from '@/theme/colors';
 
@@ -126,10 +126,6 @@ export default function Home() {
         <Text style={{ color: c.ink, fontWeight: '700' }}>{t('home.themeTitle')}</Text>
         <Body small muted>{t('home.themeSub')}</Body>
       </Card>
-
-      <Eyebrow>{t('home.following')}</Eyebrow>
-      {following.length === 0 ? <Body small muted>{t('home.noFollowing')}</Body> : null}
-      {following.map(findSamplePartner).filter((p) => p && p.status !== 'in_call' && !blocked.includes(p.id)).map((p) => <PersonRow key={p!.id} person={p!} />)}
 
       <Eyebrow>{buddy ? t('home.suggestedBuddy') : t('home.suggestedExchange')}</Eyebrow>
       {suggestions.length === 0 ? <Body small muted>{t('home.noOnline')}</Body> : null}

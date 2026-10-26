@@ -25,8 +25,8 @@ export function hoursForMe(p: Partner): string {
   return `${r.start}–${r.end}`;
 }
 
-/** One person in a list (Find, Home). Opens their profile. */
-export function PersonRow({ person }: { person: Partner }) {
+/** One person in a list (Find, Home, Connections). Opens their profile. */
+export function PersonRow({ person, mutual }: { person: Partner; mutual?: boolean }) {
   const { t } = useTranslation();
   const c = useColors();
   const profile = useApp((s) => s.profile);
@@ -45,7 +45,7 @@ export function PersonRow({ person }: { person: Partner }) {
           <Text style={{ color: c.ink, fontWeight: '700', fontSize: 15 }}>{person.name}</Text>
           {rel ? <Pill label={rel === 'buddy' ? t('home.buddy') : t('home.exchange')} tone={rel === 'buddy' ? 'buddy' : 'learn'} /> : null}
           {person.languageOnly ? <Pill label={t('person.languageOnly')} /> : null}
-          {following ? <Pill label={t('profileView.following')} tone="ok" /> : null}
+          {mutual ? <Pill label={t('connections.mutualTag')} tone="ok" /> : following ? <Pill label={t('profileView.following')} tone="ok" /> : null}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text numberOfLines={1} style={{ color: c.muted, fontSize: 12, flexShrink: 1 }}>

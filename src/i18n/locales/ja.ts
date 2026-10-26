@@ -2,7 +2,7 @@ const ja = {
   common: { next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
   lang: { ja: '日本語', en: '英語', ko: '韓国語', es: 'スペイン語', pt: 'ポルトガル語', vi: 'ベトナム語', de: 'ドイツ語' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
-  tabs: { home: 'ホーム', find: '探す', notifications: '通知', history: '履歴', me: '自分' },
+  tabs: { home: 'ホーム', find: '探す', connections: 'つながり', notifications: '通知', history: '履歴', me: '自分' },
   welcome: {
     title: 'Tentalkへようこそ',
     tagline: '1対1の10分通話で、話せるようになる語学アプリ',
@@ -49,7 +49,6 @@ const ja = {
   },
   home: {
     paused: '途中で通話を終了したため、ランダム通話はあと{{m}}分使えません。プロフィールからのリクエストは使えます。',
-    following: 'フォロー中', noFollowing: 'ランダム通話で10分話した相手や、探すタブの相手をフォローするとここに表示されます。',
     hello: 'こんばんは、{{name}}さん', learning: '学習中', add: '＋ 追加',
     buddy: '練習仲間', exchange: '言語交換', buddySub: '{{lang}}だけで話す', exchangeSub: '{{learn}}と{{native}}を半分ずつ',
     random: 'ランダム', online: 'いま{{people}}人・待ち時間 約{{seconds}}秒', startNow: 'ランダムですぐに開始',
@@ -114,6 +113,7 @@ const ja = {
     note: 'フォロワー数や人気順はありません。通話中の人は表示されません。',
   },
   profileView: {
+    followAfterCall: 'フォローできるのは、10分話しきった相手だけです。まずは話してみましょう。',
     offline: 'オフライン', nextAvailable: '次に話せる: {{hours}}', localTime: '現地時刻 {{time}}', learning: '学習中', hours: '話せる時間帯', hoursMine: '{{hours}}（あなたの時間）',
     calls: '完了した通話 {{n}}回', commonHobbies: '共通の趣味', modeBuddy: '練習仲間として、10分間{{lang}}だけで話します。', modeExchange: '言語交換として、{{learn}}と{{native}}を半分ずつ話します。',
     requestOnline: '10分通話をリクエスト', requestOffline: 'リクエストを送る', requested: 'リクエスト済み',
@@ -130,6 +130,13 @@ const ja = {
     followed: '{{name}}さんがあなたをフォローしました', accepted: '{{name}}さんがリクエストを承認しました', call: '通話する', incoming: '{{name}}さんが10分話したいそうです',
     accept: '承認して通話', decline: '今は無理', expired: '期限切れ', done: '対応済み', reportResult: '通報の確認が完了しました。違反が認められたため、相手に措置を取りました。',
     justNow: 'たった今', minutes: '{{n}}分前', hours: '{{n}}時間前', days: '{{n}}日前', devIncoming: '開発用: リクエストが届く',
+  },
+  connections: {
+    title: 'つながり', note: 'フォローできるのは10分話しきった相手だけ。つながりは話すことで増えていきます。',
+    mutual: '相互フォロー', following: 'フォロー中', followers: 'フォロワー', mutualTag: '相互フォロー',
+    empty_mutual: 'おたがいにフォローしている人がここに表示されます。',
+    empty_following: '10分話しきった相手をフォローすると、ここに表示されます。',
+    empty_followers: 'あなたをフォローした人がここに表示されます。',
   },
   history: {
     title: '履歴', empty: 'まだ通話していません。', note: 'ランダム通話で2人とも10分以上話した相手は、ここからいつでもプロフィールを見てフォローできます。',
