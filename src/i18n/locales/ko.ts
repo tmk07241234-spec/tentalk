@@ -47,6 +47,7 @@ const ko: Translation = {
     s5: { title: '안심하고 대화하기', body: '어학 목적만 원하는 사람에게는 “어학 전용” 배지가 붙어요. 신고와 차단은 언제든 한 번에. 만 18세 이상만 이용할 수 있어요.' },
   },
   home: {
+    paused: '통화를 중간에 끝내서 랜덤 통화는 {{m}}분 동안 이용할 수 없어요. 프로필에서 요청은 할 수 있어요.',
     following: '팔로잉', noFollowing: '랜덤 통화에서 10분 대화한 상대나 찾기 탭의 상대를 팔로우하면 여기에 표시돼요.',
     hello: '안녕하세요, {{name}}님', learning: '학습 중', add: '+ 추가',
     buddy: '연습 친구', exchange: '언어 교환', buddySub: '{{lang}}로만 대화', exchangeSub: '{{learn}} · {{native}} 반반',
@@ -158,6 +159,16 @@ const ko: Translation = {
     deleteReason: '괜찮다면 이유를 알려 주세요 (선택)', reasons: { none: '답하지 않음', noPartners: '상대를 찾을 수 없음', notUseful: '연습이 되지 않음', safety: '안전이 걱정됨', other: '기타' },
     deleteContinue: '삭제 계속하기', deleteConfirm: '정말 삭제할까요? 이 작업은 되돌릴 수 없어요.', deleteNow: '계정 삭제하기',
   },
+  plus: {
+    lead: '학습을 더 편하게. 통화 시간과 매칭은 무료 플랜과 같아요.', active: 'Tentalk Plus를 이용 중이에요. 고마워요!',
+    features: { noAds: '광고 없음', frames: '아이콘 프레임', feedback: '통화 후 AI 피드백', notes: '단어·표현 메모' }, comingSoon: '곧 추가',
+    fair: '유료 플랜으로 통화 시간, 매칭, 요청 수, 신뢰 점수가 유리해지지는 않아요.', monthly: '월간 플랜', yearly: '연간 플랜',
+    per: { month: '{{price}} / 월', year: '{{price}} / 년' }, subscribe: '구독하기 (데모)', restore: '구매 복원', thanks: '구매해 주셔서 고마워요!', restored: '구매를 복원했어요.', nothingToRestore: '복원할 구매가 없어요.',
+    legal: '구매하면 스토어 계정으로 청구돼요. 기간 종료 24시간 전까지 해지하지 않으면 자동으로 갱신돼요. App Store 또는 Google Play의 구독 관리에서 언제든 해지할 수 있어요.',
+    devCancel: '개발용: 해지 상태로 되돌리기', card: '광고 없음, 아이콘 프레임 등', cardActive: '이용 중', see: '자세히 보기',
+  },
+  frames: { title: '아이콘 프레임 (Plus)', none: '없음', gold: '골드', sakura: '벚꽃', wave: '파도', locked: 'Plus에서 사용 가능' },
+  ad: { label: '광고', sample: '하루 5분 단어 앱 (샘플 광고)', every: '광고는 통화 2번마다 표시돼요', remove: '광고 없애기', close: '광고 닫기' },
   placeholder: { body: '이 화면은 다음 단계에서 구현해요.' },
 };
 

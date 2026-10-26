@@ -28,9 +28,13 @@ export interface Profile {
   /** Available hours in this user's local time; null until set. */
   hours: HoursRange | null;
   /** Minutes east of UTC, so others see the hours in their own time. */
-  utcOffset: number;  /** Self-introduction recording; null until recorded. */
+  utcOffset: number;  /** Tentalk Plus icon frame; null = none. */
+  frame?: FrameId | null;
+  /** Self-introduction recording; null until recorded. */
   voice?: VoiceIntro | null;
 }
+
+export type FrameId = 'gold' | 'sakura' | 'wave';
 
 export interface VoiceIntro {
   /**
@@ -98,13 +102,17 @@ interface AppState {
   history: HistoryEntry[];
   notifications: AppNotification[];
   requests: OutgoingRequest[];
+  /** Tentalk Plus is active (from the store receipt once purchases are real). */
+  plus: boolean;
+  /** After hanging up early, random calls are paused until this time (ms). */
+  randomPausedUntil: number;
 
   setUiLang: (lang: UiLang | null) => void;
   completeSetup: (input: { account: NonNullable<AppState['account']>; profile: Profile }) => void;
   finishGuide: () => void;
   setMode: (mode: Mode) => void;
   setActiveLearn: (lang: Lang) => void;
-  applyCallResult: (input: { trustDelta: number; todayGain: number; minutes: number; completed: boolean }) => void;
+  applyCallResult: (input: { trustDelta: number; todayGain: number; minutes: number; completed: boolean; cooldownMinutes: number }) => void;
   /** Development only: fills the call log with a few days of calls. */
   seedDemoProgress: () => void;
   follow: (id: string) => void;
@@ -118,6 +126,7 @@ interface AppState {
   markNotificationsRead: () => void;
   markHandled: (id: string) => void;
   addRequest: (r: OutgoingRequest) => void;
+  setPlus: (on: boolean) => void;
   removeRequest: (partnerId: string) => void;
   signOut: () => void;
 }
@@ -138,6 +147,8 @@ const initial = {
   history: [] as HistoryEntry[],
   notifications: [] as AppNotification[],
   requests: [] as OutgoingRequest[],
+  plus: false,
+  randomPausedUntil: 0,
 };
 
 const newId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
@@ -158,8 +169,9 @@ export const useApp = create<AppState>()(
       finishGuide: () => set({ onboarded: true }),
       setMode: (mode) => set({ mode }),
       setActiveLearn: (lang) => set((s) => (s.profile ? { profile: { ...s.profile, activeLearn: lang } } : s)),
-      applyCallResult: ({ trustDelta, todayGain, minutes, completed }) =>
+      applyCallResult: ({ trustDelta, todayGain, minutes, completed, cooldownMinutes }) =>
         set((s) => ({
+          randomPausedUntil: cooldownMinutes > 0 ? Date.now() + cooldownMinutes * 60_000 : s.randomPausedUntil,
           trust: clampTrust(s.trust + trustDelta),
           todayGain,
           callCount: s.callCount + 1,
@@ -192,6 +204,7 @@ export const useApp = create<AppState>()(
         set((s) => (s.notifications.some((n) => !n.read) ? { notifications: s.notifications.map((n) => ({ ...n, read: true })) } : s)),
       markHandled: (id) => set((s) => ({ notifications: s.notifications.map((n) => (n.id === id ? { ...n, handled: true, read: true } : n)) })),
       addRequest: (r) => set((s) => ({ requests: [...s.requests.filter((x) => x.partnerId !== r.partnerId), r] })),
+      setPlus: (plus) => set((s) => ({ plus, profile: s.profile && !plus ? { ...s.profile, frame: null } : s.profile })),
       removeRequest: (partnerId) => set((s) => ({ requests: s.requests.filter((r) => r.partnerId !== partnerId) })),
       // Keeps the display language: it belongs to the device, not the account.
       signOut: () => set((s) => ({ ...initial, uiLang: s.uiLang })),

@@ -13,7 +13,7 @@ import { Body, Button, Card, Title } from '@/components/ui';
 import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, TOPICS } from '@/data/conversation';
 import type { Partner } from '@/data/samplePartners';
 import {
-  REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, silenceNudge, type CallOutcome, type EndReason,
+  REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
 import type { Lang } from '@/domain/languages';
 import { relation } from '@/domain/matching';
@@ -56,7 +56,8 @@ export default function Call() {
   const [muted, setMuted] = useState(false);
   const [sheet, setSheet] = useState<null | 'leave' | 'report' | 'help'>(null);
   const [reason, setReason] = useState<(typeof REASONS)[number] | null>(null);
-  const [outcome, setOutcome] = useState<(CallOutcome & { reason: EndReason; badges: BadgeId[]; streakUp: number }) | null>(null);
+  const [outcome, setOutcome] = useState<(CallOutcome & { reason: EndReason; badges: BadgeId[]; streakUp: number; ad: boolean }) | null>(null);
+  const [adClosed, setAdClosed] = useState(false);
   const [devSpeed, setDevSpeed] = useState(1);
   const [devSilent, setDevSilent] = useState(false);
   const autoTopicDone = useRef(false);
@@ -132,13 +133,16 @@ export default function Call() {
     const after = [...before, { date: dayKey(new Date()), minutes: Math.round(elapsed / 60), completed: o.completedRequired }];
     // The streak only goes up on the first completed call of the day.
     const streakUp = o.completedRequired && !calledToday(before, new Date()) ? currentStreak(after, new Date()) : 0;
-    app.applyCallResult({ trustDelta: o.trustDelta, todayGain: o.todayGain, minutes: Math.round(elapsed / 60), completed: o.completedRequired });
+    app.applyCallResult({ trustDelta: o.trustDelta, todayGain: o.todayGain, minutes: Math.round(elapsed / 60), completed: o.completedRequired, cooldownMinutes: o.randomCooldownMinutes });
     if (partner) {
       app.addHistory({ partnerId: partner.id, kind, endedAt: Date.now(), seconds: Math.round(elapsed), completed: o.completedRequired, unlocked: o.profileUnlocked });
       if (r === 'report') app.block(partner.id);
     }
     // TODO(call service): leave the audio room; send the report with the reason to the server.
-    setOutcome({ ...o, reason: r, badges: newBadges(before, after), streakUp });
+    // callCount after this call; ads never show for reports, and never full-screen.
+    const ad = r !== 'report' && shouldShowAd({ plus: app.plus, callCount: app.callCount + 1 });
+    setAdClosed(false);
+    setOutcome({ ...o, reason: r, badges: newBadges(before, after), streakUp, ad });
     setSheet(null);
     setPhase('result');
   };
@@ -233,6 +237,22 @@ export default function Call() {
               <Body small muted>{t('call.followLater')}</Body>
             </Card>
           ) : outcome.reason !== 'report' ? <Body small muted>{t('call.notUnlocked')}</Body> : null}
+          {outcome.ad && !adClosed ? (
+            <View accessibilityLabel={t('ad.label')} style={{ borderRadius: 14, borderWidth: 1, borderColor: c.line, overflow: 'hidden', backgroundColor: c.surface }}>
+              <View style={{ height: 86, backgroundColor: '#F4C95D', justifyContent: 'center', paddingHorizontal: space.md }}>
+                <Text style={{ color: '#2a1405', fontWeight: '700', fontSize: 15 }}>{t('ad.sample')}</Text>
+              </View>
+              <Text style={{ position: 'absolute', top: 8, left: 8, color: '#fff', backgroundColor: 'rgba(0,0,0,0.55)', fontSize: 10, borderRadius: 4, paddingHorizontal: 5, overflow: 'hidden' }}>{t('ad.label')}</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel={t('ad.close')} onPress={() => setAdClosed(true)}
+                style={{ position: 'absolute', top: 6, right: 6, width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(0,0,0,0.55)', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="close" size={16} color="#fff" />
+              </Pressable>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: space.sm }}>
+                <Body small muted>{t('ad.every')}</Body>
+                <Pressable accessibilityRole="button" onPress={() => router.push('/plus')}><Text style={{ color: c.learn, fontWeight: '700', fontSize: 12 }}>{t('ad.remove')}</Text></Pressable>
+              </View>
+            </View>
+          ) : null}
           {kind === 'random' && (outcome.reason !== 'hangup' || outcome.trustDelta >= 0) ? (
             <Button variant="primary" label={t('call.talkAgain')} onPress={() => setPhase('searching')} />
           ) : null}

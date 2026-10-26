@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { LevelBars } from '@/components/level';
 import { Pip, type PipPose } from '@/components/Pip';
-import { PersonRow } from '@/components/people';
+import { PersonRow, useNow } from '@/components/people';
 import { GoalBar, SpeechBubble, WeekDots } from '@/components/progress';
 import { Body, Card, Eyebrow, Screen, Segmented, Title } from '@/components/ui';
+import { RANDOM_COOLDOWN_MINUTES } from '@/domain/callRules';
 import type { Mode } from '@/domain/matching';
 import { isProfileComplete } from '@/domain/profile';
 import { WEEKLY_GOAL, currentStreak, homeMood, weekDays, weekSummary, type MascotMood } from '@/domain/progress';
@@ -23,7 +24,8 @@ const MOOD_POSE: Record<MascotMood, PipPose> = { welcome: 'wave', done_today: 'h
 export default function Home() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, mode, setMode, setActiveLearn, settings, blocked, callLog, following } = useApp();
+  const { profile, mode, setMode, setActiveLearn, settings, blocked, callLog, following, randomPausedUntil } = useApp();
+  const now = useNow(15_000);
   const active = useActiveLearning();
   if (!profile || !active) return null;
 
@@ -34,6 +36,9 @@ export default function Home() {
   const mood = homeMood(callLog, today);
   const streak = currentStreak(callLog, today);
   const week = weekSummary(callLog, today);
+  const paused = randomPausedUntil > now;
+  // `now` refreshes every 15 s, so clamp to the real pause length.
+  const pausedMinutes = Math.min(RANDOM_COOLDOWN_MINUTES, Math.max(1, Math.ceil((randomPausedUntil - now) / 60_000)));
   const suggestions = matchmaking.onlineSuggestions(
     { native: profile.native, learn: active.lang },
     { mode, myLevel: active.level, languageOnlyPartners: settings.languageOnlyPartners, matchLevel: false, blocked: new Set(blocked) },
@@ -72,8 +77,14 @@ export default function Home() {
         ]}
       />
 
-      <Pressable accessibilityRole="button" accessibilityLabel={t('home.startNow')} onPress={() => router.push({ pathname: '/call', params: { kind: 'random' } })}
-        style={({ pressed }) => ({ backgroundColor: buddy ? CALL_BG.buddy : CALL_BG.learn, borderRadius: radius.xl, padding: space.lg, gap: 4, transform: [{ scale: pressed ? 0.99 : 1 }] })}>
+      {paused ? (
+        <Card style={{ backgroundColor: c.nativeSoft }}>
+          <Body small>{t('home.paused', { m: pausedMinutes })}</Body>
+        </Card>
+      ) : null}
+      <Pressable accessibilityRole="button" accessibilityLabel={t('home.startNow')} accessibilityState={{ disabled: paused }} disabled={paused}
+        onPress={() => router.push({ pathname: '/call', params: { kind: 'random' } })}
+        style={({ pressed }) => ({ backgroundColor: buddy ? CALL_BG.buddy : CALL_BG.learn, borderRadius: radius.xl, padding: space.lg, gap: 4, opacity: paused ? 0.45 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] })}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700', backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 99, paddingHorizontal: 8, overflow: 'hidden' }}>{t('home.random')}</Text>
           <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700', opacity: 0.9 }}>

@@ -47,6 +47,7 @@ const es: Translation = {
     s5: { title: 'Conversaciones seguras', body: 'Quien solo busca practicar idiomas lleva la insignia “Solo idiomas”. Denunciar y bloquear siempre está a un toque. Debes tener 18 años o más.' },
   },
   home: {
+    paused: 'Como colgaste antes de tiempo, las llamadas aleatorias están en pausa {{m}} min más. Las solicitudes desde perfiles siguen funcionando.',
     following: 'Siguiendo', noFollowing: 'Aquí aparecen las personas que sigas tras una llamada aleatoria de 10 minutos o desde Buscar.',
     hello: 'Buenas noches, {{name}}', learning: 'Aprendiendo', add: '+ Añadir',
     buddy: 'Compañero de práctica', exchange: 'Intercambio', buddySub: 'Solo en {{lang}}', exchangeSub: 'Mitad {{learn}}, mitad {{native}}',
@@ -158,6 +159,16 @@ const es: Translation = {
     deleteReason: 'Si quieres, cuéntanos por qué (opcional)', reasons: { none: 'Prefiero no decirlo', noPartners: 'No encuentro compañeros', notUseful: 'No me ayuda a practicar', safety: 'Me preocupa la seguridad', other: 'Otro' },
     deleteContinue: 'Continuar', deleteConfirm: '¿Eliminar tu cuenta? No se puede deshacer.', deleteNow: 'Eliminar cuenta',
   },
+  plus: {
+    lead: 'Practica con más comodidad. El tiempo de llamada y el emparejamiento son iguales que en el plan gratuito.', active: 'Tienes Tentalk Plus. ¡Gracias!',
+    features: { noAds: 'Sin anuncios', frames: 'Marcos de icono', feedback: 'Comentarios de IA tras las llamadas', notes: 'Notas de palabras y frases' }, comingSoon: 'Próximamente',
+    fair: 'El plan de pago nunca da ventaja en tiempo de llamada, emparejamiento, solicitudes ni puntuación de confianza.', monthly: 'Mensual', yearly: 'Anual',
+    per: { month: '{{price}} / mes', year: '{{price}} / año' }, subscribe: 'Suscribirse (demo)', restore: 'Restaurar compras', thanks: '¡Gracias por suscribirte!', restored: 'Se restauró tu compra.', nothingToRestore: 'No había nada que restaurar.',
+    legal: 'El pago se carga a tu cuenta de la tienda. Se renueva automáticamente salvo que canceles al menos 24 horas antes de que termine el periodo. Cancela cuando quieras en la gestión de suscripciones de App Store o Google Play.',
+    devCancel: 'Dev: volver a sin suscripción', card: 'Sin anuncios, marcos de icono y más', cardActive: 'Activo', see: 'Ver más',
+  },
+  frames: { title: 'Marco de icono (Plus)', none: 'Ninguno', gold: 'Oro', sakura: 'Sakura', wave: 'Ola', locked: 'Disponible con Plus' },
+  ad: { label: 'Anuncio', sample: '5 palabras al día (anuncio de ejemplo)', every: 'Los anuncios aparecen cada 2 llamadas', remove: 'Quitar anuncios', close: 'Cerrar anuncio' },
   placeholder: { body: 'Esta pantalla llegará en la próxima etapa.' },
 };
 

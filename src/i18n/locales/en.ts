@@ -47,6 +47,7 @@ const en: Translation = {
     s5: { title: 'Safe conversations', body: 'People who only want language practice get a “Language only” badge. Reporting and blocking are always one tap away. You must be 18 or older.' },
   },
   home: {
+    paused: 'Because you ended a call early, random calls are paused for {{m}} more min. Requests from profiles still work.',
     following: 'Following', noFollowing: 'People you follow after a 10-minute random call, or from Find, appear here.',
     hello: 'Good evening, {{name}}', learning: 'Learning', add: '+ Add',
     buddy: 'Practice buddy', exchange: 'Language exchange', buddySub: 'Only {{lang}}', exchangeSub: 'Half {{learn}}, half {{native}}',
@@ -158,6 +159,16 @@ const en: Translation = {
     deleteReason: 'If you don’t mind, tell us why (optional)', reasons: { none: 'Prefer not to say', noPartners: 'Can’t find partners', notUseful: 'Not helpful for practice', safety: 'Safety concerns', other: 'Other' },
     deleteContinue: 'Continue', deleteConfirm: 'Delete your account? This can’t be undone.', deleteNow: 'Delete account',
   },
+  plus: {
+    lead: 'Make practice more comfortable. Call time and matching stay the same as the free plan.', active: 'You have Tentalk Plus. Thank you!',
+    features: { noAds: 'No ads', frames: 'Icon frames', feedback: 'AI feedback after calls', notes: 'Word and phrase notes' }, comingSoon: 'Coming soon',
+    fair: 'The paid plan never gives an advantage in call time, matching, requests, or trust score.', monthly: 'Monthly', yearly: 'Yearly',
+    per: { month: '{{price}} / month', year: '{{price}} / year' }, subscribe: 'Subscribe (demo)', restore: 'Restore purchases', thanks: 'Thank you for subscribing!', restored: 'Your purchase was restored.', nothingToRestore: 'There was nothing to restore.',
+    legal: 'Payment is charged to your store account. It renews automatically unless cancelled at least 24 hours before the period ends. Cancel anytime in your App Store or Google Play subscription settings.',
+    devCancel: 'Dev: go back to not subscribed', card: 'No ads, icon frames, and more', cardActive: 'Active', see: 'Learn more',
+  },
+  frames: { title: 'Icon frame (Plus)', none: 'None', gold: 'Gold', sakura: 'Sakura', wave: 'Wave', locked: 'Available with Plus' },
+  ad: { label: 'Ad', sample: 'Learn 5 words a day (sample ad)', every: 'Ads appear after every 2nd call', remove: 'Remove ads', close: 'Close ad' },
   placeholder: { body: 'This screen comes in the next stage.' },
 };
 

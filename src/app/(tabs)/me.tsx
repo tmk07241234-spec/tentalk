@@ -23,7 +23,7 @@ type UiChoice = UiLang | 'device';
 export default function Me() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, trust, account, uiLang, setUiLang, signOut, callLog, seedDemoProgress, settings, updateSettings, blocked, unblock } = useApp();
+  const { profile, trust, account, uiLang, setUiLang, signOut, callLog, seedDemoProgress, settings, updateSettings, blocked, unblock, plus } = useApp();
   if (!profile) return null;
 
   const logout = async () => {
@@ -37,7 +37,7 @@ export default function Me() {
       <Title>{t('me.title')}</Title>
       <Card>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-          <Avatar name={profile.name} color={profile.color} photoUri={profile.photoUri} size={64} />
+          <Avatar name={profile.name} color={profile.color} photoUri={profile.photoUri} size={64} frame={plus ? profile.frame : null} />
           <View style={{ flex: 1, gap: 4 }}>
             <Text style={{ color: c.ink, fontWeight: '700', fontSize: 17 }}>{profile.name}</Text>
             <Body small muted>{t('person.native', { lang: t(`lang.${profile.native}`) })}</Body>
@@ -57,6 +57,17 @@ export default function Me() {
         {profile.hours ? <Body small muted>{t('profileView.hours')}: {profile.hours.start}–{profile.hours.end}</Body> : null}
         <Button label={t('me.editProfile')} onPress={() => router.push('/profile-edit')} />
       </Card>
+
+      <Pressable accessibilityRole="button" onPress={() => router.push('/plus')}>
+        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.learnSoft }}>
+          <Ionicons name="sparkles" size={22} color={c.learn} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: c.ink, fontWeight: '700' }}>Tentalk Plus{plus ? ` · ${t('plus.cardActive')}` : ''}</Text>
+            <Body small muted>{t('plus.card')}</Body>
+          </View>
+          <Text style={{ color: c.learn, fontWeight: '700' }}>{t('plus.see')}</Text>
+        </Card>
+      </Pressable>
 
       <Card>
         <Eyebrow>{t('me.trust')}</Eyebrow>

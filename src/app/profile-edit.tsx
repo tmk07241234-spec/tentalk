@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +15,7 @@ import { MAX_LEARNING_LANGS, SELECTABLE_LANGS, type Lang } from '@/domain/langua
 import type { Level } from '@/domain/levels';
 import { HOBBIES, MAX_BIO, MAX_NAME, validateProfile } from '@/domain/profile';
 import { deviceOffset, formatHM, type HoursRange } from '@/domain/schedule';
-import { useApp, type LearningLang, type VoiceIntro } from '@/state/store';
+import { useApp, type FrameId, type LearningLang, type VoiceIntro } from '@/state/store';
 import { AVATAR_COLORS, radius, space, useColors } from '@/theme/colors';
 
 const HOUR_OPTIONS = Array.from({ length: 48 }, (_, i) => formatHM(i * 30)).concat('24:00');
@@ -22,7 +23,7 @@ const HOUR_OPTIONS = Array.from({ length: 48 }, (_, i) => formatHM(i * 30)).conc
 export default function ProfileEdit() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, updateProfile, setActiveLearn } = useApp();
+  const { profile, updateProfile, setActiveLearn, plus } = useApp();
   const [name, setName] = useState(profile?.name ?? '');
   const [bio, setBio] = useState(profile?.bio ?? '');
   const [color, setColor] = useState(profile?.color ?? AVATAR_COLORS[1]);
@@ -32,6 +33,7 @@ export default function ProfileEdit() {
   const [hobbies, setHobbies] = useState<string[]>(profile?.hobbies ?? []);
   const [hours, setHours] = useState<HoursRange>(profile?.hours ?? { start: '21:00', end: '23:00' });
   const [voice, setVoice] = useState<VoiceIntro | null>(profile?.voice ?? null);
+  const [frame, setFrame] = useState<FrameId | null>(profile?.frame ?? null);
   const [levelFor, setLevelFor] = useState<number | null>(null);
   const [picking, setPicking] = useState<null | 'start' | 'end'>(null);
   const [error, setError] = useState('');
@@ -48,7 +50,7 @@ export default function ProfileEdit() {
   const save = () => {
     const err = validateProfile({ name, bio, native, learning, hobbies, hours });
     if (err) return setError(t(`profileEdit.errors.${err}`));
-    updateProfile({ name: name.trim(), bio: bio.trim(), color, photoUri, native, learning, hobbies, hours, voice, utcOffset: deviceOffset() });
+    updateProfile({ name: name.trim(), bio: bio.trim(), color, photoUri, native, learning, hobbies, hours, voice, frame: plus ? frame : null, utcOffset: deviceOffset() });
     if (!learning.some((l) => l.lang === profile.activeLearn)) setActiveLearn(learning[0].lang);
     router.back();
   };
@@ -59,7 +61,7 @@ export default function ProfileEdit() {
 
       <Eyebrow>{t('profileEdit.icon')}</Eyebrow>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.lg }}>
-        <Avatar name={name || '?'} color={color} photoUri={photoUri} size={72} />
+        <Avatar name={name || '?'} color={color} photoUri={photoUri} size={72} frame={plus ? frame : null} />
         <View style={{ flex: 1, gap: space.sm }}>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
             {AVATAR_COLORS.map((col) => (
@@ -74,6 +76,25 @@ export default function ProfileEdit() {
           </View>
         </View>
       </View>
+
+      <Eyebrow>{t('frames.title')}</Eyebrow>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.md }}>
+        {([null, 'gold', 'sakura', 'wave'] as (FrameId | null)[]).map((f) => {
+          const on = (plus ? frame : null) === f;
+          return (
+            <Pressable key={f ?? 'none'} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={t(`frames.${f ?? 'none'}`)}
+              onPress={() => (f && !plus ? router.push('/plus') : setFrame(f))}
+              style={{ alignItems: 'center', gap: 4, padding: 6, borderRadius: radius.md, borderWidth: 1.5, borderColor: on ? c.learn : 'transparent' }}>
+              <Avatar name={name || '?'} color={color} photoUri={photoUri} size={44} frame={f} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                {f && !plus ? <Ionicons name="lock-closed" size={10} color={c.muted} /> : null}
+                <Text style={{ fontSize: 11, color: c.muted }}>{t(`frames.${f ?? 'none'}`)}</Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+      {!plus ? <Body small muted>{t('frames.locked')}</Body> : null}
 
       <Field label={t('profileEdit.name')} value={name} onChangeText={setName} maxLength={MAX_NAME} />
       <Field label={`${t('profileEdit.bio')} (${bio.length}/${MAX_BIO})`} value={bio} onChangeText={setBio} maxLength={MAX_BIO} multiline
