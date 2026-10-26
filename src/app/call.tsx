@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,16 +16,21 @@ import {
   REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
 import type { Lang } from '@/domain/languages';
+import { relation } from '@/domain/matching';
 import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
-import { matchmaking } from '@/services/matchmaking';
+import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
+import { findSamplePartner, matchmaking } from '@/services/matchmaking';
+import { requests, type RequestAnswer } from '@/services/requests';
 import { useActiveLearning, useApp } from '@/state/store';
 import { CALL_BG, space, useColors } from '@/theme/colors';
 
-type Phase = 'searching' | 'none' | 'connected' | 'result';
+type Phase = 'searching' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
 const REASONS = ['romance', 'sexual', 'abuse', 'spam', 'minor', 'trolling', 'other'] as const;
 
 /**
- * Random call: search → 10 required minutes → open-ended extension → result.
+ * kind=random: search → 10 required minutes → open-ended extension → result.
+ * kind=direct&partner=<id>: a call with a chosen person. With ask=1 we first wait
+ * for them to accept; without it the request was already accepted.
  * Audio is not connected yet; the call service will plug in where noted.
  */
 export default function Call() {
@@ -34,12 +39,18 @@ export default function Call() {
   const app = useApp();
   const active = useActiveLearning();
   const profile = app.profile!;
+  const params = useLocalSearchParams<{ kind?: string; partner?: string; ask?: string }>();
+  const kind = params.kind === 'direct' ? 'direct' : 'random';
+  const chosen = kind === 'direct' && params.partner ? findSamplePartner(params.partner) ?? null : null;
 
-  const [phase, setPhase] = useState<Phase>('searching');
-  const [partner, setPartner] = useState<Partner | null>(null);
+  const [phase, setPhase] = useState<Phase>(chosen ? (params.ask === '1' ? 'waiting' : 'connected') : kind === 'direct' ? 'none' : 'searching');
+  const [partner, setPartner] = useState<Partner | null>(chosen);
+  const [answer, setAnswer] = useState<RequestAnswer | null>(null);
+  const [waitLeft, setWaitLeft] = useState(ONLINE_REQUEST_SECONDS);
   const [elapsed, setElapsed] = useState(0);
   const [silence, setSilence] = useState(0);
-  const [lang, setLang] = useState<Lang>(active?.lang ?? 'en');
+  const [lang, setLang] = useState<Lang>(() =>
+    (chosen ? profile.learning.find((l) => relation({ native: profile.native, learn: l.lang }, chosen))?.lang : undefined) ?? active?.lang ?? 'en');
   const [topicIndex, setTopicIndex] = useState(0);
   const [cueDone, setCueDone] = useState(false);
   const [muted, setMuted] = useState(false);
@@ -51,8 +62,30 @@ export default function Call() {
   const autoTopicDone = useRef(false);
 
   const me = { native: profile.native, learn: active?.lang ?? 'en' };
-  const mode = app.mode;
+  // A chosen person may relate to any of my learning languages; random calls use the Home mode.
+  const myLearnFor = (p: Partner | null) => (p && p.native !== me.native ? (profile.learning.find((l) => relation({ native: me.native, learn: l.lang }, p)) ?? null) : null);
+  const directLearn = chosen ? myLearnFor(chosen)?.lang ?? me.learn : me.learn;
+  const meNow = { native: me.native, learn: kind === 'direct' ? directLearn : me.learn };
+  const mode = kind === 'direct' && chosen ? relation(meNow, chosen) ?? 'buddy' : app.mode;
   const buddy = mode === 'buddy';
+
+  // Direct call with ask=1: wait for the partner's answer (60 s at most).
+  useEffect(() => {
+    if (phase !== 'waiting' || !chosen) return;
+    const ctrl = new AbortController();
+    let left = false; // set when this screen is closed, so a late answer is ignored
+    const tick = setInterval(() => setWaitLeft((n) => Math.max(0, n - 1)), 1000);
+    const timeout = setTimeout(() => ctrl.abort(), ONLINE_REQUEST_SECONDS * 1000);
+    requests.askNow(chosen.id, ctrl.signal)
+      .then((a) => {
+        if (left) return;
+        if (a === 'accepted') { setLang(meNow.learn); setPhase('connected'); }
+        else { setAnswer(a); setPhase('noAnswer'); }
+      })
+      .catch(() => { if (!left) { setAnswer('expired'); setPhase('noAnswer'); } });
+    return () => { left = true; ctrl.abort(); clearInterval(tick); clearTimeout(timeout); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   // Search for a partner whenever we enter the searching phase.
   useEffect(() => {
@@ -94,21 +127,41 @@ export default function Call() {
   }, [nudge]);
 
   const end = (r: EndReason) => {
-    const o = callOutcome({ elapsedSeconds: elapsed, reason: r, kind: 'random', todayGain: app.todayGain });
+    const o = callOutcome({ elapsedSeconds: elapsed, reason: r, kind, todayGain: app.todayGain });
     const before = app.callLog;
     const after = [...before, { date: dayKey(new Date()), minutes: Math.round(elapsed / 60), completed: o.completedRequired }];
     // The streak only goes up on the first completed call of the day.
     const streakUp = o.completedRequired && !calledToday(before, new Date()) ? currentStreak(after, new Date()) : 0;
     app.applyCallResult({ trustDelta: o.trustDelta, todayGain: o.todayGain, minutes: Math.round(elapsed / 60), completed: o.completedRequired });
-    if (r === 'report' && partner) app.block(partner.id);
+    if (partner) {
+      app.addHistory({ partnerId: partner.id, kind, endedAt: Date.now(), seconds: Math.round(elapsed), completed: o.completedRequired, unlocked: o.profileUnlocked });
+      if (r === 'report') app.block(partner.id);
+    }
     // TODO(call service): leave the audio room; send the report with the reason to the server.
     setOutcome({ ...o, reason: r, badges: newBadges(before, after), streakUp });
     setSheet(null);
     setPhase('result');
   };
 
-  const otherLang: Lang = lang === me.learn ? profile.native : me.learn;
-  const bg = buddy ? CALL_BG.buddy : lang === me.learn ? CALL_BG.learn : CALL_BG.native;
+  const otherLang: Lang = lang === meNow.learn ? profile.native : meNow.learn;
+  const bg = buddy ? CALL_BG.buddy : lang === meNow.learn ? CALL_BG.learn : CALL_BG.native;
+
+  if (phase === 'waiting' || phase === 'noAnswer') {
+    const name = chosen?.name ?? '';
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
+        <View style={{ alignItems: 'center' }}>
+          {phase === 'waiting'
+            ? <Pip pose="listen" tone={buddy ? 'buddy' : 'learn'} size={130} motion="bounce" />
+            : <Pip pose="sleepy" tone={buddy ? 'buddy' : 'learn'} size={130} />}
+        </View>
+        {chosen ? <View style={{ alignItems: 'center' }}><Avatar name={chosen.name} color={chosen.color} size={56} /></View> : null}
+        <Title>{phase === 'waiting' ? t('request.waiting', { name }) : answer === 'declined' ? t('request.declined', { name }) : t('request.expired')}</Title>
+        <Body muted>{phase === 'waiting' ? t('request.waitingBody', { seconds: waitLeft }) : t('request.tryLater')}</Body>
+        <Button label={phase === 'waiting' ? t('request.cancel') : t('call.home')} onPress={() => router.back()} />
+      </SafeAreaView>
+    );
+  }
   const required = elapsed < REQUIRED_SECONDS;
 
   if (phase === 'searching' || phase === 'none') {
@@ -180,7 +233,7 @@ export default function Call() {
               <Body small muted>{t('call.followLater')}</Body>
             </Card>
           ) : outcome.reason !== 'report' ? <Body small muted>{t('call.notUnlocked')}</Body> : null}
-          {outcome.reason !== 'hangup' || outcome.trustDelta >= 0 ? (
+          {kind === 'random' && (outcome.reason !== 'hangup' || outcome.trustDelta >= 0) ? (
             <Button variant="primary" label={t('call.talkAgain')} onPress={() => setPhase('searching')} />
           ) : null}
           <Button label={t('call.home')} onPress={() => router.back()} />
@@ -239,11 +292,13 @@ export default function Call() {
           <View style={{ alignSelf: 'flex-start', marginTop: 6 }}><GlassButton label={t('call.nextTopic')} onPress={() => setTopicIndex((i) => i + 1)} /></View>
         </View>
 
-        <View style={{ borderRadius: 12, padding: space.sm, borderWidth: 1, borderStyle: required ? 'dashed' : 'solid', borderColor: 'rgba(255,255,255,0.5)', backgroundColor: required ? 'transparent' : 'rgba(255,255,255,0.95)' }}>
-          <Text style={{ color: required ? '#fff' : '#111', fontSize: 12, textAlign: 'center', fontWeight: required ? '400' : '700' }}>
-            {required ? t('call.unlockPending') : t('call.unlockDone', { name: partner.name })}
-          </Text>
-        </View>
+        {kind === 'random' ? (
+          <View style={{ borderRadius: 12, padding: space.sm, borderWidth: 1, borderStyle: required ? 'dashed' : 'solid', borderColor: 'rgba(255,255,255,0.5)', backgroundColor: required ? 'transparent' : 'rgba(255,255,255,0.95)' }}>
+            <Text style={{ color: required ? '#fff' : '#111', fontSize: 12, textAlign: 'center', fontWeight: required ? '400' : '700' }}>
+              {required ? t('call.unlockPending') : t('call.unlockDone', { name: partner.name })}
+            </Text>
+          </View>
+        ) : null}
 
         {nudge ? (
           <Nudge text={nudge === 'example' ? t('call.silenceExample', { example: EXAMPLE_QUESTIONS[lang] ?? '' }) : t('call.silenceTopic')} />
@@ -263,7 +318,7 @@ export default function Call() {
           <RoundButton icon="flag-outline" label={t('call.report')} onPress={() => setSheet('report')} />
           <RoundButton icon="chatbox-ellipses-outline" label={t('call.help')} onPress={() => setSheet('help')} />
           <RoundButton icon={muted ? 'mic-off' : 'mic-outline'} label={t('call.mute')} onPress={() => setMuted((m) => !m)} active={muted} />
-          {!required ? (
+          {!required && kind === 'random' ? (
             <Pressable accessibilityRole="button" onPress={() => end('hangup')} style={{ backgroundColor: '#fff', borderRadius: 99, paddingHorizontal: 18, height: 50, justifyContent: 'center' }}>
               <Text style={{ color: '#111', fontWeight: '700' }}>{t('call.nextPerson')}</Text>
             </Pressable>

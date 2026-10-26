@@ -47,6 +47,7 @@ const en: Translation = {
     s5: { title: 'Safe conversations', body: 'People who only want language practice get a “Language only” badge. Reporting and blocking are always one tap away. You must be 18 or older.' },
   },
   home: {
+    following: 'Following', noFollowing: 'People you follow after a 10-minute random call, or from Find, appear here.',
     hello: 'Good evening, {{name}}', learning: 'Learning', add: '+ Add',
     buddy: 'Practice buddy', exchange: 'Language exchange', buddySub: 'Only {{lang}}', exchangeSub: 'Half {{learn}}, half {{native}}',
     random: 'Random', online: '{{people}} online · ~{{seconds}}s wait', startNow: 'Start a random call now',
@@ -84,6 +85,7 @@ const en: Translation = {
     devSpeed: 'Dev: 30× speed',
   },
   me: {
+    editProfile: 'Edit profile',
     title: 'Me', trust: 'Trust score', trustNote: 'Others only see “Trusted”', learning: 'Learning',
     uiLanguage: 'Display language', uiLanguageNote: 'The language of the app’s text. This is separate from your native and learning languages.', device: 'Use device setting ({{lang}})',
     account: 'Account', signedInWith: 'Signed in with {{method}}', logout: 'Log out', deleteAccount: 'Delete account', legal: 'Terms and policies',
@@ -101,6 +103,49 @@ const en: Translation = {
     weekA11y: 'You talked on {{done}} days this week', badges: 'Badges', locked: 'not earned yet', streakUp: 'Streak: {{n}} days!', devSeed: 'Dev: add sample progress',
   },
   badges: { first_call: 'First 10 minutes', calls_10: '10 calls', calls_50: '50 calls', streak_3: '3-day streak', streak_7: '7-day streak', streak_30: '30-day streak', hour_1: '1 hour total', hours_10: '10 hours total' },
+  country: { US: 'USA', GB: 'UK', AU: 'Australia', CA: 'Canada', BR: 'Brazil', KR: 'Korea', ES: 'Spain', VN: 'Vietnam', DE: 'Germany', MX: 'Mexico', JP: 'Japan' },
+  hobbies: { travel: 'Travel', anime: 'Anime', cooking: 'Cooking', music: 'Music', movies: 'Movies & TV', games: 'Games', sports: 'Sports', reading: 'Reading', photo: 'Photography', cafe: 'Cafés', tech: 'Tech', art: 'Art' },
+  find: {
+    title: 'Find', exchange: 'Language exchange', exchangeSub: 'Native {{lang}}', buddy: 'Practice buddy', buddySub: '{{lang}} learners', hobby: 'Shared hobbies', hobbySub: 'Both modes',
+    levelOf: 'Their {{lang}} level (online now)', level: 'Level', all: 'All', sort: 'Sort', sortOnline: 'Online first', sortCommon: 'Shared hobbies', sortLevel: 'Closest level',
+    count: '{{n}} people', empty: 'No one matches these filters.', yourHobbies: 'Hobbies you share', noHobbies: 'Add hobbies to find people who share them.', addHobbies: 'Add hobbies',
+    note: 'No follower counts or popularity rankings. People in a call are hidden.',
+  },
+  profileView: {
+    offline: 'Offline', nextAvailable: 'Next available: {{hours}}', localTime: 'Local time {{time}}', learning: 'Learning', hours: 'Available hours', hoursMine: '{{hours}} (your time)',
+    calls: '{{n}} completed calls', commonHobbies: 'Hobbies you share', modeBuddy: 'As practice buddies, you’ll talk only in {{lang}} for 10 minutes.', modeExchange: 'As a language exchange, you’ll talk half in {{learn}} and half in {{native}}.',
+    requestOnline: 'Request a 10-minute call', requestOffline: 'Send a request', requested: 'Request sent',
+    noteOnline: 'There’s no messaging. If they accept, the call starts right away.', noteOffline: 'They’re offline. The request lasts 24 hours, and you’ll get a ring when they accept.',
+    follow: 'Follow', following: 'Following', block: 'Block', blockTitle: 'Block {{name}}?', blockBody: 'You won’t be matched again, and they disappear from lists and history. They aren’t notified. You can unblock them from Me → Blocked people.', blockConfirm: 'Block', unavailable: 'This profile isn’t available.',
+  },
+  request: {
+    waiting: 'Waiting for {{name}} to answer', waitingBody: 'The call starts as soon as they accept. The request is cancelled in {{seconds}} seconds.', cancel: 'Cancel',
+    declined: '{{name}} can’t talk right now', expired: 'No answer', tryLater: 'Try again later, or use a random call.',
+    sentTitle: 'Request sent', sentBody: 'When {{name}} accepts, you’ll get a ring. Answer within 30 seconds to start. If you miss it, you can still call from Alerts for 24 hours.', ok: 'OK',
+  },
+  notifications: {
+    title: 'Alerts', empty: 'No alerts yet.', welcome: 'Welcome to Tentalk! Start with a random call and talk for your first 10 minutes.', theme: 'This week’s theme is “a movie you’d recommend.”',
+    followed: '{{name}} followed you', accepted: '{{name}} accepted your request', call: 'Call', incoming: '{{name}} wants to talk for 10 minutes',
+    accept: 'Accept and call', decline: 'Not now', expired: 'Expired', done: 'Done', reportResult: 'We reviewed your report. A violation was confirmed and we took action.',
+    justNow: 'Just now', minutes: '{{n}} min ago', hours: '{{n}} h ago', days: '{{n}} d ago', devIncoming: 'Dev: receive a request',
+  },
+  history: {
+    title: 'History', empty: 'No calls yet.', note: 'If you both talked for 10 minutes or more in a random call, you can open their profile and follow them from here anytime.',
+    random: 'Random', direct: 'Request', open: 'Profile open', hidden: 'Hidden (under 10 minutes)', view: 'View', unknown: 'Partner',
+  },
+  profileEdit: {
+    title: 'Edit profile', icon: 'Icon', name: 'Name', bio: 'About you', bioPlaceholder: 'Your work, what you like, topics you want to talk about', native: 'Native language', learning: 'Learning (up to 2)',
+    addLanguage: '+ Add language', remove: 'Remove', levelHelp: 'Tap a level to choose with the five descriptions.', hobbies: 'Hobbies', hours: 'Available hours', from: 'From', to: 'To',
+    hoursNote: 'You’ll appear in suggestions during these hours. Others see them in their own time.', voice: 'Voice intro', voiceSoon: 'Coming in the next stage',
+    save: 'Save', saved: 'Saved',
+    errors: { name: 'Enter a name (up to 20 characters).', bio: 'About you can be up to 200 characters.', learnSame: 'A learning language can’t be your native language.', learnDuplicate: 'The same language is selected twice.', learnNone: 'Choose at least one learning language.', learnTooMany: 'You can learn up to 2 languages.', hobbies: 'Choose at least one hobby.', hours: 'Choose a valid start and end time.' },
+  },
+  settings: {
+    title: 'Call settings', languageOnly: 'Language practice only', languageOnlyNote: 'While on, your profile shows “Language only”.',
+    languageOnlyPartners: 'Random calls: match only “Language only” people', languageOnlyPartnersNote: 'Turning this off shortens the wait.',
+    switchCue: 'Language exchange: switch cue at 5 minutes', switchCueNote: 'You can switch languages anytime during a call.', matchLevel: 'Random calls: match a similar level', matchLevelNote: 'Turning this on makes the wait a little longer.',
+    guide: 'How to use Tentalk', blocked: 'Blocked people', unblock: 'Unblock', noneBlocked: 'You haven’t blocked anyone.',
+  },
   placeholder: { body: 'This screen comes in the next stage.' },
 };
 

@@ -7,6 +7,7 @@ import type { Lang, UiLang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import type { Mode } from '@/domain/matching';
 import { dayKey, type CallLogEntry } from '@/domain/progress';
+import type { HoursRange } from '@/domain/schedule';
 import type { SignInMethod } from '@/services/auth';
 
 export interface LearningLang {
@@ -22,8 +23,42 @@ export interface Profile {
   learning: LearningLang[];
   /** The learning language currently used on Home and for random calls. */
   activeLearn: Lang;
-  /** False until hobbies, hours and a voice intro are added after setup. */
-  complete: boolean;
+  bio: string;
+  hobbies: string[];
+  /** Available hours in this user's local time; null until set. */
+  hours: HoursRange | null;
+  /** Minutes east of UTC, so others see the hours in their own time. */
+  utcOffset: number;
+}
+
+export interface HistoryEntry {
+  id: string;
+  partnerId: string;
+  kind: 'random' | 'direct';
+  endedAt: number;
+  seconds: number;
+  completed: boolean;
+  /** Random calls: both stayed 10 minutes, so the profile is open. */
+  unlocked: boolean;
+}
+
+export type NotificationType = 'welcome' | 'theme' | 'followed' | 'accepted' | 'incoming' | 'reportResult';
+
+export interface AppNotification {
+  id: string;
+  type: NotificationType;
+  partnerId?: string;
+  at: number;
+  read: boolean;
+  /** For accepted / incoming requests: after this the action button is gone. */
+  expiresAt?: number;
+  handled?: boolean;
+}
+
+export interface OutgoingRequest {
+  partnerId: string;
+  sentAt: number;
+  expiresAt: number;
 }
 
 export interface Settings {
@@ -50,6 +85,9 @@ interface AppState {
   following: string[];
   blocked: string[];
   settings: Settings;
+  history: HistoryEntry[];
+  notifications: AppNotification[];
+  requests: OutgoingRequest[];
 
   setUiLang: (lang: UiLang | null) => void;
   completeSetup: (input: { account: NonNullable<AppState['account']>; profile: Profile }) => void;
@@ -60,7 +98,17 @@ interface AppState {
   /** Development only: fills the call log with a few days of calls. */
   seedDemoProgress: () => void;
   follow: (id: string) => void;
+  unfollow: (id: string) => void;
   block: (id: string) => void;
+  unblock: (id: string) => void;
+  updateProfile: (patch: Partial<Profile>) => void;
+  updateSettings: (patch: Partial<Settings>) => void;
+  addHistory: (entry: Omit<HistoryEntry, 'id'>) => void;
+  notify: (n: Omit<AppNotification, 'id' | 'at' | 'read'> & { at?: number }) => void;
+  markNotificationsRead: () => void;
+  markHandled: (id: string) => void;
+  addRequest: (r: OutgoingRequest) => void;
+  removeRequest: (partnerId: string) => void;
   signOut: () => void;
 }
 
@@ -76,15 +124,27 @@ const initial = {
   callLog: [] as CallLogEntry[],
   following: [] as string[],
   blocked: [] as string[],
-  settings: { languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false },
+  settings: { languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false } as Settings,
+  history: [] as HistoryEntry[],
+  notifications: [] as AppNotification[],
+  requests: [] as OutgoingRequest[],
 };
+
+const newId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 
 export const useApp = create<AppState>()(
   persist(
     (set) => ({
       ...initial,
       setUiLang: (uiLang) => set({ uiLang }),
-      completeSetup: ({ account, profile }) => set({ account, profile, onboarded: false }),
+      completeSetup: ({ account, profile }) =>
+        set({
+          account, profile, onboarded: false,
+          notifications: [
+            { id: newId(), type: 'welcome', at: Date.now(), read: false },
+            { id: newId(), type: 'theme', at: Date.now() - 1000, read: false },
+          ],
+        }),
       finishGuide: () => set({ onboarded: true }),
       setMode: (mode) => set({ mode }),
       setActiveLearn: (lang) => set((s) => (s.profile ? { profile: { ...s.profile, activeLearn: lang } } : s)),
@@ -105,15 +165,41 @@ export const useApp = create<AppState>()(
           return { callLog: days, callCount: days.length };
         }),
       follow: (id) => set((s) => (s.following.includes(id) ? s : { following: [...s.following, id] })),
+      unfollow: (id) => set((s) => ({ following: s.following.filter((f) => f !== id) })),
       block: (id) =>
-        set((s) => ({ blocked: s.blocked.includes(id) ? s.blocked : [...s.blocked, id], following: s.following.filter((f) => f !== id) })),
+        set((s) => ({
+          blocked: s.blocked.includes(id) ? s.blocked : [...s.blocked, id],
+          following: s.following.filter((f) => f !== id),
+          requests: s.requests.filter((r) => r.partnerId !== id),
+        })),
+      unblock: (id) => set((s) => ({ blocked: s.blocked.filter((b) => b !== id) })),
+      updateProfile: (patch) => set((s) => (s.profile ? { profile: { ...s.profile, ...patch } } : s)),
+      updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
+      addHistory: (entry) => set((s) => ({ history: [{ ...entry, id: newId() }, ...s.history].slice(0, 200) })),
+      notify: ({ at, ...n }) =>
+        set((s) => ({ notifications: [{ ...n, id: newId(), at: at ?? Date.now(), read: false }, ...s.notifications].slice(0, 100) })),
+      markNotificationsRead: () =>
+        set((s) => (s.notifications.some((n) => !n.read) ? { notifications: s.notifications.map((n) => ({ ...n, read: true })) } : s)),
+      markHandled: (id) => set((s) => ({ notifications: s.notifications.map((n) => (n.id === id ? { ...n, handled: true, read: true } : n)) })),
+      addRequest: (r) => set((s) => ({ requests: [...s.requests.filter((x) => x.partnerId !== r.partnerId), r] })),
+      removeRequest: (partnerId) => set((s) => ({ requests: s.requests.filter((r) => r.partnerId !== partnerId) })),
       // Keeps the display language: it belongs to the device, not the account.
       signOut: () => set((s) => ({ ...initial, uiLang: s.uiLang })),
     }),
     {
       name: 'tentalk-app',
+      version: 2,
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: ({ setUiLang, completeSetup, finishGuide, setMode, setActiveLearn, applyCallResult, seedDemoProgress, follow, block, signOut, ...data }) => data,
+      // Only data is saved; functions are recreated on load.
+      partialize: (s) => Object.fromEntries(Object.entries(s).filter(([, v]) => typeof v !== 'function')) as Partial<AppState>,
+      migrate: (persisted, version) => {
+        const s = (persisted ?? {}) as Partial<AppState> & { profile?: Profile & { complete?: boolean } };
+        if (version < 2 && s.profile) {
+          const { complete: _complete, ...rest } = s.profile;
+          s.profile = Object.assign({ bio: '', hobbies: [], hours: null, utcOffset: -new Date().getTimezoneOffset() }, rest);
+        }
+        return { ...initial, ...s } as AppState;
+      },
     },
   ),
 );

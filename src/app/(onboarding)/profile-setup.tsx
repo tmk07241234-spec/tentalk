@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { Body, Button, ErrorText, Field, Screen, StepLabel, Title } from '@/components/ui';
+import { deviceOffset } from '@/domain/schedule';
 import { SETUP_STEPS, useOnboarding } from '@/state/onboarding';
 import { useApp } from '@/state/store';
 import { AVATAR_COLORS, space, useColors } from '@/theme/colors';
@@ -32,7 +33,8 @@ export default function ProfileStep() {
       account: { method: draft.method, email: draft.email },
       profile: {
         name: name.trim(), color, photoUri, native: draft.native,
-        learning: [{ lang: draft.learn, level: draft.level }], activeLearn: draft.learn, complete: false,
+        learning: [{ lang: draft.learn, level: draft.level }], activeLearn: draft.learn,
+        bio: '', hobbies: [], hours: null, utcOffset: deviceOffset(),
       },
     });
     draft.reset();

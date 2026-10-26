@@ -3,14 +3,15 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar } from '@/components/Avatar';
 import { LevelBars } from '@/components/level';
 import { Pip, type PipPose } from '@/components/Pip';
+import { PersonRow } from '@/components/people';
 import { GoalBar, SpeechBubble, WeekDots } from '@/components/progress';
 import { Body, Card, Eyebrow, Screen, Segmented, Title } from '@/components/ui';
 import type { Mode } from '@/domain/matching';
+import { isProfileComplete } from '@/domain/profile';
 import { WEEKLY_GOAL, currentStreak, homeMood, weekDays, weekSummary, type MascotMood } from '@/domain/progress';
-import { matchmaking } from '@/services/matchmaking';
+import { findSamplePartner, matchmaking } from '@/services/matchmaking';
 import { useActiveLearning, useApp } from '@/state/store';
 import { CALL_BG, radius, space, useColors } from '@/theme/colors';
 
@@ -22,7 +23,7 @@ const MOOD_POSE: Record<MascotMood, PipPose> = { welcome: 'wave', done_today: 'h
 export default function Home() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, mode, setMode, setActiveLearn, settings, blocked, callLog } = useApp();
+  const { profile, mode, setMode, setActiveLearn, settings, blocked, callLog, following } = useApp();
   const active = useActiveLearning();
   if (!profile || !active) return null;
 
@@ -87,7 +88,7 @@ export default function Home() {
         </View>
       </Pressable>
 
-      {!profile.complete ? (
+      {!isProfileComplete(profile) ? (
         <Card>
           <Body small muted>{t('home.nudge')}</Body>
         </Card>
@@ -115,23 +116,13 @@ export default function Home() {
         <Body small muted>{t('home.themeSub')}</Body>
       </Card>
 
+      <Eyebrow>{t('home.following')}</Eyebrow>
+      {following.length === 0 ? <Body small muted>{t('home.noFollowing')}</Body> : null}
+      {following.map(findSamplePartner).filter((p) => p && p.status !== 'in_call' && !blocked.includes(p.id)).map((p) => <PersonRow key={p!.id} person={p!} />)}
+
       <Eyebrow>{buddy ? t('home.suggestedBuddy') : t('home.suggestedExchange')}</Eyebrow>
       {suggestions.length === 0 ? <Body small muted>{t('home.noOnline')}</Body> : null}
-      {suggestions.map((p) => (
-        <Card key={p.id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-          <Avatar name={p.name} color={p.color} online />
-          <View style={{ flex: 1, gap: 2 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-              <Text style={{ color: c.ink, fontWeight: '700' }}>{p.name}</Text>
-              {p.languageOnly ? <Text style={{ fontSize: 11, color: c.muted, backgroundColor: c.surface2, borderRadius: 99, paddingHorizontal: 7, overflow: 'hidden' }}>{t('person.languageOnly')}</Text> : null}
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Body small muted>{t('person.native', { lang: t(`lang.${p.native}`) })} · {t(`lang.${p.learn}`)}</Body>
-              <LevelBars level={p.level} />
-            </View>
-          </View>
-        </Card>
-      ))}
+      {suggestions.filter((p) => !following.includes(p.id)).map((p) => <PersonRow key={p.id} person={p} />)}
     </Screen>
   );
 }

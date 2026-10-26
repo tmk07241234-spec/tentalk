@@ -45,6 +45,7 @@ const ja = {
     s5: { title: '安心して話すために', body: '語学目的だけの人には「語学のみ」バッジが付きます。通報とブロックはいつでも1タップ。利用は18歳以上です。' },
   },
   home: {
+    following: 'フォロー中', noFollowing: 'ランダム通話で10分話した相手や、探すタブの相手をフォローするとここに表示されます。',
     hello: 'こんばんは、{{name}}さん', learning: '学習中', add: '＋ 追加',
     buddy: '練習仲間', exchange: '言語交換', buddySub: '{{lang}}だけで話す', exchangeSub: '{{learn}}と{{native}}を半分ずつ',
     random: 'ランダム', online: 'いま{{people}}人・待ち時間 約{{seconds}}秒', startNow: 'ランダムですぐに開始',
@@ -82,6 +83,7 @@ const ja = {
     devSpeed: '開発用: 30倍速',
   },
   me: {
+    editProfile: 'プロフィールを編集',
     title: '自分', trust: '信頼スコア', trustNote: '他の人には「信頼済み」とだけ表示されます', learning: '学習中',
     uiLanguage: 'アプリの表示言語', uiLanguageNote: '画面の文字の言語です。母語や学習言語の設定とは別です。', device: '端末の設定に合わせる ({{lang}})',
     account: 'アカウント', signedInWith: 'ログイン方法: {{method}}', logout: 'ログアウト', deleteAccount: 'アカウントを削除', legal: '規約とポリシー',
@@ -99,6 +101,49 @@ const ja = {
     weekA11y: '今週は{{done}}日話しました', badges: 'バッジ', locked: '未獲得', streakUp: '連続 {{n}}日に！', devSeed: '開発用: 進捗のサンプルを入れる',
   },
   badges: { first_call: 'はじめての10分', calls_10: '10回完走', calls_50: '50回完走', streak_3: '3日連続', streak_7: '7日連続', streak_30: '30日連続', hour_1: '合計1時間', hours_10: '合計10時間' },
+  country: { US: 'アメリカ', GB: 'イギリス', AU: 'オーストラリア', CA: 'カナダ', BR: 'ブラジル', KR: '韓国', ES: 'スペイン', VN: 'ベトナム', DE: 'ドイツ', MX: 'メキシコ', JP: '日本' },
+  hobbies: { travel: '旅行', anime: 'アニメ', cooking: '料理', music: '音楽', movies: '映画・ドラマ', games: 'ゲーム', sports: 'スポーツ', reading: '読書', photo: '写真', cafe: 'カフェ', tech: 'テクノロジー', art: 'アート' },
+  find: {
+    title: '相手を探す', exchange: '言語交換', exchangeSub: '{{lang}}ネイティブ', buddy: '練習仲間', buddySub: '{{lang}}を学ぶ人', hobby: '共通の趣味', hobbySub: '両方から',
+    levelOf: '相手の{{lang}}レベル（いまオンライン）', level: 'レベル', all: 'すべて', sort: '並び替え', sortOnline: 'オンライン優先', sortCommon: '共通の趣味', sortLevel: 'レベルが近い',
+    count: '{{n}}人', empty: '条件に合う人はいません。', yourHobbies: 'あなたと共通の趣味', noHobbies: '趣味を登録すると、共通の趣味から相手を探せます。', addHobbies: '趣味を登録する',
+    note: 'フォロワー数や人気順はありません。通話中の人は表示されません。',
+  },
+  profileView: {
+    offline: 'オフライン', nextAvailable: '次に話せる: {{hours}}', localTime: '現地時刻 {{time}}', learning: '学習中', hours: '話せる時間帯', hoursMine: '{{hours}}（あなたの時間）',
+    calls: '完了した通話 {{n}}回', commonHobbies: '共通の趣味', modeBuddy: '練習仲間として、10分間{{lang}}だけで話します。', modeExchange: '言語交換として、{{learn}}と{{native}}を半分ずつ話します。',
+    requestOnline: '10分通話をリクエスト', requestOffline: 'リクエストを送る', requested: 'リクエスト済み',
+    noteOnline: 'メッセージは送れません。承認されるとすぐに通話が始まります。', noteOffline: 'いまはオフラインです。リクエストは24時間有効で、承認されると着信でお知らせします。',
+    follow: 'フォロー', following: 'フォロー中', block: 'ブロック', blockTitle: '{{name}}さんをブロックしますか？', blockBody: '今後マッチせず、一覧や履歴にも表示されません。相手には通知されません。「自分」→「ブロックした人」から解除できます。', blockConfirm: 'ブロックする', unavailable: 'このプロフィールは表示できません。',
+  },
+  request: {
+    waiting: '{{name}}さんの返事を待っています', waitingBody: '承認されるとすぐに通話が始まります。{{seconds}}秒で自動的に取り消されます。', cancel: '取り消す',
+    declined: '{{name}}さんはいま通話できないようです', expired: '返事がありませんでした', tryLater: '時間をおいてもう一度リクエストするか、ランダム通話を使ってください。',
+    sentTitle: 'リクエストを送りました', sentBody: '{{name}}さんが承認すると着信でお知らせします。30秒以内に出ると通話が始まります。出られなかった場合も24時間は通知から通話できます。', ok: 'OK',
+  },
+  notifications: {
+    title: '通知', empty: '通知はまだありません。', welcome: 'Tentalkへようこそ！まずはランダム通話で最初の10分を話してみましょう。', theme: '今週のテーマは「おすすめの映画」です。',
+    followed: '{{name}}さんがあなたをフォローしました', accepted: '{{name}}さんがリクエストを承認しました', call: '通話する', incoming: '{{name}}さんが10分話したいそうです',
+    accept: '承認して通話', decline: '今は無理', expired: '期限切れ', done: '対応済み', reportResult: '通報の確認が完了しました。違反が認められたため、相手に措置を取りました。',
+    justNow: 'たった今', minutes: '{{n}}分前', hours: '{{n}}時間前', days: '{{n}}日前', devIncoming: '開発用: リクエストが届く',
+  },
+  history: {
+    title: '履歴', empty: 'まだ通話していません。', note: 'ランダム通話で2人とも10分以上話した相手は、ここからいつでもプロフィールを見てフォローできます。',
+    random: 'ランダム', direct: 'リクエスト', open: 'プロフィール公開', hidden: '10分未満のため非公開', view: '見る', unknown: '相手',
+  },
+  profileEdit: {
+    title: 'プロフィールを編集', icon: 'アイコン', name: '名前', bio: '自己紹介', bioPlaceholder: '仕事、好きなこと、話したい話題など', native: '母語', learning: '学習中の言語（2つまで）',
+    addLanguage: '＋ 言語を追加', remove: '削除', levelHelp: 'レベルを押すと、5段階の説明を見ながら選べます。', hobbies: '趣味', hours: '話せる時間帯', from: '開始', to: '終了',
+    hoursNote: 'この時間はおすすめに表示されます。他の人には相手の時間に直して表示されます。', voice: '自己紹介の音声', voiceSoon: '次の段階で追加します',
+    save: '保存', saved: '保存しました',
+    errors: { name: '名前を入力してください（20文字まで）。', bio: '自己紹介は200文字までです。', learnSame: '母語と同じ言語は学習言語にできません。', learnDuplicate: '同じ言語が2回選ばれています。', learnNone: '学習言語を1つ以上選んでください。', learnTooMany: '学習言語は2つまでです。', hobbies: '趣味を1つ以上選んでください。', hours: '開始と終了の時刻を正しく選んでください。' },
+  },
+  settings: {
+    title: '通話の設定', languageOnly: '語学目的の会話のみ', languageOnlyNote: 'オンの間はプロフィールに「語学のみ」と表示されます。',
+    languageOnlyPartners: 'ランダムでは「語学のみ」の人とだけマッチ', languageOnlyPartnersNote: 'オフにすると待ち時間が短くなります。',
+    switchCue: '言語交換で5分の交代の合図を出す', switchCueNote: '言語の切り替えは通話中いつでもできます。', matchLevel: 'ランダムでレベル帯を合わせる', matchLevelNote: 'オンにすると待ち時間が少し長くなります。',
+    guide: '使い方ガイドを見る', blocked: 'ブロックした人', unblock: '解除', noneBlocked: 'ブロックした人はいません。',
+  },
   placeholder: { body: 'この画面は次の段階で実装します。' },
 };
 

@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { LevelTag } from '@/components/level';
+import { Pill, SwitchRow } from '@/components/people';
 import { Badge } from '@/components/progress';
 import { Body, Button, Card, ChoiceChips, Eyebrow, Screen, Title } from '@/components/ui';
 import { UI_LANGS, type UiLang } from '@/domain/languages';
 import { BADGES, earnedBadges } from '@/domain/progress';
+import { findSamplePartner } from '@/services/matchmaking';
 import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
 import { useApp } from '@/state/store';
@@ -18,7 +20,7 @@ type UiChoice = UiLang | 'device';
 export default function Me() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, trust, account, uiLang, setUiLang, signOut, callLog, seedDemoProgress } = useApp();
+  const { profile, trust, account, uiLang, setUiLang, signOut, callLog, seedDemoProgress, settings, updateSettings, blocked, unblock } = useApp();
   if (!profile) return null;
 
   const logout = async () => {
@@ -44,6 +46,12 @@ export default function Me() {
             ))}
           </View>
         </View>
+        {profile.bio ? <Body>{profile.bio}</Body> : null}
+        {profile.hobbies.length ? (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>{profile.hobbies.map((h) => <Pill key={h} label={t(`hobbies.${h}`)} />)}</View>
+        ) : null}
+        {profile.hours ? <Body small muted>{t('profileView.hours')}: {profile.hours.start}–{profile.hours.end}</Body> : null}
+        <Button label={t('me.editProfile')} onPress={() => router.push('/profile-edit')} />
       </Card>
 
       <Card>
@@ -58,6 +66,30 @@ export default function Me() {
           {BADGES.map((b) => <Badge key={b} id={b} earned={earnedBadges(callLog).has(b)} size={48} />)}
         </View>
         {__DEV__ ? <Button small variant="ghost" label={t('progress.devSeed')} onPress={seedDemoProgress} /> : null}
+      </Card>
+
+      <Card>
+        <Eyebrow>{t('settings.title')}</Eyebrow>
+        <SwitchRow label={t('settings.languageOnly')} note={t('settings.languageOnlyNote')} value={settings.languageOnly} onChange={(v) => updateSettings({ languageOnly: v })} />
+        <SwitchRow label={t('settings.languageOnlyPartners')} note={t('settings.languageOnlyPartnersNote')} value={settings.languageOnlyPartners} onChange={(v) => updateSettings({ languageOnlyPartners: v })} />
+        <SwitchRow label={t('settings.switchCue')} note={t('settings.switchCueNote')} value={settings.switchCue} onChange={(v) => updateSettings({ switchCue: v })} />
+        <SwitchRow label={t('settings.matchLevel')} note={t('settings.matchLevelNote')} value={settings.matchLevel} onChange={(v) => updateSettings({ matchLevel: v })} />
+        <Button variant="ghost" label={t('settings.guide')} onPress={() => router.push('/guide')} />
+      </Card>
+
+      <Card>
+        <Eyebrow>{t('settings.blocked')}</Eyebrow>
+        {blocked.length === 0 ? <Body small muted>{t('settings.noneBlocked')}</Body> : null}
+        {blocked.map((id) => {
+          const p = findSamplePartner(id);
+          return (
+            <View key={id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+              <Avatar name={p?.name ?? '?'} color={p?.color ?? '#8A8FA3'} size={36} />
+              <Text style={{ color: c.ink, flex: 1 }}>{p?.name ?? id}</Text>
+              <Button small label={t('settings.unblock')} onPress={() => unblock(id)} />
+            </View>
+          );
+        })}
       </Card>
 
       <Card>

@@ -47,6 +47,7 @@ const es: Translation = {
     s5: { title: 'Conversaciones seguras', body: 'Quien solo busca practicar idiomas lleva la insignia “Solo idiomas”. Denunciar y bloquear siempre está a un toque. Debes tener 18 años o más.' },
   },
   home: {
+    following: 'Siguiendo', noFollowing: 'Aquí aparecen las personas que sigas tras una llamada aleatoria de 10 minutos o desde Buscar.',
     hello: 'Buenas noches, {{name}}', learning: 'Aprendiendo', add: '+ Añadir',
     buddy: 'Compañero de práctica', exchange: 'Intercambio', buddySub: 'Solo en {{lang}}', exchangeSub: 'Mitad {{learn}}, mitad {{native}}',
     random: 'Aleatorio', online: '{{people}} en línea · espera ~{{seconds}} s', startNow: 'Empieza ya una llamada aleatoria',
@@ -84,6 +85,7 @@ const es: Translation = {
     devSpeed: 'Dev: velocidad 30×',
   },
   me: {
+    editProfile: 'Editar perfil',
     title: 'Yo', trust: 'Puntuación de confianza', trustNote: 'Los demás solo ven “De confianza”', learning: 'Aprendiendo',
     uiLanguage: 'Idioma de la app', uiLanguageNote: 'Es el idioma de los textos de la app. Es independiente de tu idioma nativo y de los que aprendes.', device: 'Usar el idioma del dispositivo ({{lang}})',
     account: 'Cuenta', signedInWith: 'Sesión iniciada con {{method}}', logout: 'Cerrar sesión', deleteAccount: 'Eliminar cuenta', legal: 'Términos y políticas',
@@ -101,6 +103,49 @@ const es: Translation = {
     weekA11y: 'Hablaste {{done}} días esta semana', badges: 'Insignias', locked: 'sin conseguir', streakUp: '¡Racha de {{n}} días!', devSeed: 'Dev: añadir progreso de ejemplo',
   },
   badges: { first_call: 'Primeros 10 minutos', calls_10: '10 llamadas', calls_50: '50 llamadas', streak_3: '3 días seguidos', streak_7: '7 días seguidos', streak_30: '30 días seguidos', hour_1: '1 hora en total', hours_10: '10 horas en total' },
+  country: { US: 'EE. UU.', GB: 'Reino Unido', AU: 'Australia', CA: 'Canadá', BR: 'Brasil', KR: 'Corea', ES: 'España', VN: 'Vietnam', DE: 'Alemania', MX: 'México', JP: 'Japón' },
+  hobbies: { travel: 'Viajar', anime: 'Anime', cooking: 'Cocina', music: 'Música', movies: 'Cine y series', games: 'Videojuegos', sports: 'Deportes', reading: 'Lectura', photo: 'Fotografía', cafe: 'Cafeterías', tech: 'Tecnología', art: 'Arte' },
+  find: {
+    title: 'Buscar', exchange: 'Intercambio', exchangeSub: 'Nativos de {{lang}}', buddy: 'Compañero', buddySub: 'Aprenden {{lang}}', hobby: 'Aficiones', hobbySub: 'Ambos modos',
+    levelOf: 'Su nivel de {{lang}} (en línea ahora)', level: 'Nivel', all: 'Todos', sort: 'Ordenar', sortOnline: 'En línea primero', sortCommon: 'Aficiones en común', sortLevel: 'Nivel parecido',
+    count: '{{n}} personas', empty: 'Nadie coincide con estos filtros.', yourHobbies: 'Aficiones en común', noHobbies: 'Añade aficiones para encontrar gente que las comparta.', addHobbies: 'Añadir aficiones',
+    note: 'Sin número de seguidores ni rankings de popularidad. No se muestra a quien está en una llamada.',
+  },
+  profileView: {
+    offline: 'Desconectado', nextAvailable: 'Disponible: {{hours}}', localTime: 'Hora local {{time}}', learning: 'Aprendiendo', hours: 'Horario disponible', hoursMine: '{{hours}} (tu hora)',
+    calls: '{{n}} llamadas completadas', commonHobbies: 'Aficiones en común', modeBuddy: 'Como compañeros de práctica, hablarán solo en {{lang}} durante 10 minutos.', modeExchange: 'Como intercambio, hablarán mitad en {{learn}} y mitad en {{native}}.',
+    requestOnline: 'Pedir una llamada de 10 minutos', requestOffline: 'Enviar solicitud', requested: 'Solicitud enviada',
+    noteOnline: 'No hay mensajes. Si acepta, la llamada empieza enseguida.', noteOffline: 'Está desconectado. La solicitud dura 24 horas y te avisaremos con una llamada cuando acepte.',
+    follow: 'Seguir', following: 'Siguiendo', block: 'Bloquear', blockTitle: '¿Bloquear a {{name}}?', blockBody: 'No volverán a emparejarte y desaparecerá de las listas y del historial. No se le avisa. Puedes desbloquearlo en Yo → Personas bloqueadas.', blockConfirm: 'Bloquear', unavailable: 'Este perfil no está disponible.',
+  },
+  request: {
+    waiting: 'Esperando la respuesta de {{name}}', waitingBody: 'La llamada empieza en cuanto acepte. La solicitud se cancela en {{seconds}} segundos.', cancel: 'Cancelar',
+    declined: '{{name}} no puede hablar ahora', expired: 'No hubo respuesta', tryLater: 'Inténtalo más tarde o usa una llamada aleatoria.',
+    sentTitle: 'Solicitud enviada', sentBody: 'Cuando {{name}} acepte, te avisaremos con una llamada. Contesta en 30 segundos para empezar. Si no puedes, podrás llamar desde Avisos durante 24 horas.', ok: 'OK',
+  },
+  notifications: {
+    title: 'Avisos', empty: 'Todavía no hay avisos.', welcome: '¡Te damos la bienvenida! Empieza con una llamada aleatoria y habla tus primeros 10 minutos.', theme: 'El tema de esta semana es “una película que recomiendes”.',
+    followed: '{{name}} empezó a seguirte', accepted: '{{name}} aceptó tu solicitud', call: 'Llamar', incoming: '{{name}} quiere hablar 10 minutos',
+    accept: 'Aceptar y llamar', decline: 'Ahora no', expired: 'Caducada', done: 'Atendida', reportResult: 'Revisamos tu denuncia. Se confirmó una infracción y tomamos medidas.',
+    justNow: 'Ahora mismo', minutes: 'hace {{n}} min', hours: 'hace {{n}} h', days: 'hace {{n}} d', devIncoming: 'Dev: recibir una solicitud',
+  },
+  history: {
+    title: 'Historial', empty: 'Todavía no has hecho llamadas.', note: 'Si en una llamada aleatoria hablaron 10 minutos o más, aquí puedes ver su perfil y seguirle cuando quieras.',
+    random: 'Aleatoria', direct: 'Solicitud', open: 'Perfil abierto', hidden: 'Oculto (menos de 10 minutos)', view: 'Ver', unknown: 'Compañero',
+  },
+  profileEdit: {
+    title: 'Editar perfil', icon: 'Icono', name: 'Nombre', bio: 'Sobre ti', bioPlaceholder: 'Tu trabajo, lo que te gusta, temas de los que quieres hablar', native: 'Idioma nativo', learning: 'Aprendiendo (hasta 2)',
+    addLanguage: '+ Añadir idioma', remove: 'Quitar', levelHelp: 'Toca el nivel para elegirlo viendo las cinco descripciones.', hobbies: 'Aficiones', hours: 'Horario disponible', from: 'Desde', to: 'Hasta',
+    hoursNote: 'En este horario aparecerás en las sugerencias. Los demás lo ven en su propia hora.', voice: 'Presentación de voz', voiceSoon: 'Llegará en la próxima etapa',
+    save: 'Guardar', saved: 'Guardado',
+    errors: { name: 'Introduce un nombre (hasta 20 caracteres).', bio: '“Sobre ti” admite hasta 200 caracteres.', learnSame: 'Un idioma que aprendes no puede ser tu idioma nativo.', learnDuplicate: 'Has elegido el mismo idioma dos veces.', learnNone: 'Elige al menos un idioma para aprender.', learnTooMany: 'Puedes aprender hasta 2 idiomas.', hobbies: 'Elige al menos una afición.', hours: 'Elige una hora de inicio y de fin válidas.' },
+  },
+  settings: {
+    title: 'Ajustes de llamada', languageOnly: 'Solo práctica de idiomas', languageOnlyNote: 'Mientras esté activado, tu perfil muestra “Solo idiomas”.',
+    languageOnlyPartners: 'Aleatorias: solo personas con “Solo idiomas”', languageOnlyPartnersNote: 'Si lo desactivas, esperarás menos.',
+    switchCue: 'Intercambio: aviso de cambio a los 5 minutos', switchCueNote: 'Puedes cambiar de idioma en cualquier momento.', matchLevel: 'Aleatorias: nivel parecido', matchLevelNote: 'Si lo activas, la espera será un poco más larga.',
+    guide: 'Cómo usar Tentalk', blocked: 'Personas bloqueadas', unblock: 'Desbloquear', noneBlocked: 'No has bloqueado a nadie.',
+  },
   placeholder: { body: 'Esta pantalla llegará en la próxima etapa.' },
 };
 

@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router/tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
+import { useApp } from '@/state/store';
 import { useColors } from '@/theme/colors';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
@@ -18,6 +19,7 @@ const TABS: { name: string; label: string; icon: IconName }[] = [
 export default function TabsLayout() {
   const { t } = useTranslation();
   const c = useColors();
+  const unread = useApp((s) => s.notifications.filter((n) => !n.read).length);
   return (
     <Tabs screenOptions={{
       headerShown: false,
@@ -30,6 +32,7 @@ export default function TabsLayout() {
         <Tabs.Screen key={tab.name} name={tab.name} options={{
           title: t(tab.label),
           tabBarIcon: ({ color, size }) => <Ionicons name={tab.icon} size={size} color={color as string} />,
+          tabBarBadge: tab.name === 'notifications' && unread > 0 ? unread : undefined,
         }} />
       ))}
     </Tabs>
