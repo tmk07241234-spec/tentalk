@@ -2,6 +2,7 @@
   "expo": {
     "name": "Tentalk",
     "slug": "tentalk",
+    "owner": "tentalk",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -43,6 +44,11 @@
     "scheme": "tentalk",
     "experiments": {
       "typedRoutes": false
+    },
+    "extra": {
+      "eas": {
+        "projectId": "387e867b-f84f-4cfa-990c-4366d245a535"
+      }
     }
   }
 }
