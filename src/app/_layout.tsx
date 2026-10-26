@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
 import { useApp } from '@/state/store';
+import { startCloudSync } from '@/state/sync';
 import { useColors } from '@/theme/colors';
 
 /** Waits for the persisted store to load so the first redirect is correct. */
@@ -27,6 +28,8 @@ export default function RootLayout() {
     i18n.changeLanguage(lang);
     auth.setLanguage(lang);
   }, [uiLang, i18n]);
+
+  useEffect(() => (hydrated ? startCloudSync() : undefined), [hydrated]);
 
   if (!hydrated) return null;
 

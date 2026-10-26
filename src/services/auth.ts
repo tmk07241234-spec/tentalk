@@ -58,12 +58,19 @@ export interface AuthService {
   /** Signs in, or creates the account when the address is new. */
   continueWithEmail(email: string, password: string): Promise<SignInResult>;
   sendPasswordReset(email: string): Promise<void>;
-  /** Deletes the signed-in account. Fails with 'requires-recent-login' after a long session. */
-  deleteAccount(): Promise<void>;
+  /**
+   * Deletes the signed-in account, running `removeData` first while still signed in.
+   * Fails with 'requires-recent-login', before anything is removed, when the last
+   * sign-in is too old for Firebase to allow the deletion.
+   */
+  deleteAccount(removeData: (uid: string) => Promise<void>): Promise<void>;
   signOut(): Promise<void>;
   /** Language of the emails Firebase sends (verification, password reset). */
   setLanguage(lang: string): void;
 }
+
+/** Firebase asks for a fresh sign-in before deleting an account; its window is about 5 minutes. */
+const RECENT_LOGIN_MS = 4 * 60_000;
 
 const result = (method: SignInMethod, cred: UserCredential, isNew: boolean): SignInResult => ({
   method,
@@ -101,9 +108,15 @@ export const auth: AuthService = {
     await sendPasswordResetEmail(firebaseAuth, email);
   },
 
-  async deleteAccount() {
+  async deleteAccount(removeData) {
     const user = firebaseAuth.currentUser;
-    if (user) await deleteUser(user);
+    if (!user) return;
+    const lastSignIn = Date.parse(user.metadata.lastSignInTime ?? '');
+    if (!(Date.now() - lastSignIn < RECENT_LOGIN_MS)) {
+      throw Object.assign(new Error('Sign in again to delete the account.'), { code: 'auth/requires-recent-login' });
+    }
+    await removeData(user.uid);
+    await deleteUser(user);
   },
 
   async signOut() {

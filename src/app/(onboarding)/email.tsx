@@ -6,6 +6,7 @@ import { Body, Button, ErrorText, Field, Screen, StepLabel, Title } from '@/comp
 import { isEmail, isPassword } from '@/domain/validation';
 import { auth, authErrorKind } from '@/services/auth';
 import { SETUP_STEPS, useOnboarding } from '@/state/onboarding';
+import { continueAfterSignIn } from '@/state/session';
 
 /** Email and password. A new address creates the account; a known one signs in. */
 export default function EmailStep() {
@@ -35,8 +36,7 @@ export default function EmailStep() {
     setBusy('continue');
     try {
       const r = await auth.continueWithEmail(email.trim(), password);
-      draft.set({ method: r.method, uid: r.uid, email: r.email, suggestedName: r.displayName ?? '' });
-      router.push('/birthday');
+      await continueAfterSignIn(r);
     } catch (e) {
       setError(errorText(e));
     } finally {

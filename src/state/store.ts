@@ -9,6 +9,7 @@ import type { Mode } from '@/domain/matching';
 import { dayKey, type CallLogEntry } from '@/domain/progress';
 import type { HoursRange } from '@/domain/schedule';
 import type { SignInMethod } from '@/services/auth';
+import type { fromCloud } from './cloudShape';
 
 export interface LearningLang {
   lang: Lang;
@@ -28,7 +29,8 @@ export interface Profile {
   /** Available hours in this user's local time; null until set. */
   hours: HoursRange | null;
   /** Minutes east of UTC, so others see the hours in their own time. */
-  utcOffset: number;  /** Tentalk Plus icon frame; null = none. */
+  utcOffset: number;
+  /** Tentalk Plus icon frame; null = none. */
   frame?: FrameId | null;
   /** Self-introduction recording; null until recorded. */
   voice?: VoiceIntro | null;
@@ -84,7 +86,7 @@ export interface Settings {
   matchLevel: boolean;
 }
 
-interface AppState {
+export interface AppState {
   /** null = follow the device language. */
   uiLang: UiLang | null;
   /** uid is the Firebase user id; accounts made before Firebase have none. */
@@ -111,6 +113,8 @@ interface AppState {
   setUiLang: (lang: UiLang | null) => void;
   completeSetup: (input: { account: NonNullable<AppState['account']>; profile: Profile }) => void;
   finishGuide: () => void;
+  /** Signing in to an account that already finished setup, e.g. on a new device. */
+  restoreAccount: (input: { account: NonNullable<AppState['account']>; saved: ReturnType<typeof fromCloud> }) => void;
   setMode: (mode: Mode) => void;
   setActiveLearn: (lang: Lang) => void;
   applyCallResult: (input: { trustDelta: number; todayGain: number; minutes: number; completed: boolean; cooldownMinutes: number }) => void;
@@ -168,6 +172,7 @@ export const useApp = create<AppState>()(
           ],
         }),
       finishGuide: () => set({ onboarded: true }),
+      restoreAccount: ({ account, saved }) => set((s) => ({ ...initial, uiLang: s.uiLang, onboarded: true, ...saved, account })),
       setMode: (mode) => set({ mode }),
       setActiveLearn: (lang) => set((s) => (s.profile ? { profile: { ...s.profile, activeLearn: lang } } : s)),
       applyCallResult: ({ trustDelta, todayGain, minutes, completed, cooldownMinutes }) =>

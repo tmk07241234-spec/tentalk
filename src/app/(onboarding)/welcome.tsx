@@ -9,6 +9,7 @@ import { Body, ChoiceChips, ErrorText, Screen, Title } from '@/components/ui';
 import { UI_LANGS, type UiLang } from '@/domain/languages';
 import { auth, authErrorKind } from '@/services/auth';
 import { useOnboarding } from '@/state/onboarding';
+import { continueAfterSignIn } from '@/state/session';
 import { useApp } from '@/state/store';
 import { radius, space, useColors } from '@/theme/colors';
 
@@ -26,8 +27,7 @@ export default function Welcome() {
     try {
       const r = await auth.signInWithGoogle();
       draft.reset();
-      draft.set({ method: r.method, uid: r.uid, email: r.email, suggestedName: r.displayName ?? '' });
-      router.push('/birthday');
+      await continueAfterSignIn(r);
     } catch (e) {
       if (authErrorKind(e) !== 'cancelled') setError(t('welcome.signInFailed'));
     } finally {

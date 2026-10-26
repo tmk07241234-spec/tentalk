@@ -8,6 +8,7 @@ import { SmallChips } from '@/components/people';
 import { Body, Button, Card, ChoiceChips, ErrorText, Field, Screen, Title } from '@/components/ui';
 import { LICENSES, legalDoc, type DocId } from '@/data/legal';
 import { auth, authErrorKind } from '@/services/auth';
+import { cloud } from '@/services/cloud';
 import { support, type InquiryKind } from '@/services/support';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
@@ -126,7 +127,7 @@ function DeleteAccount() {
     setError('');
     try {
       await support.deleteAccount();
-      await auth.deleteAccount();
+      await auth.deleteAccount((uid) => cloud.remove(uid));
     } catch (e) {
       setStep('confirm');
       return setError(authErrorKind(e) === 'requires-recent-login' ? t('info.deleteReauth') : t('info.deleteFailed'));

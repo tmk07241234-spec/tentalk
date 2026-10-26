@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Paste into Firebase console → Firestore → Rules, then press Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Public profile: any signed-in user can read it (to show it to call partners);
+    // only its owner can write it.
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create, update: if isOwner(uid)
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 20
+        && request.resource.data.bio is string
+        && request.resource.data.bio.size() <= 300;
+      allow delete: if isOwner(uid);
+
+      // Settings, follows, blocks, call history and trust score: owner only.
+      // The trust score moves to the server once calls go through it.
+      match /private/{doc} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+  }
+}
