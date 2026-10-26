@@ -136,9 +136,9 @@ const ko: Translation = {
   profileEdit: {
     title: '프로필 편집', icon: '아이콘', name: '이름', bio: '자기소개', bioPlaceholder: '하는 일, 좋아하는 것, 이야기하고 싶은 주제 등', native: '모국어', learning: '학습 중인 언어 (2개까지)',
     addLanguage: '+ 언어 추가', remove: '삭제', levelHelp: '레벨을 누르면 5단계 설명을 보면서 고를 수 있어요.', hobbies: '취미', hours: '대화 가능한 시간', from: '시작', to: '종료',
-    hoursNote: '이 시간에는 추천에 표시돼요. 다른 사람에게는 그 사람의 시간으로 바꿔 보여요.', voice: '음성 소개', voiceSoon: '다음 단계에서 추가해요',
+    hoursNote: '이 시간에는 추천에 표시돼요. 다른 사람에게는 그 사람의 시간으로 바꿔 보여요.', voice: '음성 소개',
     save: '저장', saved: '저장했어요',
-    errors: { name: '이름을 입력해 주세요 (20자까지).', bio: '자기소개는 200자까지예요.', learnSame: '모국어와 같은 언어는 학습 언어로 고를 수 없어요.', learnDuplicate: '같은 언어가 두 번 선택됐어요.', learnNone: '학습 언어를 하나 이상 골라 주세요.', learnTooMany: '학습 언어는 2개까지예요.', hobbies: '취미를 하나 이상 골라 주세요.', hours: '시작과 종료 시각을 올바르게 골라 주세요.' },
+    errors: { name: '이름을 입력해 주세요 (20자까지).', bio: '자기소개는 200자까지예요.', learnSame: '모국어와 같은 언어는 학습 언어로 고를 수 없어요.', learnDuplicate: '같은 언어가 두 번 선택됐어요.', learnNone: '학습 언어를 하나 이상 골라 주세요.', learnTooMany: '학습 언어는 2개까지예요.', hours: '시작과 종료 시각을 올바르게 골라 주세요.' },
   },
   settings: {
     title: '통화 설정', languageOnly: '어학 목적 대화만', languageOnlyNote: '켜 두면 프로필에 “어학 전용”이 표시돼요.',
@@ -146,6 +146,7 @@ const ko: Translation = {
     switchCue: '언어 교환에서 5분에 교대 알림', switchCueNote: '통화 중 언제든 언어를 바꿀 수 있어요.', matchLevel: '랜덤에서 비슷한 레벨끼리 매칭', matchLevelNote: '켜면 대기 시간이 조금 길어져요.',
     guide: '사용 가이드 보기', blocked: '차단한 사람', unblock: '해제', noneBlocked: '차단한 사람이 없어요.',
   },
+  voice: { title: '음성 소개', record: '녹음하기', stop: '녹음 멈추기', play: '재생', pause: '일시정지', rerecord: '다시 녹음', delete: '삭제', recording: '녹음 중 {{s}} / {{max}}초', tooShort: '{{n}}초 이상 말해 주세요.', permission: '마이크 사용이 허용되지 않았어요. 기기 설정에서 Tentalk의 마이크를 허용해 주세요.', hint: '{{max}}초 안에 이름, 출신, 배우는 언어, 이야기하고 싶은 것 등을 말해 보세요. 목소리를 먼저 들을 수 있어서 상대가 안심해요.' },
   placeholder: { body: '이 화면은 다음 단계에서 구현해요.' },
 };
 

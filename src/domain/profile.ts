@@ -5,6 +5,10 @@ import { validateLanguages } from './validation';
 export const HOBBIES = ['travel', 'anime', 'cooking', 'music', 'movies', 'games', 'sports', 'reading', 'photo', 'cafe', 'tech', 'art'] as const;
 export type Hobby = (typeof HOBBIES)[number];
 
+/** Voice intro length limits, in seconds. */
+export const VOICE_MAX_SECONDS = 15;
+export const VOICE_MIN_SECONDS = 3;
+
 export const MAX_NAME = 20;
 export const MAX_BIO = 200;
 
@@ -17,7 +21,8 @@ export interface ProfileDraft {
   hours: HoursRange;
 }
 
-export type ProfileError = 'name' | 'bio' | 'learnSame' | 'learnDuplicate' | 'learnNone' | 'learnTooMany' | 'hobbies' | 'hours';
+// Hobbies are optional here: a new user may want to save just a voice intro. Home nudges until they are added.
+export type ProfileError = 'name' | 'bio' | 'learnSame' | 'learnDuplicate' | 'learnNone' | 'learnTooMany' | 'hours';
 
 export function validateProfile(d: ProfileDraft): ProfileError | null {
   if (!d.name.trim() || d.name.trim().length > MAX_NAME) return 'name';
@@ -27,7 +32,6 @@ export function validateProfile(d: ProfileDraft): ProfileError | null {
   if (lang === 'sameAsNative') return 'learnSame';
   if (lang === 'duplicate') return 'learnDuplicate';
   if (lang === 'none') return 'learnNone';
-  if (d.hobbies.length === 0) return 'hobbies';
   if (!isValidRange(d.hours)) return 'hours';
   return null;
 }

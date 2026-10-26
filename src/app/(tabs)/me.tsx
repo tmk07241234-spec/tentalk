@@ -6,6 +6,7 @@ import { Avatar } from '@/components/Avatar';
 import { LevelTag } from '@/components/level';
 import { Pill, SwitchRow } from '@/components/people';
 import { Badge } from '@/components/progress';
+import { VoicePlayer } from '@/components/voice';
 import { Body, Button, Card, ChoiceChips, Eyebrow, Screen, Title } from '@/components/ui';
 import { UI_LANGS, type UiLang } from '@/domain/languages';
 import { BADGES, earnedBadges } from '@/domain/progress';
@@ -46,6 +47,7 @@ export default function Me() {
             ))}
           </View>
         </View>
+        {profile.voice ? <VoicePlayer voice={profile.voice} /> : null}
         {profile.bio ? <Body>{profile.bio}</Body> : null}
         {profile.hobbies.length ? (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>{profile.hobbies.map((h) => <Pill key={h} label={t(`hobbies.${h}`)} />)}</View>

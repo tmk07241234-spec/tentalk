@@ -136,9 +136,9 @@ const en: Translation = {
   profileEdit: {
     title: 'Edit profile', icon: 'Icon', name: 'Name', bio: 'About you', bioPlaceholder: 'Your work, what you like, topics you want to talk about', native: 'Native language', learning: 'Learning (up to 2)',
     addLanguage: '+ Add language', remove: 'Remove', levelHelp: 'Tap a level to choose with the five descriptions.', hobbies: 'Hobbies', hours: 'Available hours', from: 'From', to: 'To',
-    hoursNote: 'You’ll appear in suggestions during these hours. Others see them in their own time.', voice: 'Voice intro', voiceSoon: 'Coming in the next stage',
+    hoursNote: 'You’ll appear in suggestions during these hours. Others see them in their own time.', voice: 'Voice intro',
     save: 'Save', saved: 'Saved',
-    errors: { name: 'Enter a name (up to 20 characters).', bio: 'About you can be up to 200 characters.', learnSame: 'A learning language can’t be your native language.', learnDuplicate: 'The same language is selected twice.', learnNone: 'Choose at least one learning language.', learnTooMany: 'You can learn up to 2 languages.', hobbies: 'Choose at least one hobby.', hours: 'Choose a valid start and end time.' },
+    errors: { name: 'Enter a name (up to 20 characters).', bio: 'About you can be up to 200 characters.', learnSame: 'A learning language can’t be your native language.', learnDuplicate: 'The same language is selected twice.', learnNone: 'Choose at least one learning language.', learnTooMany: 'You can learn up to 2 languages.', hours: 'Choose a valid start and end time.' },
   },
   settings: {
     title: 'Call settings', languageOnly: 'Language practice only', languageOnlyNote: 'While on, your profile shows “Language only”.',
@@ -146,6 +146,7 @@ const en: Translation = {
     switchCue: 'Language exchange: switch cue at 5 minutes', switchCueNote: 'You can switch languages anytime during a call.', matchLevel: 'Random calls: match a similar level', matchLevelNote: 'Turning this on makes the wait a little longer.',
     guide: 'How to use Tentalk', blocked: 'Blocked people', unblock: 'Unblock', noneBlocked: 'You haven’t blocked anyone.',
   },
+  voice: { title: 'Voice intro', record: 'Record', stop: 'Stop recording', play: 'Play', pause: 'Pause', rerecord: 'Record again', delete: 'Delete', recording: 'Recording {{s}} / {{max}} s', tooShort: 'Please talk for at least {{n}} seconds.', permission: 'Microphone access is off. Allow Tentalk to use the microphone in your device settings.', hint: 'In up to {{max}} seconds, say your name, where you’re from, the language you’re learning, and what you’d like to talk about. Hearing your voice first helps people feel at ease.' },
   placeholder: { body: 'This screen comes in the next stage.' },
 };
 

@@ -30,6 +30,12 @@
         {
           "photosPermission": "Choose a profile photo from your library."
         }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Tentalk uses the microphone for calls and for recording your voice intro."
+        }
       ]
     ],
     "scheme": "tentalk",

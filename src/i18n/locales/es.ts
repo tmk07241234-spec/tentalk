@@ -136,9 +136,9 @@ const es: Translation = {
   profileEdit: {
     title: 'Editar perfil', icon: 'Icono', name: 'Nombre', bio: 'Sobre ti', bioPlaceholder: 'Tu trabajo, lo que te gusta, temas de los que quieres hablar', native: 'Idioma nativo', learning: 'Aprendiendo (hasta 2)',
     addLanguage: '+ Añadir idioma', remove: 'Quitar', levelHelp: 'Toca el nivel para elegirlo viendo las cinco descripciones.', hobbies: 'Aficiones', hours: 'Horario disponible', from: 'Desde', to: 'Hasta',
-    hoursNote: 'En este horario aparecerás en las sugerencias. Los demás lo ven en su propia hora.', voice: 'Presentación de voz', voiceSoon: 'Llegará en la próxima etapa',
+    hoursNote: 'En este horario aparecerás en las sugerencias. Los demás lo ven en su propia hora.', voice: 'Presentación de voz',
     save: 'Guardar', saved: 'Guardado',
-    errors: { name: 'Introduce un nombre (hasta 20 caracteres).', bio: '“Sobre ti” admite hasta 200 caracteres.', learnSame: 'Un idioma que aprendes no puede ser tu idioma nativo.', learnDuplicate: 'Has elegido el mismo idioma dos veces.', learnNone: 'Elige al menos un idioma para aprender.', learnTooMany: 'Puedes aprender hasta 2 idiomas.', hobbies: 'Elige al menos una afición.', hours: 'Elige una hora de inicio y de fin válidas.' },
+    errors: { name: 'Introduce un nombre (hasta 20 caracteres).', bio: '“Sobre ti” admite hasta 200 caracteres.', learnSame: 'Un idioma que aprendes no puede ser tu idioma nativo.', learnDuplicate: 'Has elegido el mismo idioma dos veces.', learnNone: 'Elige al menos un idioma para aprender.', learnTooMany: 'Puedes aprender hasta 2 idiomas.', hours: 'Elige una hora de inicio y de fin válidas.' },
   },
   settings: {
     title: 'Ajustes de llamada', languageOnly: 'Solo práctica de idiomas', languageOnlyNote: 'Mientras esté activado, tu perfil muestra “Solo idiomas”.',
@@ -146,6 +146,7 @@ const es: Translation = {
     switchCue: 'Intercambio: aviso de cambio a los 5 minutos', switchCueNote: 'Puedes cambiar de idioma en cualquier momento.', matchLevel: 'Aleatorias: nivel parecido', matchLevelNote: 'Si lo activas, la espera será un poco más larga.',
     guide: 'Cómo usar Tentalk', blocked: 'Personas bloqueadas', unblock: 'Desbloquear', noneBlocked: 'No has bloqueado a nadie.',
   },
+  voice: { title: 'Presentación de voz', record: 'Grabar', stop: 'Detener grabación', play: 'Reproducir', pause: 'Pausa', rerecord: 'Grabar de nuevo', delete: 'Eliminar', recording: 'Grabando {{s}} / {{max}} s', tooShort: 'Habla al menos {{n}} segundos.', permission: 'El micrófono no está permitido. Permite que Tentalk use el micrófono en los ajustes del dispositivo.', hint: 'En {{max}} segundos como máximo, di tu nombre, de dónde eres, el idioma que aprendes y de qué te gustaría hablar. Oír tu voz primero da confianza.' },
   placeholder: { body: 'Esta pantalla llegará en la próxima etapa.' },
 };
 

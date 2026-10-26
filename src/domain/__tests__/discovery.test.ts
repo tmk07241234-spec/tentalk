@@ -70,7 +70,7 @@ describe('profile', () => {
     expect(validateProfile({ ...draft, learning: [{ lang: 'ja' }] })).toBe('learnSame');
     expect(validateProfile({ ...draft, learning: [{ lang: 'en' }, { lang: 'en' }] })).toBe('learnDuplicate');
     expect(validateProfile({ ...draft, learning: [{ lang: 'en' }, { lang: 'ko' }, { lang: 'es' }] })).toBe('learnTooMany');
-    expect(validateProfile({ ...draft, hobbies: [] })).toBe('hobbies');
+    expect(validateProfile({ ...draft, hobbies: [] })).toBeNull();
     expect(validateProfile({ ...draft, hours: { start: '9:00', end: '9:00' } })).toBe('hours');
   });
 

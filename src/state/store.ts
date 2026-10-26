@@ -28,7 +28,17 @@ export interface Profile {
   /** Available hours in this user's local time; null until set. */
   hours: HoursRange | null;
   /** Minutes east of UTC, so others see the hours in their own time. */
-  utcOffset: number;
+  utcOffset: number;  /** Self-introduction recording; null until recorded. */
+  voice?: VoiceIntro | null;
+}
+
+export interface VoiceIntro {
+  /**
+   * Local file (native) or blob URL (web). Uploaded to storage once the backend exists;
+   * until then a web recording does not survive a page reload.
+   */
+  uri: string;
+  seconds: number;
 }
 
 export interface HistoryEntry {

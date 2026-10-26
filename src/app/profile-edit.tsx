@@ -7,13 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/Avatar';
 import { LevelBars, LevelPicker } from '@/components/level';
 import { SmallChips } from '@/components/people';
+import { VoiceRecorder } from '@/components/voice';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, ChoiceChips, ErrorText, Eyebrow, Field, Screen, Title } from '@/components/ui';
 import { MAX_LEARNING_LANGS, SELECTABLE_LANGS, type Lang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import { HOBBIES, MAX_BIO, MAX_NAME, validateProfile } from '@/domain/profile';
 import { deviceOffset, formatHM, type HoursRange } from '@/domain/schedule';
-import { useApp, type LearningLang } from '@/state/store';
+import { useApp, type LearningLang, type VoiceIntro } from '@/state/store';
 import { AVATAR_COLORS, radius, space, useColors } from '@/theme/colors';
 
 const HOUR_OPTIONS = Array.from({ length: 48 }, (_, i) => formatHM(i * 30)).concat('24:00');
@@ -30,6 +31,7 @@ export default function ProfileEdit() {
   const [learning, setLearning] = useState<LearningLang[]>(profile?.learning ?? []);
   const [hobbies, setHobbies] = useState<string[]>(profile?.hobbies ?? []);
   const [hours, setHours] = useState<HoursRange>(profile?.hours ?? { start: '21:00', end: '23:00' });
+  const [voice, setVoice] = useState<VoiceIntro | null>(profile?.voice ?? null);
   const [levelFor, setLevelFor] = useState<number | null>(null);
   const [picking, setPicking] = useState<null | 'start' | 'end'>(null);
   const [error, setError] = useState('');
@@ -46,7 +48,7 @@ export default function ProfileEdit() {
   const save = () => {
     const err = validateProfile({ name, bio, native, learning, hobbies, hours });
     if (err) return setError(t(`profileEdit.errors.${err}`));
-    updateProfile({ name: name.trim(), bio: bio.trim(), color, photoUri, native, learning, hobbies, hours, utcOffset: deviceOffset() });
+    updateProfile({ name: name.trim(), bio: bio.trim(), color, photoUri, native, learning, hobbies, hours, voice, utcOffset: deviceOffset() });
     if (!learning.some((l) => l.lang === profile.activeLearn)) setActiveLearn(learning[0].lang);
     router.back();
   };
@@ -121,7 +123,7 @@ export default function ProfileEdit() {
       <Body small muted>{t('profileEdit.hoursNote')}</Body>
 
       <Eyebrow>{t('profileEdit.voice')}</Eyebrow>
-      <Body small muted>{t('profileEdit.voiceSoon')}</Body>
+      <VoiceRecorder value={voice} onChange={setVoice} />
 
       <ErrorText>{error}</ErrorText>
 

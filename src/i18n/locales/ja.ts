@@ -134,9 +134,9 @@ const ja = {
   profileEdit: {
     title: 'プロフィールを編集', icon: 'アイコン', name: '名前', bio: '自己紹介', bioPlaceholder: '仕事、好きなこと、話したい話題など', native: '母語', learning: '学習中の言語（2つまで）',
     addLanguage: '＋ 言語を追加', remove: '削除', levelHelp: 'レベルを押すと、5段階の説明を見ながら選べます。', hobbies: '趣味', hours: '話せる時間帯', from: '開始', to: '終了',
-    hoursNote: 'この時間はおすすめに表示されます。他の人には相手の時間に直して表示されます。', voice: '自己紹介の音声', voiceSoon: '次の段階で追加します',
+    hoursNote: 'この時間はおすすめに表示されます。他の人には相手の時間に直して表示されます。', voice: '自己紹介の音声',
     save: '保存', saved: '保存しました',
-    errors: { name: '名前を入力してください（20文字まで）。', bio: '自己紹介は200文字までです。', learnSame: '母語と同じ言語は学習言語にできません。', learnDuplicate: '同じ言語が2回選ばれています。', learnNone: '学習言語を1つ以上選んでください。', learnTooMany: '学習言語は2つまでです。', hobbies: '趣味を1つ以上選んでください。', hours: '開始と終了の時刻を正しく選んでください。' },
+    errors: { name: '名前を入力してください（20文字まで）。', bio: '自己紹介は200文字までです。', learnSame: '母語と同じ言語は学習言語にできません。', learnDuplicate: '同じ言語が2回選ばれています。', learnNone: '学習言語を1つ以上選んでください。', learnTooMany: '学習言語は2つまでです。', hours: '開始と終了の時刻を正しく選んでください。' },
   },
   settings: {
     title: '通話の設定', languageOnly: '語学目的の会話のみ', languageOnlyNote: 'オンの間はプロフィールに「語学のみ」と表示されます。',
@@ -144,6 +144,7 @@ const ja = {
     switchCue: '言語交換で5分の交代の合図を出す', switchCueNote: '言語の切り替えは通話中いつでもできます。', matchLevel: 'ランダムでレベル帯を合わせる', matchLevelNote: 'オンにすると待ち時間が少し長くなります。',
     guide: '使い方ガイドを見る', blocked: 'ブロックした人', unblock: '解除', noneBlocked: 'ブロックした人はいません。',
   },
+  voice: { title: '自己紹介', record: '録音する', stop: '録音を止める', play: '再生', pause: '一時停止', rerecord: '録音し直す', delete: '削除', recording: '録音中 {{s}} / {{max}}秒', tooShort: '{{n}}秒以上話してください。', permission: 'マイクの使用が許可されていません。端末の設定でTentalkのマイクを許可してください。', hint: '{{max}}秒以内で、名前、出身、学んでいる言語、話したいことなどを話してみましょう。声を聞いてから話しかけられるので、相手が安心します。' },
   placeholder: { body: 'この画面は次の段階で実装します。' },
 };
 
