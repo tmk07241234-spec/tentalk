@@ -90,11 +90,25 @@ src/
 
 候補の比較ページ: https://claude.ai/artifact/D76p6isuwx2JLpZ3Qyr7YL
 
+## Firebase
+
+プロジェクト `tentalk-c6061`（Blaze プラン）。設定値は `src/services/firebase/config.ts`。
+
+| サービス | 設定 |
+|---|---|
+| Authentication | メール/パスワード、Google |
+| Firestore | `asia-northeast1`、ルールは `firestore.rules`（コンソールに貼り付けて公開） |
+| Storage | `US-WEST1`（無料枠）、ルールは `storage.rules`（同上） |
+
+ルールを変えたら、リポジトリのファイルとコンソールの両方を更新します。
+
 ## 次のマイルストーン
 
 3. Firebase の導入: サインイン、アカウント削除、Firestore と Storage への保存（済）
 4. 通話サービスの導入: 本物の音声通話、マッチングサーバー、通報の受付と管理画面
 5. 通知（リクエスト、通話タイム）、Tentalk Plus（アプリ内課金）と広告
 6. ストア申請の準備: 規約類、プライバシーの記載、スクリーンショット、TestFlight / 内部テスト
+
+次の作業: Expo のアカウントを作り、EAS で Web 版の公開と Android のテスト版を作る。スマホの Google ログイン（開発ビルドが必要）もここで対応。
 
 本番に向けて必要になるもの: Apple Developer Program（年額）、Google Play デベロッパー登録、Firebase プロジェクト、通話サービスのアカウント、EAS（Expo のビルドサービス）のアカウント。
