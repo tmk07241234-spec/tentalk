@@ -89,7 +89,7 @@ const en: Translation = {
     title: 'Me', trust: 'Trust score', trustNote: 'Others only see “Trusted”', learning: 'Learning',
     uiLanguage: 'Display language', uiLanguageNote: 'The language of the app’s text. This is separate from your native and learning languages.', device: 'Use device setting ({{lang}})',
     account: 'Account', signedInWith: 'Signed in with {{method}}', logout: 'Log out', deleteAccount: 'Delete account', legal: 'Terms and policies',
-    terms: 'Terms of Service', privacy: 'Privacy Policy', guidelines: 'Community guidelines', comingSoon: 'Coming in the next stage',
+    terms: 'Terms of Service', privacy: 'Privacy Policy', guidelines: 'Community guidelines',
   },
   pip: {
     name: 'Pip', welcome: 'Hi, I’m Pip! Let’s try your first 10 minutes together.', done_today: 'You talked for 10 minutes today. Keep it up!',
@@ -147,6 +147,17 @@ const en: Translation = {
     guide: 'How to use Tentalk', blocked: 'Blocked people', unblock: 'Unblock', noneBlocked: 'You haven’t blocked anyone.',
   },
   voice: { title: 'Voice intro', record: 'Record', stop: 'Stop recording', play: 'Play', pause: 'Pause', rerecord: 'Record again', delete: 'Delete', recording: 'Recording {{s}} / {{max}} s', tooShort: 'Please talk for at least {{n}} seconds.', permission: 'Microphone access is off. Allow Tentalk to use the microphone in your device settings.', hint: 'In up to {{max}} seconds, say your name, where you’re from, the language you’re learning, and what you’d like to talk about. Hearing your voice first helps people feel at ease.' },
+  info: {
+    englishOnly: 'This document is currently available in English only.', draftNote: 'Dev only: this is a draft. It needs professional review and the bracketed parts filled in before release.',
+    licenses: 'Licenses', licensesNote: 'Tentalk uses the following open-source software.', support: 'Support', faq: 'FAQ', tokusho: 'Commercial disclosure (Japan)', version: 'Version {{v}}',
+    contact: 'Contact us', contactKind: 'Topic', kinds: { bug: 'Bug', account: 'Account', payment: 'Payment', safety: 'Safety concern', other: 'Other' },
+    contactMessage: 'Message', contactReply: 'Reply-to email (optional)', contactTooShort: 'Please write at least 10 characters.', send: 'Send',
+    contactSent: 'Sent', contactSentBody: 'We’ll reply within 2 business days. Safety concerns are reviewed first.',
+    deleteTitle: 'Delete account', deleteBody: 'Your profile, voice intro, call history, follows, trust score, and badges will be deleted. This can’t be undone.',
+    deleteSubscription: 'If you have Tentalk Plus, deleting your account does not stop billing. Cancel first in your App Store or Google Play subscription settings.',
+    deleteReason: 'If you don’t mind, tell us why (optional)', reasons: { none: 'Prefer not to say', noPartners: 'Can’t find partners', notUseful: 'Not helpful for practice', safety: 'Safety concerns', other: 'Other' },
+    deleteContinue: 'Continue', deleteConfirm: 'Delete your account? This can’t be undone.', deleteNow: 'Delete account',
+  },
   placeholder: { body: 'This screen comes in the next stage.' },
 };
 

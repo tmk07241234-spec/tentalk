@@ -89,7 +89,7 @@ const es: Translation = {
     title: 'Yo', trust: 'Puntuación de confianza', trustNote: 'Los demás solo ven “De confianza”', learning: 'Aprendiendo',
     uiLanguage: 'Idioma de la app', uiLanguageNote: 'Es el idioma de los textos de la app. Es independiente de tu idioma nativo y de los que aprendes.', device: 'Usar el idioma del dispositivo ({{lang}})',
     account: 'Cuenta', signedInWith: 'Sesión iniciada con {{method}}', logout: 'Cerrar sesión', deleteAccount: 'Eliminar cuenta', legal: 'Términos y políticas',
-    terms: 'Términos del servicio', privacy: 'Política de privacidad', guidelines: 'Normas de la comunidad', comingSoon: 'Llegará en la próxima etapa',
+    terms: 'Términos del servicio', privacy: 'Política de privacidad', guidelines: 'Normas de la comunidad',
   },
   pip: {
     name: 'Pip', welcome: '¡Hola, soy Pip! Probemos juntos tus primeros 10 minutos.', done_today: 'Hoy ya hablaste 10 minutos. ¡Sigue así!',
@@ -147,6 +147,17 @@ const es: Translation = {
     guide: 'Cómo usar Tentalk', blocked: 'Personas bloqueadas', unblock: 'Desbloquear', noneBlocked: 'No has bloqueado a nadie.',
   },
   voice: { title: 'Presentación de voz', record: 'Grabar', stop: 'Detener grabación', play: 'Reproducir', pause: 'Pausa', rerecord: 'Grabar de nuevo', delete: 'Eliminar', recording: 'Grabando {{s}} / {{max}} s', tooShort: 'Habla al menos {{n}} segundos.', permission: 'El micrófono no está permitido. Permite que Tentalk use el micrófono en los ajustes del dispositivo.', hint: 'En {{max}} segundos como máximo, di tu nombre, de dónde eres, el idioma que aprendes y de qué te gustaría hablar. Oír tu voz primero da confianza.' },
+  info: {
+    englishOnly: 'Este documento solo está disponible en inglés por ahora.', draftNote: 'Solo desarrollo: es un borrador. Necesita revisión profesional y completar lo que está entre corchetes antes de publicar.',
+    licenses: 'Licencias', licensesNote: 'Tentalk usa el siguiente software de código abierto.', support: 'Ayuda', faq: 'Preguntas frecuentes', tokusho: 'Aviso comercial (Japón)', version: 'Versión {{v}}',
+    contact: 'Contacto', contactKind: 'Tema', kinds: { bug: 'Error', account: 'Cuenta', payment: 'Pago', safety: 'Seguridad', other: 'Otro' },
+    contactMessage: 'Mensaje', contactReply: 'Correo para responderte (opcional)', contactTooShort: 'Escribe al menos 10 caracteres.', send: 'Enviar',
+    contactSent: 'Enviado', contactSentBody: 'Te responderemos en 2 días hábiles. Los temas de seguridad se revisan primero.',
+    deleteTitle: 'Eliminar cuenta', deleteBody: 'Se eliminarán tu perfil, tu presentación de voz, el historial de llamadas, los seguidos, la puntuación de confianza y las insignias. No se puede deshacer.',
+    deleteSubscription: 'Si tienes Tentalk Plus, eliminar la cuenta no detiene el cobro. Cancela antes en la gestión de suscripciones de App Store o Google Play.',
+    deleteReason: 'Si quieres, cuéntanos por qué (opcional)', reasons: { none: 'Prefiero no decirlo', noPartners: 'No encuentro compañeros', notUseful: 'No me ayuda a practicar', safety: 'Me preocupa la seguridad', other: 'Otro' },
+    deleteContinue: 'Continuar', deleteConfirm: '¿Eliminar tu cuenta? No se puede deshacer.', deleteNow: 'Eliminar cuenta',
+  },
   placeholder: { body: 'Esta pantalla llegará en la próxima etapa.' },
 };
 

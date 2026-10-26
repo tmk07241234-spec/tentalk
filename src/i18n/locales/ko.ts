@@ -89,7 +89,7 @@ const ko: Translation = {
     title: '나', trust: '신뢰 점수', trustNote: '다른 사람에게는 “신뢰됨”으로만 보여요', learning: '학습 중',
     uiLanguage: '앱 표시 언어', uiLanguageNote: '앱 화면의 글자 언어예요. 모국어·학습 언어 설정과는 별개예요.', device: '기기 설정 따르기 ({{lang}})',
     account: '계정', signedInWith: '로그인 방법: {{method}}', logout: '로그아웃', deleteAccount: '계정 삭제', legal: '약관 및 정책',
-    terms: '이용약관', privacy: '개인정보처리방침', guidelines: '커뮤니티 가이드라인', comingSoon: '다음 단계에서 구현해요',
+    terms: '이용약관', privacy: '개인정보처리방침', guidelines: '커뮤니티 가이드라인',
   },
   pip: {
     name: '핍', welcome: '안녕, 나는 핍이야! 첫 10분, 같이 해 보자.', done_today: '오늘도 10분 대화했네. 이대로 계속 가자!',
@@ -147,6 +147,17 @@ const ko: Translation = {
     guide: '사용 가이드 보기', blocked: '차단한 사람', unblock: '해제', noneBlocked: '차단한 사람이 없어요.',
   },
   voice: { title: '음성 소개', record: '녹음하기', stop: '녹음 멈추기', play: '재생', pause: '일시정지', rerecord: '다시 녹음', delete: '삭제', recording: '녹음 중 {{s}} / {{max}}초', tooShort: '{{n}}초 이상 말해 주세요.', permission: '마이크 사용이 허용되지 않았어요. 기기 설정에서 Tentalk의 마이크를 허용해 주세요.', hint: '{{max}}초 안에 이름, 출신, 배우는 언어, 이야기하고 싶은 것 등을 말해 보세요. 목소리를 먼저 들을 수 있어서 상대가 안심해요.' },
+  info: {
+    englishOnly: '이 문서는 현재 영어로만 제공돼요.', draftNote: '개발용 표시: 이 문서는 초안이에요. 공개 전에 전문가 검토와 [ ] 안의 내용 기입이 필요해요.',
+    licenses: '라이선스', licensesNote: 'Tentalk는 다음 오픈소스 소프트웨어를 사용해요.', support: '지원', faq: '자주 묻는 질문', tokusho: '특정상거래법에 따른 표기 (일본)', version: '버전 {{v}}',
+    contact: '문의하기', contactKind: '종류', kinds: { bug: '오류', account: '계정', payment: '결제', safety: '안전 관련 상담', other: '기타' },
+    contactMessage: '내용', contactReply: '답장 받을 이메일 (선택)', contactTooShort: '내용을 10자 이상 써 주세요.', send: '보내기',
+    contactSent: '보냈어요', contactSentBody: '영업일 기준 2일 안에 답장해요. 안전 관련 상담은 먼저 확인해요.',
+    deleteTitle: '계정 삭제', deleteBody: '프로필, 음성 소개, 통화 기록, 팔로우, 신뢰 점수, 배지가 모두 삭제되며 되돌릴 수 없어요.',
+    deleteSubscription: 'Tentalk Plus를 이용 중이라면 계정을 삭제해도 결제는 멈추지 않아요. 먼저 App Store 또는 Google Play의 구독 관리에서 해지해 주세요.',
+    deleteReason: '괜찮다면 이유를 알려 주세요 (선택)', reasons: { none: '답하지 않음', noPartners: '상대를 찾을 수 없음', notUseful: '연습이 되지 않음', safety: '안전이 걱정됨', other: '기타' },
+    deleteContinue: '삭제 계속하기', deleteConfirm: '정말 삭제할까요? 이 작업은 되돌릴 수 없어요.', deleteNow: '계정 삭제하기',
+  },
   placeholder: { body: '이 화면은 다음 단계에서 구현해요.' },
 };
 

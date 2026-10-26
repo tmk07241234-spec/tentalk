@@ -1,5 +1,7 @@
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import Constants from 'expo-constants';
+import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
@@ -108,16 +110,38 @@ export default function Me() {
       </Card>
 
       <Card>
-        <Eyebrow>{t('me.account')}</Eyebrow>
-        {account ? <Body small muted>{t('me.signedInWith', { method: account.method === 'email' ? account.email ?? 'email' : account.method === 'apple' ? 'Apple' : 'Google' })}</Body> : null}
-        <Button label={t('me.logout')} onPress={logout} />
-        <Button variant="ghost" label={`${t('me.deleteAccount')} — ${t('me.comingSoon')}`} onPress={() => {}} disabled />
+        <Eyebrow>{t('info.support')}</Eyebrow>
+        <MenuRow label={t('info.faq')} onPress={() => router.push('/info/faq')} />
+        <MenuRow label={t('info.contact')} onPress={() => router.push('/info/contact')} />
       </Card>
 
       <Card>
         <Eyebrow>{t('me.legal')}</Eyebrow>
-        <Body small muted>{t('me.terms')} · {t('me.privacy')} · {t('me.guidelines')} — {t('me.comingSoon')}</Body>
+        <MenuRow label={t('me.terms')} onPress={() => router.push('/info/terms')} />
+        <MenuRow label={t('me.privacy')} onPress={() => router.push('/info/privacy')} />
+        <MenuRow label={t('me.guidelines')} onPress={() => router.push('/info/guidelines')} />
+        <MenuRow label={t('info.tokusho')} onPress={() => router.push('/info/tokusho')} />
+        <MenuRow label={t('info.licenses')} onPress={() => router.push('/info/licenses')} />
       </Card>
+
+      <Card>
+        <Eyebrow>{t('me.account')}</Eyebrow>
+        {account ? <Body small muted>{t('me.signedInWith', { method: account.method === 'email' ? account.email ?? 'email' : account.method === 'apple' ? 'Apple' : 'Google' })}</Body> : null}
+        <Button label={t('me.logout')} onPress={logout} />
+        <MenuRow label={t('me.deleteAccount')} danger onPress={() => router.push('/info/delete')} />
+      </Card>
+      <Body small muted style={{ textAlign: 'center' }}>{t('info.version', { v: Constants.expoConfig?.version ?? '' })}</Body>
     </Screen>
+  );
+}
+
+function MenuRow({ label, onPress, danger }: { label: string; onPress: () => void; danger?: boolean }) {
+  const c = useColors();
+  return (
+    <Pressable accessibilityRole="button" onPress={onPress}
+      style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', paddingVertical: space.sm + 2, borderTopWidth: 1, borderTopColor: c.line, opacity: pressed ? 0.7 : 1 })}>
+      <Text style={{ flex: 1, color: danger ? c.bad : c.ink, fontSize: 14 }}>{label}</Text>
+      <Ionicons name="chevron-forward" size={16} color={c.muted} />
+    </Pressable>
   );
 }

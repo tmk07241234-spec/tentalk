@@ -37,6 +37,7 @@ export default function RootLayout() {
         <Stack.Screen name="call" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
         <Stack.Screen name="person/[id]" options={{ presentation: 'modal' }} />
         <Stack.Screen name="profile-edit" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="info/[page]" options={{ presentation: 'modal' }} />
       </Stack>
     </>
   );

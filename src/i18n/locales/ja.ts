@@ -87,7 +87,7 @@ const ja = {
     title: '自分', trust: '信頼スコア', trustNote: '他の人には「信頼済み」とだけ表示されます', learning: '学習中',
     uiLanguage: 'アプリの表示言語', uiLanguageNote: '画面の文字の言語です。母語や学習言語の設定とは別です。', device: '端末の設定に合わせる ({{lang}})',
     account: 'アカウント', signedInWith: 'ログイン方法: {{method}}', logout: 'ログアウト', deleteAccount: 'アカウントを削除', legal: '規約とポリシー',
-    terms: '利用規約', privacy: 'プライバシーポリシー', guidelines: 'コミュニティガイドライン', comingSoon: '次の段階で実装します',
+    terms: '利用規約', privacy: 'プライバシーポリシー', guidelines: 'コミュニティガイドライン',
   },
   pip: {
     name: 'ピップ', welcome: 'はじめまして、ピップです！最初の10分、いっしょに行ってみよう。', done_today: '今日も10分話せたね。この調子！',
@@ -145,6 +145,17 @@ const ja = {
     guide: '使い方ガイドを見る', blocked: 'ブロックした人', unblock: '解除', noneBlocked: 'ブロックした人はいません。',
   },
   voice: { title: '自己紹介', record: '録音する', stop: '録音を止める', play: '再生', pause: '一時停止', rerecord: '録音し直す', delete: '削除', recording: '録音中 {{s}} / {{max}}秒', tooShort: '{{n}}秒以上話してください。', permission: 'マイクの使用が許可されていません。端末の設定でTentalkのマイクを許可してください。', hint: '{{max}}秒以内で、名前、出身、学んでいる言語、話したいことなどを話してみましょう。声を聞いてから話しかけられるので、相手が安心します。' },
+  info: {
+    englishOnly: 'この文書は現在英語版のみです。', draftNote: '開発用の表示: この文書は下書きです。公開前に専門家の確認と〔 〕内の記入が必要です。',
+    licenses: 'ライセンス', licensesNote: 'Tentalk は次のオープンソースソフトウェアを利用しています。', support: 'サポート', faq: 'よくある質問', tokusho: '特定商取引法に基づく表記', version: 'バージョン {{v}}',
+    contact: 'お問い合わせ', contactKind: '種類', kinds: { bug: '不具合', account: 'アカウント', payment: '支払い', safety: '安全に関する相談', other: 'その他' },
+    contactMessage: '内容', contactReply: '返信先のメールアドレス（任意）', contactTooShort: '内容を10文字以上で書いてください。', send: '送信する',
+    contactSent: '送信しました', contactSentBody: '2営業日以内に返信します。安全に関する相談は優先して確認します。',
+    deleteTitle: 'アカウントを削除', deleteBody: 'プロフィール、自己紹介の音声、通話の履歴、フォロー、信頼スコア、バッジがすべて削除され、元に戻せません。',
+    deleteSubscription: 'Tentalk Plus に加入している場合、アカウントを削除しても請求は止まりません。先に App Store または Google Play のサブスクリプション管理から解約してください。',
+    deleteReason: '差し支えなければ理由を教えてください（任意）', reasons: { none: '答えない', noPartners: '相手が見つからない', notUseful: '練習にならない', safety: '安全面の不安', other: 'その他' },
+    deleteContinue: '削除に進む', deleteConfirm: '本当に削除しますか？この操作は取り消せません。', deleteNow: 'アカウントを削除する',
+  },
   placeholder: { body: 'この画面は次の段階で実装します。' },
 };
 
