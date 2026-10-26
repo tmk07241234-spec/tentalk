@@ -9,8 +9,8 @@ import { Pip } from '@/components/Pip';
 import { useNow, useRelativeTime } from '@/components/people';
 import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { SAMPLE_PARTNERS } from '@/data/samplePartners';
-import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
 import { findSamplePartner } from '@/services/matchmaking';
+import { receiveRequest } from '@/services/requests';
 import { useApp, type AppNotification } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -22,7 +22,7 @@ export default function Notifications() {
   const { t } = useTranslation();
   const c = useColors();
   const ago = useRelativeTime();
-  const { notifications, markNotificationsRead, markHandled, notify, blocked } = useApp();
+  const { notifications, markNotificationsRead, markHandled, blocked, following } = useApp();
 
   // Opening the tab clears the badge; items that were unread stay highlighted until you leave.
   const [highlight, setHighlight] = useState<Set<string>>(new Set());
@@ -74,8 +74,10 @@ export default function Notifications() {
 
       {__DEV__ ? (
         <Button small variant="ghost" label={t('notifications.devIncoming')} onPress={() => {
-          const p = SAMPLE_PARTNERS.find((x) => x.status === 'online' && !blocked.includes(x.id))!;
-          notify({ type: 'incoming', partnerId: p.id, expiresAt: Date.now() + ONLINE_REQUEST_SECONDS * 1000 });
+          // Tries everyone online, people I follow first, so each request setting can be checked.
+          const online = SAMPLE_PARTNERS.filter((x) => x.status === 'online' && !blocked.includes(x.id));
+          const ordered = [...online.filter((x) => following.includes(x.id)), ...online];
+          ordered.some((x) => receiveRequest(x.id));
         }} />
       ) : null}
     </Screen>

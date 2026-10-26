@@ -152,6 +152,21 @@ const es: Translation = {
     save: 'Guardar', saved: 'Guardado',
     errors: { name: 'Introduce un nombre (hasta 20 caracteres).', bio: '“Sobre ti” admite hasta 200 caracteres.', learnSame: 'Un idioma que aprendes no puede ser tu idioma nativo.', learnDuplicate: 'Has elegido el mismo idioma dos veces.', learnNone: 'Elige al menos un idioma para aprender.', learnTooMany: 'Puedes aprender hasta 2 idiomas.', hours: 'Elige una hora de inicio y de fin válidas.' },
   },
+  appSettings: {
+    title: 'Ajustes de la app',
+    requests: 'Quién puede pedirte una llamada', requestsNote: 'Las solicitudes de otras personas no te llegan y verán «No acepta solicitudes ahora». Las llamadas aleatorias no cambian.',
+    policy: { everyone: 'Todos', following: 'Personas que sigo', mutual: 'Seguidores mutuos', selected: 'Solo quienes elija', none: 'Nadie' },
+    policyNote: {
+      everyone: 'Cualquiera puede enviarte una solicitud.',
+      following: 'Solo las personas que sigues.',
+      mutual: 'Solo quienes se siguen contigo.',
+      selected: 'Solo los contactos que elijas abajo. Útil si sigues hablando con la misma persona.',
+      none: 'No te llegan solicitudes. Puedes usar llamadas aleatorias y enviar solicitudes tú.',
+    },
+    noConnections: 'Aún no tienes contactos. Sigue a alguien tras una llamada completa de 10 minutos para elegirlo aquí.',
+    notifications: 'Notificaciones', notifyAccepted: 'Cuando aceptan una solicitud mía', notifyFollowed: 'Cuando alguien me sigue', notifyTheme: 'Tema semanal y novedades',
+    notificationsNote: 'Los avisos de solicitudes recibidas siguen lo elegido en «Quién puede pedirte una llamada».',
+  },
   settings: {
     title: 'Ajustes de llamada', languageOnly: 'Solo práctica de idiomas', languageOnlyNote: 'Mientras esté activado, tu perfil muestra “Solo idiomas”.',
     languageOnlyPartners: 'Aleatorias: solo personas con “Solo idiomas”', languageOnlyPartnersNote: 'Si lo desactivas, esperarás menos.',

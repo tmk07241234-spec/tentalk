@@ -150,6 +150,21 @@ const ja = {
     save: '保存', saved: '保存しました',
     errors: { name: '名前を入力してください（20文字まで）。', bio: '自己紹介は200文字までです。', learnSame: '母語と同じ言語は学習言語にできません。', learnDuplicate: '同じ言語が2回選ばれています。', learnNone: '学習言語を1つ以上選んでください。', learnTooMany: '学習言語は2つまでです。', hours: '開始と終了の時刻を正しく選んでください。' },
   },
+  appSettings: {
+    title: 'アプリの設定',
+    requests: '通話リクエストを受け付ける相手', requestsNote: '対象外の人からはリクエストが届かず、相手には「いまはリクエストを受け付けていません」と表示されます。ランダム通話には影響しません。',
+    policy: { everyone: '全員', following: 'フォロー中の人', mutual: '相互フォローの人', selected: '選んだ人だけ', none: '受け付けない' },
+    policyNote: {
+      everyone: 'だれでもリクエストを送れます。',
+      following: 'あなたがフォローしている人だけ。',
+      mutual: 'おたがいにフォローしている人だけ。',
+      selected: 'つながりの中から、下で選んだ人だけ。決まった相手と続けて話したいときに。',
+      none: 'リクエストは届きません。ランダム通話と、自分から送るリクエストは使えます。',
+    },
+    noConnections: 'つながりのある人がまだいません。10分話しきった相手をフォローすると選べるようになります。',
+    notifications: '通知', notifyAccepted: '送ったリクエストが承認されたとき', notifyFollowed: 'フォローされたとき', notifyTheme: '今週のテーマとお知らせ',
+    notificationsNote: '届いたリクエストの通知は、上の「受け付ける相手」で決まります。',
+  },
   settings: {
     title: '通話の設定', languageOnly: '語学目的の会話のみ', languageOnlyNote: 'オンの間はプロフィールに「語学のみ」と表示されます。',
     languageOnlyPartners: 'ランダムでは「語学のみ」の人とだけマッチ', languageOnlyPartnersNote: 'オフにすると待ち時間が短くなります。',

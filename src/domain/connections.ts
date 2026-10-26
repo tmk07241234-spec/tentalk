@@ -26,3 +26,28 @@ export function connectionGroups(following: readonly string[], followers: readon
   const back = new Set(theirs);
   return { mutual: mine.filter((id) => back.has(id)), following: mine, followers: theirs };
 }
+
+/** Who may send me a call request. Random calls are not affected. */
+export type RequestPolicy = 'everyone' | 'following' | 'mutual' | 'selected' | 'none';
+
+export interface RequestRules {
+  requestsFrom: RequestPolicy;
+  /** For 'selected': the people allowed to send requests. */
+  requestAllowList: readonly string[];
+}
+
+/** Whether a request from `partnerId` reaches me under my rules. */
+export function acceptsRequestFrom(
+  rules: RequestRules,
+  me: { following: readonly string[]; followers: readonly string[]; blocked: readonly string[] },
+  partnerId: string,
+): boolean {
+  if (me.blocked.includes(partnerId)) return false;
+  switch (rules.requestsFrom) {
+    case 'everyone': return true;
+    case 'following': return me.following.includes(partnerId);
+    case 'mutual': return me.following.includes(partnerId) && me.followers.includes(partnerId);
+    case 'selected': return rules.requestAllowList.includes(partnerId);
+    case 'none': return false;
+  }
+}

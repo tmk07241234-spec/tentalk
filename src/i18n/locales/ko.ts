@@ -152,6 +152,21 @@ const ko: Translation = {
     save: '저장', saved: '저장했어요',
     errors: { name: '이름을 입력해 주세요 (20자까지).', bio: '자기소개는 200자까지예요.', learnSame: '모국어와 같은 언어는 학습 언어로 고를 수 없어요.', learnDuplicate: '같은 언어가 두 번 선택됐어요.', learnNone: '학습 언어를 하나 이상 골라 주세요.', learnTooMany: '학습 언어는 2개까지예요.', hours: '시작과 종료 시각을 올바르게 골라 주세요.' },
   },
+  appSettings: {
+    title: '앱 설정',
+    requests: '통화 요청을 받을 상대', requestsNote: '대상이 아닌 사람의 요청은 오지 않고, 상대에게는 “지금은 요청을 받지 않아요”라고 표시돼요. 랜덤 통화에는 영향이 없어요.',
+    policy: { everyone: '모두', following: '내가 팔로우한 사람', mutual: '맞팔로우한 사람', selected: '선택한 사람만', none: '받지 않음' },
+    policyNote: {
+      everyone: '누구나 요청을 보낼 수 있어요.',
+      following: '내가 팔로우한 사람만.',
+      mutual: '서로 팔로우한 사람만.',
+      selected: '연결된 사람 중 아래에서 고른 사람만. 같은 상대와 계속 대화하고 싶을 때.',
+      none: '요청이 오지 않아요. 랜덤 통화와 내가 보내는 요청은 쓸 수 있어요.',
+    },
+    noConnections: '아직 연결된 사람이 없어요. 10분 대화를 끝까지 한 상대를 팔로우하면 고를 수 있어요.',
+    notifications: '알림', notifyAccepted: '보낸 요청이 승인됐을 때', notifyFollowed: '누군가 나를 팔로우했을 때', notifyTheme: '이번 주 테마와 소식',
+    notificationsNote: '받은 요청 알림은 위의 “통화 요청을 받을 상대”에 따라 정해져요.',
+  },
   settings: {
     title: '통화 설정', languageOnly: '어학 목적 대화만', languageOnlyNote: '켜 두면 프로필에 “어학 전용”이 표시돼요.',
     languageOnlyPartners: '랜덤에서는 “어학 전용”인 사람과만 매칭', languageOnlyPartnersNote: '끄면 대기 시간이 짧아져요.',

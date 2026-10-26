@@ -1,4 +1,4 @@
-import { canFollow, connectionGroups, type CallRecord } from '../connections';
+import { acceptsRequestFrom, canFollow, connectionGroups, type CallRecord, type RequestPolicy } from '../connections';
 
 const call = (x: Partial<CallRecord>): CallRecord => ({ partnerId: 'emma', kind: 'random', completed: false, unlocked: false, ...x });
 
@@ -25,5 +25,26 @@ describe('connectionGroups', () => {
     expect(g.mutual).toEqual(['c', 'b']);
     expect(g.following).toEqual(['c', 'b', 'a']);
     expect(g.followers).toEqual(['c', 'b']);
+  });
+});
+
+describe('acceptsRequestFrom', () => {
+  const me = { following: ['a', 'b'], followers: ['b', 'c'], blocked: ['x'] };
+  const from = (requestsFrom: RequestPolicy, id: string, requestAllowList: string[] = []) => acceptsRequestFrom({ requestsFrom, requestAllowList }, me, id);
+
+  it('follows the chosen policy', () => {
+    expect(from('everyone', 'z')).toBe(true);
+    expect(from('following', 'a')).toBe(true);
+    expect(from('following', 'c')).toBe(false);
+    expect(from('mutual', 'b')).toBe(true);
+    expect(from('mutual', 'a')).toBe(false);
+    expect(from('selected', 'c', ['c'])).toBe(true);
+    expect(from('selected', 'a', ['c'])).toBe(false);
+    expect(from('none', 'b')).toBe(false);
+  });
+
+  it('never lets blocked people through', () => {
+    expect(from('everyone', 'x')).toBe(false);
+    expect(from('selected', 'x', ['x'])).toBe(false);
   });
 });

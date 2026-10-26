@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import Constants from 'expo-constants';
@@ -6,24 +7,19 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { LevelTag } from '@/components/level';
-import { Pill, SwitchRow } from '@/components/people';
+import { Pill } from '@/components/people';
 import { Badge } from '@/components/progress';
 import { VoicePlayer } from '@/components/voice';
-import { Body, Button, Card, ChoiceChips, Eyebrow, Screen, Title } from '@/components/ui';
-import { UI_LANGS, type UiLang } from '@/domain/languages';
+import { Body, Button, Card, Eyebrow, Screen, Title } from '@/components/ui';
 import { BADGES, earnedBadges } from '@/domain/progress';
-import { findSamplePartner } from '@/services/matchmaking';
-import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
-type UiChoice = UiLang | 'device';
-
 export default function Me() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, trust, account, uiLang, setUiLang, signOut, callLog, seedDemoProgress, settings, updateSettings, blocked, unblock, plus } = useApp();
+  const { profile, trust, account, signOut, callLog, seedDemoProgress, plus } = useApp();
   if (!profile) return null;
 
   const logout = async () => {
@@ -34,7 +30,12 @@ export default function Me() {
 
   return (
     <Screen>
-      <Title>{t('me.title')}</Title>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Title>{t('me.title')}</Title>
+        <Pressable accessibilityRole="button" accessibilityLabel={t('appSettings.title')} onPress={() => router.push('/settings')} hitSlop={8} style={{ padding: 4 }}>
+          <Ionicons name="settings-outline" size={24} color={c.ink} />
+        </Pressable>
+      </View>
       <Card>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
           <Avatar name={profile.name} color={profile.color} photoUri={profile.photoUri} size={64} frame={plus ? profile.frame : null} />
@@ -84,40 +85,7 @@ export default function Me() {
       </Card>
 
       <Card>
-        <Eyebrow>{t('settings.title')}</Eyebrow>
-        <SwitchRow label={t('settings.languageOnly')} note={t('settings.languageOnlyNote')} value={settings.languageOnly} onChange={(v) => updateSettings({ languageOnly: v })} />
-        <SwitchRow label={t('settings.languageOnlyPartners')} note={t('settings.languageOnlyPartnersNote')} value={settings.languageOnlyPartners} onChange={(v) => updateSettings({ languageOnlyPartners: v })} />
-        <SwitchRow label={t('settings.switchCue')} note={t('settings.switchCueNote')} value={settings.switchCue} onChange={(v) => updateSettings({ switchCue: v })} />
-        <SwitchRow label={t('settings.matchLevel')} note={t('settings.matchLevelNote')} value={settings.matchLevel} onChange={(v) => updateSettings({ matchLevel: v })} />
-        <Button variant="ghost" label={t('settings.guide')} onPress={() => router.push('/guide')} />
-      </Card>
-
-      <Card>
-        <Eyebrow>{t('settings.blocked')}</Eyebrow>
-        {blocked.length === 0 ? <Body small muted>{t('settings.noneBlocked')}</Body> : null}
-        {blocked.map((id) => {
-          const p = findSamplePartner(id);
-          return (
-            <View key={id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-              <Avatar name={p?.name ?? '?'} color={p?.color ?? '#8A8FA3'} size={36} />
-              <Text style={{ color: c.ink, flex: 1 }}>{p?.name ?? id}</Text>
-              <Button small label={t('settings.unblock')} onPress={() => unblock(id)} />
-            </View>
-          );
-        })}
-      </Card>
-
-      <Card>
-        <ChoiceChips<UiChoice>
-          label={t('me.uiLanguage')}
-          value={uiLang ?? 'device'}
-          onChange={(v) => setUiLang(v === 'device' ? null : v)}
-          options={[
-            { key: 'device', label: t('me.device', { lang: t(`uiLangName.${deviceUiLang()}`) }) },
-            ...UI_LANGS.map((l) => ({ key: l as UiChoice, label: t(`uiLangName.${l}`) })),
-          ]}
-        />
-        <Body small muted>{t('me.uiLanguageNote')}</Body>
+        <MenuRow label={t('appSettings.title')} icon="settings-outline" first onPress={() => router.push('/settings')} />
       </Card>
 
       <Card>
@@ -146,11 +114,12 @@ export default function Me() {
   );
 }
 
-function MenuRow({ label, onPress, danger }: { label: string; onPress: () => void; danger?: boolean }) {
+function MenuRow({ label, onPress, danger, icon, first }: { label: string; onPress: () => void; danger?: boolean; icon?: ComponentProps<typeof Ionicons>['name']; first?: boolean }) {
   const c = useColors();
   return (
     <Pressable accessibilityRole="button" onPress={onPress}
-      style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', paddingVertical: space.sm + 2, borderTopWidth: 1, borderTopColor: c.line, opacity: pressed ? 0.7 : 1 })}>
+      style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: space.sm + 2, borderTopWidth: first ? 0 : 1, borderTopColor: c.line, opacity: pressed ? 0.7 : 1 })}>
+      {icon ? <Ionicons name={icon} size={18} color={c.ink} /> : null}
       <Text style={{ flex: 1, color: danger ? c.bad : c.ink, fontSize: 14 }}>{label}</Text>
       <Ionicons name="chevron-forward" size={16} color={c.muted} />
     </Pressable>

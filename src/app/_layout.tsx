@@ -45,6 +45,7 @@ export default function RootLayout() {
         <Stack.Screen name="profile-edit" options={{ presentation: 'modal' }} />
         <Stack.Screen name="info/[page]" options={{ presentation: 'modal' }} />
         <Stack.Screen name="plus" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="settings" options={{ presentation: 'modal' }} />
       </Stack>
     </>
   );

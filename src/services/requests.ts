@@ -1,4 +1,5 @@
-import { ACCEPTED_CALLABLE_HOURS } from '@/domain/schedule';
+import { acceptsRequestFrom } from '@/domain/connections';
+import { ACCEPTED_CALLABLE_HOURS, ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
 import { useApp } from '@/state/store';
 
 export type RequestAnswer = 'accepted' | 'declined' | 'expired';
@@ -12,6 +13,17 @@ export interface RequestService {
   askNow(partnerId: string, signal: AbortSignal): Promise<RequestAnswer>;
   /** Partner is offline: the server holds the request; acceptance arrives as a notification. */
   queue(partnerId: string): Promise<void>;
+}
+
+/**
+ * Someone asks me for a call right now. Requests from people my settings do not accept
+ * are dropped without a notification; the server will refuse them up front instead.
+ */
+export function receiveRequest(partnerId: string): boolean {
+  const app = useApp.getState();
+  if (!acceptsRequestFrom(app.settings, app, partnerId)) return false;
+  app.notify({ type: 'incoming', partnerId, expiresAt: Date.now() + ONLINE_REQUEST_SECONDS * 1000 });
+  return true;
 }
 
 /** Development stand-in: online people accept after a moment; offline people accept a few seconds later. */

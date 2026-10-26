@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { clampTrust } from '@/domain/callRules';
-import { canFollow } from '@/domain/connections';
+import { canFollow, type RequestPolicy } from '@/domain/connections';
 import type { Lang, UiLang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import type { Mode } from '@/domain/matching';
@@ -85,6 +85,11 @@ export interface Settings {
   languageOnlyPartners: boolean;
   switchCue: boolean;
   matchLevel: boolean;
+  /** Who may send me a call request (see acceptsRequestFrom). */
+  requestsFrom: RequestPolicy;
+  requestAllowList: string[];
+  /** Notifications I want besides incoming requests. Push uses the same switches once it exists. */
+  notify: { accepted: boolean; followed: boolean; theme: boolean };
 }
 
 export interface AppState {
@@ -144,6 +149,20 @@ export interface AppState {
   signOut: () => void;
 }
 
+export const DEFAULT_SETTINGS: Settings = {
+  languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false,
+  requestsFrom: 'everyone', requestAllowList: [],
+  notify: { accepted: true, followed: true, theme: true },
+};
+
+/** Saved settings from an older version lack newer fields; fill them with defaults. */
+export function withSettingDefaults(saved: Partial<Settings> | undefined): Settings {
+  return { ...DEFAULT_SETTINGS, ...saved, notify: { ...DEFAULT_SETTINGS.notify, ...saved?.notify } };
+}
+
+/** Notification types each user can switch off; the rest always arrive. */
+const SWITCHABLE: Partial<Record<NotificationType, keyof Settings['notify']>> = { accepted: 'accepted', followed: 'followed', theme: 'theme' };
+
 const initial = {
   uiLang: null,
   account: null,
@@ -157,7 +176,7 @@ const initial = {
   following: [] as string[],
   followers: [] as string[],
   blocked: [] as string[],
-  settings: { languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false } as Settings,
+  settings: DEFAULT_SETTINGS,
   history: [] as HistoryEntry[],
   notifications: [] as AppNotification[],
   requests: [] as OutgoingRequest[],
@@ -181,7 +200,8 @@ export const useApp = create<AppState>()(
           ],
         }),
       finishGuide: () => set({ onboarded: true }),
-      restoreAccount: ({ account, saved }) => set((s) => ({ ...initial, uiLang: s.uiLang, onboarded: true, ...saved, account })),
+      restoreAccount: ({ account, saved }) =>
+        set((s) => ({ ...initial, uiLang: s.uiLang, onboarded: true, ...saved, settings: withSettingDefaults(saved.settings), account })),
       setMode: (mode) => set({ mode }),
       setActiveLearn: (lang) => set((s) => (s.profile ? { profile: { ...s.profile, activeLearn: lang } } : s)),
       applyCallResult: ({ trustDelta, todayGain, minutes, completed, cooldownMinutes }) =>
@@ -216,7 +236,7 @@ export const useApp = create<AppState>()(
       updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
       addHistory: (entry) => set((s) => ({ history: [{ ...entry, id: newId() }, ...s.history].slice(0, 200) })),
       notify: ({ at, ...n }) =>
-        set((s) => ({ notifications: [{ ...n, id: newId(), at: at ?? Date.now(), read: false }, ...s.notifications].slice(0, 100) })),
+        set((s) => (SWITCHABLE[n.type] && !s.settings.notify[SWITCHABLE[n.type]!] ? s : { notifications: [{ ...n, id: newId(), at: at ?? Date.now(), read: false }, ...s.notifications].slice(0, 100) })),
       markNotificationsRead: () =>
         set((s) => (s.notifications.some((n) => !n.read) ? { notifications: s.notifications.map((n) => ({ ...n, read: true })) } : s)),
       markHandled: (id) => set((s) => ({ notifications: s.notifications.map((n) => (n.id === id ? { ...n, handled: true, read: true } : n)) })),
@@ -228,7 +248,7 @@ export const useApp = create<AppState>()(
     }),
     {
       name: 'tentalk-app',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => AsyncStorage),
       // Only data is saved; functions are recreated on load.
       partialize: (s) => Object.fromEntries(Object.entries(s).filter(([, v]) => typeof v !== 'function')) as Partial<AppState>,
@@ -238,7 +258,7 @@ export const useApp = create<AppState>()(
           const { complete: _complete, ...rest } = s.profile;
           s.profile = Object.assign({ bio: '', hobbies: [], hours: null, utcOffset: -new Date().getTimezoneOffset() }, rest);
         }
-        return { ...initial, ...s } as AppState;
+        return { ...initial, ...s, settings: withSettingDefaults(s.settings) } as AppState;
       },
     },
   ),

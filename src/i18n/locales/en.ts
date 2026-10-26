@@ -152,6 +152,21 @@ const en: Translation = {
     save: 'Save', saved: 'Saved',
     errors: { name: 'Enter a name (up to 20 characters).', bio: 'About you can be up to 200 characters.', learnSame: 'A learning language can’t be your native language.', learnDuplicate: 'The same language is selected twice.', learnNone: 'Choose at least one learning language.', learnTooMany: 'You can learn up to 2 languages.', hours: 'Choose a valid start and end time.' },
   },
+  appSettings: {
+    title: 'App settings',
+    requests: 'Who can send you call requests', requestsNote: 'Requests from anyone else don’t reach you, and they see “Not accepting requests right now.” Random calls are not affected.',
+    policy: { everyone: 'Everyone', following: 'People I follow', mutual: 'Mutual follows', selected: 'Only people I choose', none: 'No one' },
+    policyNote: {
+      everyone: 'Anyone can send you a request.',
+      following: 'Only people you follow.',
+      mutual: 'Only people who follow each other with you.',
+      selected: 'Only the connections you pick below. Handy when you keep talking with the same partner.',
+      none: 'No requests reach you. You can still use random calls and send requests yourself.',
+    },
+    noConnections: 'No connections yet. Follow someone after a full 10-minute call to pick them here.',
+    notifications: 'Notifications', notifyAccepted: 'When a request I sent is accepted', notifyFollowed: 'When someone follows me', notifyTheme: 'Weekly theme and news',
+    notificationsNote: 'Incoming request notifications follow “Who can send you call requests” above.',
+  },
   settings: {
     title: 'Call settings', languageOnly: 'Language practice only', languageOnlyNote: 'While on, your profile shows “Language only”.',
     languageOnlyPartners: 'Random calls: match only “Language only” people', languageOnlyPartnersNote: 'Turning this off shortens the wait.',
