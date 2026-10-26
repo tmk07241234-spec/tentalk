@@ -1,3 +1,4 @@
+import { isUploaded } from '@/domain/profile';
 import type { AppState, Profile } from './store';
 
 /**
@@ -6,10 +7,11 @@ import type { AppState, Profile } from './store';
  * users/{uid}               public profile, readable by signed-in users
  * users/{uid}/private/state everything else, readable only by the owner
  *
- * Photos and voice intros stay on the device until uploads to Storage exist, and
- * notifications and requests will come from the server, so neither is stored here.
+ * Photos and voice intros are files in Storage; the profile keeps their download URLs,
+ * and a file not uploaded yet is left out. Notifications and requests will come from
+ * the server, so they are not stored here.
  */
-export type PublicProfile = Omit<Profile, 'photoUri' | 'voice'> & { languageOnly: boolean };
+export type PublicProfile = Profile & { languageOnly: boolean };
 
 export type PrivateState = Pick<
   AppState,
@@ -23,9 +25,14 @@ export interface CloudAccount {
 
 export function toCloud(s: AppState): CloudAccount | null {
   if (!s.profile) return null;
-  const { photoUri: _photo, voice: _voice, ...profile } = s.profile;
+  const { photoUri, voice, ...profile } = s.profile;
   return {
-    profile: { ...profile, languageOnly: s.settings.languageOnly },
+    profile: {
+      ...profile,
+      photoUri: photoUri && isUploaded(photoUri) ? photoUri : null,
+      voice: voice && isUploaded(voice.uri) ? voice : null,
+      languageOnly: s.settings.languageOnly,
+    },
     state: {
       mode: s.mode, trust: s.trust, todayGain: s.todayGain, callCount: s.callCount, callLog: s.callLog,
       following: s.following, blocked: s.blocked, settings: s.settings, history: s.history,
@@ -37,5 +44,5 @@ export function toCloud(s: AppState): CloudAccount | null {
 /** The state patch that restores a saved account on this device. */
 export function fromCloud(c: CloudAccount): Pick<AppState, 'profile'> & Partial<PrivateState> {
   const { languageOnly: _languageOnly, ...profile } = c.profile;
-  return { ...c.state, profile: { ...profile, photoUri: null, voice: null } };
+  return { ...c.state, profile: { ...profile, photoUri: profile.photoUri ?? null, voice: profile.voice ?? null } };
 }

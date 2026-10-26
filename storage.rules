@@ -1,0 +1,20 @@
+rules_version = '2';
+
+// Paste into Firebase console → Storage → Rules, then press Publish.
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Profile photo and voice intro: signed-in users can listen and look;
+    // only the owner can upload, replace or delete, with type and size limits.
+    match /users/{uid}/{file} {
+      allow read: if request.auth != null;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid && (
+        (file == 'photo'
+          && request.resource.contentType.matches('image/.*')
+          && request.resource.size < 5 * 1024 * 1024)
+        || (file == 'voice'
+          && request.resource.contentType.matches('audio/.*|video/webm|video/mp4')
+          && request.resource.size < 2 * 1024 * 1024));
+    }
+  }
+}

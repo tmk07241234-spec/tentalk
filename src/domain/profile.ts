@@ -40,3 +40,6 @@ export function validateProfile(d: ProfileDraft): ProfileError | null {
 export function isProfileComplete(p: { bio: string; hobbies: readonly string[]; hours: HoursRange | null }): boolean {
   return p.bio.trim().length > 0 && p.hobbies.length > 0 && !!p.hours && isValidRange(p.hours);
 }
+
+/** Uploaded photos and voice intros are https URLs; anything else is still only on this device. */
+export const isUploaded = (uri: string) => uri.startsWith('https://');

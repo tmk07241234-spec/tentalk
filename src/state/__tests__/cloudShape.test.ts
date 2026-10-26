@@ -21,13 +21,21 @@ describe('cloud shape', () => {
     expect(toCloud({ ...state, profile: null })).toBeNull();
   });
 
-  it('keeps device-only files, notifications and purchases out of the cloud', () => {
+  it('keeps files not uploaded yet, notifications and purchases out of the cloud', () => {
     const c = toCloud(state)!;
-    expect(c.profile).not.toHaveProperty('photoUri');
-    expect(c.profile).not.toHaveProperty('voice');
+    expect(c.profile.photoUri).toBeNull();
+    expect(c.profile.voice).toBeNull();
     expect(c.profile.languageOnly).toBe(false);
     expect(c.state).not.toHaveProperty('notifications');
     expect(c.state).not.toHaveProperty('plus');
+  });
+
+  it('keeps uploaded files', () => {
+    const photoUri = 'https://firebasestorage.googleapis.com/photo';
+    const voice = { uri: 'https://firebasestorage.googleapis.com/voice', seconds: 8 };
+    const c = toCloud({ ...state, profile: { ...profile, photoUri, voice } })!;
+    expect(c.profile.photoUri).toBe(photoUri);
+    expect(fromCloud(c).profile?.voice).toEqual(voice);
   });
 
   it('restores what was saved', () => {

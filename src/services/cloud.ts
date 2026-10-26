@@ -2,6 +2,7 @@ import { deleteDoc, doc, getDoc, writeBatch } from 'firebase/firestore';
 
 import type { CloudAccount } from '@/state/cloudShape';
 import { db } from './firebase/db';
+import { media } from './media';
 
 const profileRef = (uid: string) => doc(db, 'users', uid);
 const stateRef = (uid: string) => doc(db, 'users', uid, 'private', 'state');
@@ -22,8 +23,9 @@ export const cloud = {
     await batch.commit();
   },
 
-  /** Removes everything stored for the account. Runs before the sign-in account is deleted. */
+  /** Removes everything stored for the account, files included. Runs before the sign-in account is deleted. */
   async remove(uid: string): Promise<void> {
+    await media.removeAll(uid);
     await deleteDoc(stateRef(uid));
     await deleteDoc(profileRef(uid));
   },
