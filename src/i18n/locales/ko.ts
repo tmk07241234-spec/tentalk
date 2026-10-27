@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const ko: Translation = {
-  common: { loading: '불러오는 중…', next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
+  common: { updateReady: '새 버전이 있어요. 눌러서 업데이트', loading: '불러오는 중…', next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
   lang: { ja: '일본어', en: '영어', ko: '한국어', es: '스페인어', pt: '포르투갈어', vi: '베트남어', de: '독일어' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: '홈', find: '찾기', connections: '연결', notifications: '알림', history: '기록', me: '나' },

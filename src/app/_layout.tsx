@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 // Importing the i18n module also initialises i18next before any screen renders.
 import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
+import { UpdateBanner } from '@/components/UpdateBanner';
 import { startFollowersListener } from '@/services/connections';
 import { startPresence } from '@/services/presence';
 import { startRequestListeners } from '@/services/requests';
@@ -60,6 +61,7 @@ export default function RootLayout() {
         <Stack.Screen name="plus" options={{ presentation: 'modal' }} />
         <Stack.Screen name="settings" options={{ presentation: 'modal' }} />
       </Stack>
+      <UpdateBanner />
     </>
   );
 }

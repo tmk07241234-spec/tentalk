@@ -1,5 +1,5 @@
 const ja = {
-  common: { loading: '読み込み中…', next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
+  common: { updateReady: '新しいバージョンがあります。タップして更新', loading: '読み込み中…', next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
   lang: { ja: '日本語', en: '英語', ko: '韓国語', es: 'スペイン語', pt: 'ポルトガル語', vi: 'ベトナム語', de: 'ドイツ語' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'ホーム', find: '探す', connections: 'つながり', notifications: '通知', history: '履歴', me: '自分' },

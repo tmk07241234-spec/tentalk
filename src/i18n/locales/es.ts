@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const es: Translation = {
-  common: { loading: 'Cargando…', next: 'Siguiente', back: 'Atrás', skip: 'Omitir', start: 'Empezar', close: 'Cerrar', cancel: 'Cancelar', save: 'Guardar', step: 'Paso {{n}} de {{total}}' },
+  common: { updateReady: 'Hay una nueva versión. Toca para actualizar', loading: 'Cargando…', next: 'Siguiente', back: 'Atrás', skip: 'Omitir', start: 'Empezar', close: 'Cerrar', cancel: 'Cancelar', save: 'Guardar', step: 'Paso {{n}} de {{total}}' },
   lang: { ja: 'japonés', en: 'inglés', ko: 'coreano', es: 'español', pt: 'portugués', vi: 'vietnamita', de: 'alemán' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'Inicio', find: 'Buscar', connections: 'Contactos', notifications: 'Avisos', history: 'Historial', me: 'Yo' },
