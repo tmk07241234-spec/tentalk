@@ -8,6 +8,7 @@ import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { startFollowersListener } from '@/services/connections';
+import { startModerationListener } from '@/services/moderation';
 import { startPresence } from '@/services/presence';
 import { startRequestListeners } from '@/services/requests';
 import { useApp } from '@/state/store';
@@ -44,6 +45,7 @@ export default function RootLayout() {
   useEffect(() => (hydrated && uid ? startPresence() : undefined), [hydrated, uid]);
   useEffect(() => (hydrated && uid ? startRequestListeners(uid) : undefined), [hydrated, uid]);
   useEffect(() => (hydrated && uid ? startFollowersListener(uid) : undefined), [hydrated, uid]);
+  useEffect(() => (hydrated && uid ? startModerationListener(uid) : undefined), [hydrated, uid]);
 
   if (!hydrated) return null;
 
@@ -60,6 +62,7 @@ export default function RootLayout() {
         <Stack.Screen name="info/[page]" options={{ presentation: 'modal' }} />
         <Stack.Screen name="plus" options={{ presentation: 'modal' }} />
         <Stack.Screen name="settings" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="admin" options={{ presentation: 'modal' }} />
       </Stack>
       <UpdateBanner />
     </>

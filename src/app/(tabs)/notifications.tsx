@@ -15,11 +15,12 @@ import { useApp, type AppNotification } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
 const ICON: Record<AppNotification['type'], React.ComponentProps<typeof Ionicons>['name']> = {
-  welcome: 'sparkles', theme: 'chatbubbles', followed: 'person-add', accepted: 'call', incoming: 'call', reportResult: 'shield-checkmark',
+  welcome: 'sparkles', theme: 'chatbubbles', followed: 'person-add', accepted: 'call', incoming: 'call', reportResult: 'shield-checkmark', reportDismissed: 'shield-checkmark',
+  penalty: 'alert-circle', suspended: 'ban', falseReport: 'alert-circle',
 };
 
 export default function Notifications() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const c = useColors();
   const ago = useRelativeTime();
   const { notifications, markNotificationsRead, markHandled, blocked, following } = useApp();
@@ -66,7 +67,7 @@ export default function Notifications() {
         const p = n.partnerId ? people.find((x) => x.id === n.partnerId) : undefined;
         const name = p?.name ?? '';
         const live = (n.type === 'accepted' || n.type === 'incoming') && !n.handled && (!n.expiresAt || n.expiresAt > now);
-        const text = n.type === 'followed' || n.type === 'accepted' || n.type === 'incoming' ? t(`notifications.${n.type}`, { name }) : t(`notifications.${n.type}`);
+        const text = t(`notifications.${n.type}`, { name, date: n.expiresAt ? new Date(n.expiresAt).toLocaleDateString(i18n.language) : '' });
         return (
           <Card key={n.id} style={{ flexDirection: 'row', gap: space.md, alignItems: 'flex-start', borderLeftWidth: highlight.has(n.id) || !n.read ? 3 : 0, borderLeftColor: c.learn }}>
             {p ? <Avatar name={p.name} color={p.color} size={40} /> : (

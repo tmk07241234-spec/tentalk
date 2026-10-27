@@ -51,6 +51,7 @@ const ko: Translation = {
     s5: { title: '안심하고 대화하기', body: '어학 목적만 원하는 사람에게는 “어학 전용” 배지가 붙어요. 신고와 차단은 언제든 한 번에. 만 18세 이상만 이용할 수 있어요.' },
   },
   home: {
+    suspended: '가이드라인 위반으로 {{date}}까지 통화를 이용할 수 없어요.',
     paused: '통화를 중간에 끝내서 랜덤 통화는 {{m}}분 동안 이용할 수 없어요. 프로필에서 요청은 할 수 있어요.',
     hello: '안녕하세요, {{name}}님', learning: '학습 중', add: '+ 추가',
     buddy: '연습 친구', exchange: '언어 교환', buddySub: '{{lang}}로만 대화', exchangeSub: '{{learn}} · {{native}} 반반',
@@ -62,8 +63,9 @@ const ko: Translation = {
   },
   person: { native: '{{lang}} 원어민', languageOnly: '어학 전용', online: '온라인', trusted: '신뢰됨', new: '신규' },
   call: {
+    failure: { mic: '마이크를 쓸 수 없어요', network: '연결하지 못했어요', suspended: '통화를 이용할 수 없어요' }, failureBody: { mic: '브라우저나 기기 설정에서 Tentalk의 마이크를 허용한 뒤 다시 시도해 주세요.', network: '네트워크 상태를 확인하고 다시 시도해 주세요.', suspended: '가이드라인 위반으로 {{date}}까지 통화를 이용할 수 없어요.' },
     exchangeLangs: '{{learn}}와 {{native}}, 어느 쪽으로 말해도 괜찮아요. 질문은 내가 배우는 언어로 보여요', partnerDrew: '{{name}}님이 꺼낸 질문', nextQuestionIn: '다음 질문 ({{s}}초 후)',
-    joining: '상대를 찾았어요. 연결 중…', micBlocked: '마이크를 쓸 수 없어요', micBlockedBody: '브라우저나 기기 설정에서 Tentalk의 마이크를 허용한 뒤 다시 시도해 주세요.', networkError: '연결하지 못했어요', networkErrorBody: '네트워크 상태를 확인하고 다시 시도해 주세요.', audioBlocked: '상대 목소리를 들으려면 버튼을 눌러 주세요', audioOn: '소리 켜기',
+    joining: '상대를 찾았어요. 연결 중…', audioBlocked: '상대 목소리를 들으려면 버튼을 눌러 주세요', audioOn: '소리 켜기',
     searching: '상대를 찾고 있어요', condBuddy: '조건: {{lang}} 학습 중 · 모국어가 {{native}}가 아닌 사람', condExchange: '조건: {{native}}를 배우는 {{learn}} 원어민',
     noPartner: '조건에 맞는 상대가 없어요', noPartnerBody: '대기자가 많은 “통화 타임”에 다시 시도하거나 다른 모드를 이용해 보세요.', retry: '다시 찾기',
     required: '필수 10분까지 {{time}} 남음', extended: '연장 중 · 한 명이 끊을 때까지',
@@ -125,7 +127,7 @@ const ko: Translation = {
     follow: '팔로우', following: '팔로잉', block: '차단', blockTitle: '{{name}}님을 차단할까요?', blockBody: '앞으로 매칭되지 않고 목록과 기록에서도 보이지 않아요. 상대에게는 알리지 않아요. “나” → “차단한 사람”에서 해제할 수 있어요.', blockConfirm: '차단하기', unavailable: '이 프로필은 볼 수 없어요.',
   },
   request: {
-    notSent: '요청을 보내지 못했어요', refused: { 'not-accepting': '{{name}}님은 지금 요청을 받지 않아요.', busy: '{{name}}님은 지금 통화 중이에요. 잠시 후에 보내 주세요.', 'no-shared-language': '{{name}}님과 함께 연습할 수 있는 언어 조합이 없어요.', 'not-found': '이 사람을 찾을 수 없어요.', network: '보내지 못했어요. 네트워크를 확인하고 다시 시도해 주세요.' },
+    notSent: '요청을 보내지 못했어요', refused: { suspended: '가이드라인 위반으로 지금은 요청을 보낼 수 없어요.', 'not-accepting': '{{name}}님은 지금 요청을 받지 않아요.', busy: '{{name}}님은 지금 통화 중이에요. 잠시 후에 보내 주세요.', 'no-shared-language': '{{name}}님과 함께 연습할 수 있는 언어 조합이 없어요.', 'not-found': '이 사람을 찾을 수 없어요.', network: '보내지 못했어요. 네트워크를 확인하고 다시 시도해 주세요.' },
     waiting: '{{name}}님의 답을 기다리고 있어요', waitingBody: '수락하면 바로 통화가 시작돼요. {{seconds}}초 후 자동으로 취소돼요.', cancel: '취소',
     declined: '{{name}}님은 지금 통화할 수 없대요', expired: '응답이 없었어요', tryLater: '나중에 다시 요청하거나 랜덤 통화를 이용해 보세요.',
     sentTitle: '요청을 보냈어요', sentBody: '{{name}}님이 수락하면 전화로 알려 드려요. 30초 안에 받으면 통화가 시작돼요. 놓쳐도 24시간 동안 알림에서 통화할 수 있어요.', ok: '확인',
@@ -133,7 +135,7 @@ const ko: Translation = {
   notifications: {
     title: '알림', empty: '아직 알림이 없어요.', welcome: 'Tentalk에 오신 걸 환영해요! 먼저 랜덤 통화로 첫 10분을 대화해 보세요.', theme: '이번 주 테마는 “추천하고 싶은 영화”예요.',
     followed: '{{name}}님이 나를 팔로우했어요', accepted: '{{name}}님이 요청을 수락했어요', call: '통화하기', incoming: '{{name}}님이 10분 대화하고 싶대요',
-    accept: '수락하고 통화', decline: '지금은 안 돼요', expired: '만료됨', done: '처리됨', reportResult: '신고 검토가 끝났어요. 위반이 확인되어 상대에게 조치했어요.',
+    accept: '수락하고 통화', decline: '지금은 안 돼요', expired: '만료됨', done: '처리됨', reportResult: '신고 검토가 끝났어요. 위반이 확인되어 상대에게 조치했어요. 협조해 주셔서 감사해요.', reportDismissed: '신고 검토가 끝났어요. 이번에는 위반이 확인되지 않았어요. 알려 주셔서 감사해요.', penalty: '나에 대한 신고를 검토한 결과 커뮤니티 가이드라인 위반이 확인됐어요. 신뢰 점수가 내려갔어요.', suspended: '가이드라인을 심각하게 위반해 {{date}}까지 통화를 이용할 수 없어요.', falseReport: '내 신고가 사실과 다르다고 판단됐어요. 신뢰 점수가 내려갔어요.',
     justNow: '방금', minutes: '{{n}}분 전', hours: '{{n}}시간 전', days: '{{n}}일 전', devIncoming: '개발용: 요청 받기',
   },
   connections: {
@@ -168,6 +170,19 @@ const ko: Translation = {
     noConnections: '아직 연결된 사람이 없어요. 10분 대화를 끝까지 한 상대를 팔로우하면 고를 수 있어요.',
     notifications: '알림', notifyAccepted: '보낸 요청이 승인됐을 때', notifyFollowed: '누군가 나를 팔로우했을 때', notifyTheme: '이번 주 테마와 소식',
     notificationsNote: '받은 요청 알림은 위의 “통화 요청을 받을 상대”에 따라 정해져요.',
+  },
+  admin: {
+    title: '신고 확인', note: '운영자만 볼 수 있는 화면이에요. 결정은 바로 당사자 앱에 반영돼요.', empty: '처리하지 않은 신고가 없어요.',
+    forbidden: '이 화면을 볼 권한이 없어요.', loadFailed: '불러오지 못했어요.', actFailed: '처리하지 못했어요. 다시 시도해 주세요.',
+    against: '신고된 사람: {{name}} (30일 이내 신고 {{n}}건)', by: '신고한 사람: {{name}}', suspendedUntil: '{{date}}까지 이용 정지 중', confirm: '결정하기',
+    actions: { dismiss: '문제 없음', violation: '위반 있음', suspend: '7일 정지', falseReport: '허위 신고' },
+    explain: {
+      dismiss: '위반이 없는 것으로 닫아요. {{by}}님에게는 검토했지만 위반이 확인되지 않았다고 전해져요.',
+      violation: '{{against}}님의 신뢰 점수를 30 낮추고 위반을 알려요. {{by}}님에게는 조치했다고 전해져요.',
+      suspend: '{{against}}님의 신뢰 점수를 30 낮추고 7일 동안 랜덤 통화와 요청을 막아요.',
+      falseReport: '신고가 사실과 다르다고 보고 {{by}}님의 신뢰 점수를 10 낮추고 알려요. {{against}}님에게는 아무 일도 없어요.',
+    },
+    menu: '신고 확인 (운영)', verify: '운영 화면을 쓰려면 이메일 주소 확인이 필요해요. 확인 메일의 링크를 연 뒤 다시 로그인해 주세요.',
   },
   settings: {
     title: '통화 설정', languageOnly: '어학 목적 대화만', languageOnlyNote: '켜 두면 프로필에 “어학 전용”이 표시돼요.',

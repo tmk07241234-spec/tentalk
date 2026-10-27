@@ -116,6 +116,26 @@ export const firestore = {
     return rows.filter((r) => r.document).map((r) => docData(r.document!));
   },
 
+  /** Several documents in one request (EAS Hosting allows only a few requests per API call). */
+  async getMany(paths: string[]): Promise<Record<string, Data | null>> {
+    const rows = await call<({ found?: RawDoc; missing?: string })[]>(':batchGet', { documents: paths.map((p) => `${root()}/${p}`) });
+    const out: Record<string, Data | null> = Object.fromEntries(paths.map((p) => [p, null]));
+    for (const r of rows) if (r.found) out[r.found.name.slice(root().length + 1)] = docData(r.found);
+    return out;
+  },
+
+  /** Documents in `collection` whose numeric `field` is at least `min` (at most `limit`). */
+  async since(collection: string, field: string, min: number, limit: number): Promise<(Data & { id: string })[]> {
+    const rows = await call<{ document?: RawDoc }[]>(':runQuery', {
+      structuredQuery: {
+        from: [{ collectionId: collection }],
+        where: { fieldFilter: { field: { fieldPath: field }, op: 'GREATER_THAN_OR_EQUAL', value: toValue(min) } },
+        limit,
+      },
+    });
+    return rows.filter((r) => r.document).map((r) => ({ ...docData(r.document!), id: r.document!.name.split('/').pop()! }));
+  },
+
   async begin(): Promise<string> {
     return (await call<{ transaction: string }>(':beginTransaction', {})).transaction;
   },

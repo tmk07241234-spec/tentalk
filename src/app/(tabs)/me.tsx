@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import { useEffect, useState, type ComponentProps } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import Constants from 'expo-constants';
@@ -12,6 +12,7 @@ import { Badge } from '@/components/progress';
 import { VoicePlayer } from '@/components/voice';
 import { Body, Button, Card, Eyebrow, Screen, Title } from '@/components/ui';
 import { BADGES, earnedBadges } from '@/domain/progress';
+import { api } from '@/services/api';
 import { auth } from '@/services/auth';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
@@ -20,6 +21,13 @@ export default function Me() {
   const { t } = useTranslation();
   const c = useColors();
   const { profile, trust, account, signOut, callLog, seedDemoProgress, plus } = useApp();
+  // Operators get a link to the report screen; the server decides who they are.
+  const [operator, setOperator] = useState<{ admin: boolean; needsVerification: boolean } | null>(null);
+  const uid = account?.uid;
+  useEffect(() => {
+    if (!uid) return;
+    api<{ admin: boolean; needsVerification: boolean }>('/api/admin?check=1', undefined, 'GET').then(setOperator).catch(() => {});
+  }, [uid]);
   if (!profile) return null;
 
   const logout = async () => {
@@ -86,6 +94,8 @@ export default function Me() {
 
       <Card>
         <MenuRow label={t('appSettings.title')} icon="settings-outline" first onPress={() => router.push('/settings')} />
+        {operator?.admin ? <MenuRow label={t('admin.menu')} icon="shield-checkmark-outline" onPress={() => router.push('/admin')} /> : null}
+        {operator?.needsVerification ? <Body small muted>{t('admin.verify')}</Body> : null}
       </Card>
 
       <Card>

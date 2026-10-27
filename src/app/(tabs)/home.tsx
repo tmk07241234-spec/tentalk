@@ -24,9 +24,9 @@ const SAMPLE_ONLINE: Record<Mode, { count: number; wait: number }> = { buddy: { 
 const MOOD_POSE: Record<MascotMood, PipPose> = { welcome: 'wave', done_today: 'happy', keep_streak: 'wave', goal_met: 'cheer', invite: 'think' };
 
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const c = useColors();
-  const { profile, mode, setMode, setActiveLearn, blocked, callLog, following, randomPausedUntil } = useApp();
+  const { profile, mode, setMode, setActiveLearn, blocked, callLog, following, randomPausedUntil, suspendedUntil } = useApp();
   const now = useNow(15_000);
   const active = useActiveLearning();
   const uid = useApp((s) => s.account?.uid);
@@ -40,7 +40,8 @@ export default function Home() {
   const mood = homeMood(callLog, today);
   const streak = currentStreak(callLog, today);
   const week = weekSummary(callLog, today);
-  const paused = randomPausedUntil > now;
+  const suspended = suspendedUntil > now;
+  const paused = randomPausedUntil > now || suspended;
   // `now` refreshes every 15 s, so clamp to the real pause length.
   const pausedMinutes = Math.min(RANDOM_COOLDOWN_MINUTES, Math.max(1, Math.ceil((randomPausedUntil - now) / 60_000)));
   const learner = { native: profile.native, learn: active.lang };
@@ -83,7 +84,7 @@ export default function Home() {
 
       {paused ? (
         <Card style={{ backgroundColor: c.nativeSoft }}>
-          <Body small>{t('home.paused', { m: pausedMinutes })}</Body>
+          <Body small>{suspended ? t('home.suspended', { date: new Date(suspendedUntil).toLocaleDateString(i18n.language) }) : t('home.paused', { m: pausedMinutes })}</Body>
         </Card>
       ) : null}
       <Pressable accessibilityRole="button" accessibilityLabel={t('home.startNow')} accessibilityState={{ disabled: paused }} disabled={paused}

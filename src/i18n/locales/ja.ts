@@ -49,6 +49,7 @@ const ja = {
     s5: { title: '安心して話すために', body: '語学目的だけの人には「語学のみ」バッジが付きます。通報とブロックはいつでも1タップ。利用は18歳以上です。' },
   },
   home: {
+    suspended: 'ガイドラインへの違反により、{{date}}まで通話を利用できません。',
     paused: '途中で通話を終了したため、ランダム通話はあと{{m}}分使えません。プロフィールからのリクエストは使えます。',
     hello: 'こんばんは、{{name}}さん', learning: '学習中', add: '＋ 追加',
     buddy: '練習仲間', exchange: '言語交換', buddySub: '{{lang}}だけで話す', exchangeSub: '{{learn}}と{{native}}を半分ずつ',
@@ -60,8 +61,9 @@ const ja = {
   },
   person: { native: '{{lang}}ネイティブ', languageOnly: '語学のみ', online: 'オンライン', trusted: '信頼済み', new: '新規' },
   call: {
+    failure: { mic: 'マイクが使えません', network: 'つながりませんでした', suspended: '通話を利用できません' }, failureBody: { mic: 'ブラウザか端末の設定で、Tentalk のマイクを許可してから、もう一度お試しください。', network: '通信の状態を確かめて、もう一度お試しください。', suspended: 'ガイドラインへの違反により、{{date}}まで通話を利用できません。' },
     exchangeLangs: '{{learn}}と{{native}}、どちらで話してもOK。お題は自分の学習言語で表示されます', partnerDrew: '{{name}}さんが出したお題', nextQuestionIn: '次のお題（{{s}}秒後）',
-    joining: '相手が見つかりました。つないでいます…', micBlocked: 'マイクが使えません', micBlockedBody: 'ブラウザか端末の設定で、Tentalk のマイクを許可してから、もう一度お試しください。', networkError: 'つながりませんでした', networkErrorBody: '通信の状態を確かめて、もう一度お試しください。', audioBlocked: '相手の声を出すには、ボタンを押してください', audioOn: '音声をオン',
+    joining: '相手が見つかりました。つないでいます…', audioBlocked: '相手の声を出すには、ボタンを押してください', audioOn: '音声をオン',
     searching: '相手を探しています', condBuddy: '条件: {{lang}}を学習中・母語が{{native}}以外', condExchange: '条件: {{learn}}ネイティブで{{native}}を学習中',
     noPartner: '条件に合う相手がいませんでした', noPartnerBody: '待機している人が多い「通話タイム」に試すか、もう一方のモードを使ってください。', retry: 'もう一度探す',
     required: '必修の10分まで あと{{time}}', extended: '延長中・どちらかが切るまで',
@@ -123,7 +125,7 @@ const ja = {
     follow: 'フォロー', following: 'フォロー中', block: 'ブロック', blockTitle: '{{name}}さんをブロックしますか？', blockBody: '今後マッチせず、一覧や履歴にも表示されません。相手には通知されません。「自分」→「ブロックした人」から解除できます。', blockConfirm: 'ブロックする', unavailable: 'このプロフィールは表示できません。',
   },
   request: {
-    notSent: 'リクエストを送れませんでした', refused: { 'not-accepting': '{{name}}さんは、いまリクエストを受け付けていません。', busy: '{{name}}さんはいま通話中です。少し時間をおいてから送ってください。', 'no-shared-language': '{{name}}さんとは、いっしょに練習できる言語の組み合わせがありません。', 'not-found': 'この人は見つかりませんでした。', network: '送信できませんでした。通信を確かめて、もう一度お試しください。' },
+    notSent: 'リクエストを送れませんでした', refused: { suspended: 'ガイドラインへの違反により、いまはリクエストを送れません。', 'not-accepting': '{{name}}さんは、いまリクエストを受け付けていません。', busy: '{{name}}さんはいま通話中です。少し時間をおいてから送ってください。', 'no-shared-language': '{{name}}さんとは、いっしょに練習できる言語の組み合わせがありません。', 'not-found': 'この人は見つかりませんでした。', network: '送信できませんでした。通信を確かめて、もう一度お試しください。' },
     waiting: '{{name}}さんの返事を待っています', waitingBody: '承認されるとすぐに通話が始まります。{{seconds}}秒で自動的に取り消されます。', cancel: '取り消す',
     declined: '{{name}}さんはいま通話できないようです', expired: '返事がありませんでした', tryLater: '時間をおいてもう一度リクエストするか、ランダム通話を使ってください。',
     sentTitle: 'リクエストを送りました', sentBody: '{{name}}さんが承認すると着信でお知らせします。30秒以内に出ると通話が始まります。出られなかった場合も24時間は通知から通話できます。', ok: 'OK',
@@ -131,7 +133,7 @@ const ja = {
   notifications: {
     title: '通知', empty: '通知はまだありません。', welcome: 'Tentalkへようこそ！まずはランダム通話で最初の10分を話してみましょう。', theme: '今週のテーマは「おすすめの映画」です。',
     followed: '{{name}}さんがあなたをフォローしました', accepted: '{{name}}さんがリクエストを承認しました', call: '通話する', incoming: '{{name}}さんが10分話したいそうです',
-    accept: '承認して通話', decline: '今は無理', expired: '期限切れ', done: '対応済み', reportResult: '通報の確認が完了しました。違反が認められたため、相手に措置を取りました。',
+    accept: '承認して通話', decline: '今は無理', expired: '期限切れ', done: '対応済み', reportResult: '通報の確認が完了しました。違反が認められたため、相手に措置を取りました。ご協力ありがとうございます。', reportDismissed: '通報の確認が完了しました。今回は違反は確認できませんでした。ご協力ありがとうございます。', penalty: 'あなたへの通報を確認し、コミュニティガイドラインへの違反が認められました。信頼スコアが下がりました。', suspended: 'ガイドラインへの重大な違反が認められたため、{{date}}まで通話を利用できません。', falseReport: 'あなたの通報は事実と異なると判断されました。信頼スコアが下がりました。',
     justNow: 'たった今', minutes: '{{n}}分前', hours: '{{n}}時間前', days: '{{n}}日前', devIncoming: '開発用: リクエストが届く',
   },
   connections: {
@@ -166,6 +168,19 @@ const ja = {
     noConnections: 'つながりのある人がまだいません。10分話しきった相手をフォローすると選べるようになります。',
     notifications: '通知', notifyAccepted: '送ったリクエストが承認されたとき', notifyFollowed: 'フォローされたとき', notifyTheme: '今週のテーマとお知らせ',
     notificationsNote: '届いたリクエストの通知は、上の「受け付ける相手」で決まります。',
+  },
+  admin: {
+    title: '通報の確認', note: '運営者だけが見られる画面です。決定はすぐに当事者のアプリへ反映されます。', empty: '未対応の通報はありません。',
+    forbidden: 'この画面を見る権限がありません。', loadFailed: '読み込めませんでした。', actFailed: '処理できませんでした。もう一度お試しください。',
+    against: '通報された人: {{name}}（30日以内の通報 {{n}}件）', by: '通報した人: {{name}}', suspendedUntil: '{{date}}まで利用停止中', confirm: '決定する',
+    actions: { dismiss: '問題なし', violation: '違反あり', suspend: '7日間停止', falseReport: '虚偽の通報' },
+    explain: {
+      dismiss: '違反はなかったとして閉じます。{{by}}さんには「確認しましたが違反は認められませんでした」と伝わります。',
+      violation: '{{against}}さんの信頼スコアを30下げ、違反を通知します。{{by}}さんには「違反を確認し対応しました」と伝わります。',
+      suspend: '{{against}}さんの信頼スコアを30下げ、7日間ランダム通話とリクエストを使えなくします。',
+      falseReport: '通報が事実と異なるとして、{{by}}さんの信頼スコアを10下げ、通知します。{{against}}さんには何も起きません。',
+    },
+    menu: '通報の確認（運営）', verify: '運営用の画面を使うには、メールアドレスの確認が必要です。届いた確認メールのリンクを開いてから、ログインし直してください。',
   },
   settings: {
     title: '通話の設定', languageOnly: '語学目的の会話のみ', languageOnlyNote: 'オンの間はプロフィールに「語学のみ」と表示されます。',

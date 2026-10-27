@@ -1,5 +1,6 @@
 import { acceptsRequestFrom, type RequestRules } from '@/domain/connections';
 import { relation, type Mode } from '@/domain/matching';
+import { isSuspended, type ModerationRecord } from '@/domain/moderation';
 import { HttpError } from './auth';
 import { firestore, type Data } from './firestore';
 
@@ -42,9 +43,12 @@ function pairMode(a: ProfileDoc, b: ProfileDoc): Mode | null {
 
 export async function sendRequest(uid: string, to: unknown): Promise<{ id: string; kind: RequestRecord['kind'] }> {
   if (typeof to !== 'string' || !/^[A-Za-z0-9]{10,40}$/.test(to) || to === uid) throw new HttpError(400, 'Invalid person.');
-  const [mine, theirs, theirState, theirFollowers] = await Promise.all([
-    firestore.get(`users/${uid}`), firestore.get(`users/${to}`), firestore.get(`users/${to}/private/state`), firestore.get(`users/${to}/private/followers`),
-  ]) as [ProfileDoc | null, ProfileDoc | null, Data | null, Data | null];
+  const docs = await firestore.getMany([`users/${uid}`, `users/${to}`, `users/${to}/private/state`, `users/${to}/private/followers`, `users/${uid}/private/moderation`]);
+  if (isSuspended(docs[`users/${uid}/private/moderation`] as ModerationRecord | null)) throw new HttpError(403, 'suspended');
+  const mine = docs[`users/${uid}`] as ProfileDoc | null;
+  const theirs = docs[`users/${to}`] as ProfileDoc | null;
+  const theirState = docs[`users/${to}/private/state`];
+  const theirFollowers = docs[`users/${to}/private/followers`];
   if (!mine || !theirs) throw new HttpError(404, 'not-found');
   const settings = (theirState?.settings ?? {}) as Partial<RequestRules>;
   const rules: RequestRules = { requestsFrom: settings.requestsFrom ?? 'everyone', requestAllowList: settings.requestAllowList ?? [] };

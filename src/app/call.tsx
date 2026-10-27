@@ -89,7 +89,7 @@ export default function Call() {
   // The mode the server decided for a live call (direct calls: from both people's languages).
   const [serverMode, setServerMode] = useState<Mode | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
-  const [failure, setFailure] = useState<'mic' | 'network' | null>(null);
+  const [failure, setFailure] = useState<'mic' | 'network' | 'suspended' | null>(null);
 
   const me = { native: profile.native, learn: active?.lang ?? 'en' };
   // A chosen person may relate to any of my learning languages; random calls use the Home mode.
@@ -177,7 +177,7 @@ export default function Call() {
           setCallId(id);
           setPhase('joining');
         })
-        .catch(() => { if (!ctrl.signal.aborted) { setFailure('network'); setPhase('none'); } });
+        .catch((e: Error) => { if (!ctrl.signal.aborted) { setFailure(e.message === 'suspended' ? 'suspended' : 'network'); setPhase('none'); } });
       return () => ctrl.abort();
     }
     matchmaking
@@ -327,8 +327,8 @@ export default function Call() {
         ) : (
           <>
             <View style={{ alignItems: 'center' }}><Pip pose="sleepy" tone={buddy ? 'buddy' : 'learn'} size={130} /></View>
-            <Title>{failure ? t(failure === 'mic' ? 'call.micBlocked' : 'call.networkError') : t('call.noPartner')}</Title>
-            <Body muted>{failure ? t(failure === 'mic' ? 'call.micBlockedBody' : 'call.networkErrorBody') : t('call.noPartnerBody')}</Body>
+            <Title>{failure ? t(`call.failure.${failure}`) : t('call.noPartner')}</Title>
+            <Body muted>{failure ? t(`call.failureBody.${failure}`, { date: new Date(app.suspendedUntil).toLocaleDateString(i18n.language) }) : t('call.noPartnerBody')}</Body>
             {kind === 'random' ? <Button variant="primary" label={t('call.retry')} onPress={searchAgain} /> : null}
           </>
         )}

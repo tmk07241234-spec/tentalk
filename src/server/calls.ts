@@ -1,4 +1,5 @@
 import { LANGS, type Lang } from '@/domain/languages';
+import { isSuspended, type ModerationRecord } from '@/domain/moderation';
 import { pickQueuePartner, queueKey, seekKey, type QueueEntry } from '@/domain/queue';
 import { HttpError } from './auth';
 import { firestore, type Data } from './firestore';
@@ -42,7 +43,9 @@ const newId = () => crypto.randomUUID().replace(/-/g, '').slice(0, 20);
  * compatible person, or (re)places our entry in the queue.
  */
 export async function searchStep(uid: string, req: MatchRequest): Promise<{ callId: string } | { waiting: true }> {
-  const state = await firestore.get(`users/${uid}/private/state`);
+  const docs = await firestore.getMany([`users/${uid}/private/state`, `users/${uid}/private/moderation`]);
+  if (isSuspended(docs[`users/${uid}/private/moderation`] as ModerationRecord | null)) throw new HttpError(403, 'suspended');
+  const state = docs[`users/${uid}/private/state`];
   const blocked = Array.isArray(state?.blocked) ? (state.blocked as string[]) : [];
   const me: QueueEntry = { uid, ...req, blocked, updatedAt: Date.now(), callId: null };
 

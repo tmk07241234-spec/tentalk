@@ -38,7 +38,7 @@
 | 沈黙の検出 | ランダム通話は LiveKit の「話している人」から判定。サンプルの通話は開発用ボタン | — |
 | 購入 | `src/services/purchases.ts`（押すと加入状態になる） | App Store / Google Play のアプリ内課金 |
 | 広告 | サンプルのカード | 広告配信サービス（導入時にプライバシーポリシーへ追記） |
-| 通報 | サーバーに保存（Firestore の `reports`）。確認する管理画面はまだない | 管理画面、直前60秒の音声 |
+| 通報 | サーバーに保存し、運営者が「自分 → 通報の確認」で判断（問題なし / 違反あり / 7日間停止 / 虚偽の通報）。結果は当事者のアプリへ届き、停止中はサーバーがランダム通話とリクエストを断る（`src/domain/moderation.ts`、`src/server/moderation.ts`） | 直前60秒の音声の保存 |
 | お問い合わせ・アカウント削除 | `src/services/support.ts`（送信したことにする） | サーバー |
 | データの保存 | Firestore にプロフィール、設定、フォロー、ブロック、履歴、信頼スコア（`src/state/cloudShape.ts`、ルールは `firestore.rules`）。写真と自己紹介の音声は Storage（`src/services/media.ts`、ルールは `storage.rules`）。通知は端末の中だけ | 通知はサーバー、信頼スコアはサーバーで計算 |
 
@@ -121,11 +121,13 @@ Web 版と同じ場所（EAS Hosting）で API が動いています（`src/app/
 | `POST /api/report` | 通報の保存 |
 | `POST /api/request` | 通話リクエストを送る（`PUT` で答える、`DELETE` で取り消す） |
 | `POST /api/follow` | フォロー / フォロー解除 |
+| `GET /api/admin`、`POST /api/admin` | 通報の一覧と判断（運営者だけ） |
+| `DELETE /api/account` | アカウント削除のとき、サーバー側の記録（フォロワー、待機列）を消す |
 
-- サーバーが読む値（Expo の Environment variables）: `LIVEKIT_URL`、`LIVEKIT_API_KEY`、`LIVEKIT_API_SECRET`、`FIREBASE_SERVICE_ACCOUNT`。EAS Hosting は Visibility が Secret の値を読めないので、Sensitive にする
+- サーバーが読む値（Expo の Environment variables）: `LIVEKIT_URL`、`LIVEKIT_API_KEY`、`LIVEKIT_API_SECRET`、`FIREBASE_SERVICE_ACCOUNT`、`ADMIN_EMAILS`（運営者のメールアドレス。カンマ区切り。確認済みのアドレスだけ有効）。値を変えたら、Web 版を公開し直すまで反映されない。EAS Hosting は Visibility が Secret の値を読めないので、Sensitive にする
 - Firestore の `queue`（待機列）、`calls`（組み合わされた通話）、`reports`（通報）はサーバー専用。アプリからは読み書きできない（`firestore.rules` に書いていないので拒否される）
 - `requests`（通話リクエスト）は、送った人と受け取った人だけが読める。書くのはサーバーだけ
-- `users/{uid}/private/followers` はサーバーだけが書き、本人だけが読める
+- `users/{uid}/private/followers`（フォロワー）と `users/{uid}/private/moderation`（通報の判断と利用停止）はサーバーだけが書き、本人だけが読める
 - EAS Hosting は1回の API で外へ出せる通信の数が少ないので、相手探しは1回で1歩だけ進める作り
 - 公開: `npx expo export --platform web` → `npx eas-cli@latest deploy --environment production --prod`（`--environment` がないとサーバーの値が入らない）
 

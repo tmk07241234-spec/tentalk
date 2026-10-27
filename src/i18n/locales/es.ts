@@ -51,6 +51,7 @@ const es: Translation = {
     s5: { title: 'Conversaciones seguras', body: 'Quien solo busca practicar idiomas lleva la insignia “Solo idiomas”. Denunciar y bloquear siempre está a un toque. Debes tener 18 años o más.' },
   },
   home: {
+    suspended: 'Por una infracción de las normas, no puedes hacer llamadas hasta el {{date}}.',
     paused: 'Como colgaste antes de tiempo, las llamadas aleatorias están en pausa {{m}} min más. Las solicitudes desde perfiles siguen funcionando.',
     hello: 'Buenas noches, {{name}}', learning: 'Aprendiendo', add: '+ Añadir',
     buddy: 'Compañero de práctica', exchange: 'Intercambio', buddySub: 'Solo en {{lang}}', exchangeSub: 'Mitad {{learn}}, mitad {{native}}',
@@ -62,8 +63,9 @@ const es: Translation = {
   },
   person: { native: 'Nativo de {{lang}}', languageOnly: 'Solo idiomas', online: 'En línea', trusted: 'De confianza', new: 'Nuevo' },
   call: {
+    failure: { mic: 'El micrófono está bloqueado', network: 'No se pudo conectar', suspended: 'Las llamadas no están disponibles' }, failureBody: { mic: 'Permite que Tentalk use el micrófono en el navegador o en los ajustes del dispositivo e inténtalo de nuevo.', network: 'Revisa tu conexión e inténtalo de nuevo.', suspended: 'Por una infracción de las normas, no puedes hacer llamadas hasta el {{date}}.' },
     exchangeLangs: 'Habla en {{learn}} o en {{native}}, como prefieras. Las preguntas se muestran en el idioma que aprendes', partnerDrew: 'La sacó {{name}}', nextQuestionIn: 'Siguiente pregunta ({{s}} s)',
-    joining: 'Encontramos a alguien. Conectando…', micBlocked: 'El micrófono está bloqueado', micBlockedBody: 'Permite que Tentalk use el micrófono en el navegador o en los ajustes del dispositivo e inténtalo de nuevo.', networkError: 'No se pudo conectar', networkErrorBody: 'Revisa tu conexión e inténtalo de nuevo.', audioBlocked: 'Toca el botón para oír a tu compañero', audioOn: 'Activar sonido',
+    joining: 'Encontramos a alguien. Conectando…', audioBlocked: 'Toca el botón para oír a tu compañero', audioOn: 'Activar sonido',
     searching: 'Buscando compañero', condBuddy: 'Buscando: personas que aprenden {{lang}} y cuyo idioma nativo no es el {{native}}', condExchange: 'Buscando: nativos de {{learn}} que aprenden {{native}}',
     noPartner: 'No encontramos a nadie', noPartnerBody: 'Prueba en la hora de llamadas, cuando hay más gente esperando, o usa el otro modo.', retry: 'Buscar otra vez',
     required: 'Quedan {{time}} de los 10 minutos obligatorios', extended: 'Ampliada · hasta que alguien cuelgue',
@@ -125,7 +127,7 @@ const es: Translation = {
     follow: 'Seguir', following: 'Siguiendo', block: 'Bloquear', blockTitle: '¿Bloquear a {{name}}?', blockBody: 'No volverán a emparejarte y desaparecerá de las listas y del historial. No se le avisa. Puedes desbloquearlo en Yo → Personas bloqueadas.', blockConfirm: 'Bloquear', unavailable: 'Este perfil no está disponible.',
   },
   request: {
-    notSent: 'No se envió la solicitud', refused: { 'not-accepting': '{{name}} no acepta solicitudes ahora.', busy: '{{name}} está en una llamada. Inténtalo un poco más tarde.', 'no-shared-language': 'No tienes con {{name}} una combinación de idiomas para practicar.', 'not-found': 'No se encontró a esta persona.', network: 'No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.' },
+    notSent: 'No se envió la solicitud', refused: { suspended: 'Por una infracción de las normas, ahora no puedes enviar solicitudes.', 'not-accepting': '{{name}} no acepta solicitudes ahora.', busy: '{{name}} está en una llamada. Inténtalo un poco más tarde.', 'no-shared-language': 'No tienes con {{name}} una combinación de idiomas para practicar.', 'not-found': 'No se encontró a esta persona.', network: 'No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.' },
     waiting: 'Esperando la respuesta de {{name}}', waitingBody: 'La llamada empieza en cuanto acepte. La solicitud se cancela en {{seconds}} segundos.', cancel: 'Cancelar',
     declined: '{{name}} no puede hablar ahora', expired: 'No hubo respuesta', tryLater: 'Inténtalo más tarde o usa una llamada aleatoria.',
     sentTitle: 'Solicitud enviada', sentBody: 'Cuando {{name}} acepte, te avisaremos con una llamada. Contesta en 30 segundos para empezar. Si no puedes, podrás llamar desde Avisos durante 24 horas.', ok: 'OK',
@@ -133,7 +135,7 @@ const es: Translation = {
   notifications: {
     title: 'Avisos', empty: 'Todavía no hay avisos.', welcome: '¡Te damos la bienvenida! Empieza con una llamada aleatoria y habla tus primeros 10 minutos.', theme: 'El tema de esta semana es “una película que recomiendes”.',
     followed: '{{name}} empezó a seguirte', accepted: '{{name}} aceptó tu solicitud', call: 'Llamar', incoming: '{{name}} quiere hablar 10 minutos',
-    accept: 'Aceptar y llamar', decline: 'Ahora no', expired: 'Caducada', done: 'Atendida', reportResult: 'Revisamos tu denuncia. Se confirmó una infracción y tomamos medidas.',
+    accept: 'Aceptar y llamar', decline: 'Ahora no', expired: 'Caducada', done: 'Atendida', reportResult: 'Revisamos tu denuncia. Se confirmó una infracción y tomamos medidas. Gracias.', reportDismissed: 'Revisamos tu denuncia y esta vez no encontramos ninguna infracción. Gracias por avisarnos.', penalty: 'Revisamos una denuncia sobre ti y se confirmó que incumpliste las normas de la comunidad. Tu puntuación de confianza bajó.', suspended: 'Por una infracción grave de las normas, no puedes hacer llamadas hasta el {{date}}.', falseReport: 'Se determinó que tu denuncia no era cierta. Tu puntuación de confianza bajó.',
     justNow: 'Ahora mismo', minutes: 'hace {{n}} min', hours: 'hace {{n}} h', days: 'hace {{n}} d', devIncoming: 'Dev: recibir una solicitud',
   },
   connections: {
@@ -168,6 +170,19 @@ const es: Translation = {
     noConnections: 'Aún no tienes contactos. Sigue a alguien tras una llamada completa de 10 minutos para elegirlo aquí.',
     notifications: 'Notificaciones', notifyAccepted: 'Cuando aceptan una solicitud mía', notifyFollowed: 'Cuando alguien me sigue', notifyTheme: 'Tema semanal y novedades',
     notificationsNote: 'Los avisos de solicitudes recibidas siguen lo elegido en «Quién puede pedirte una llamada».',
+  },
+  admin: {
+    title: 'Denuncias', note: 'Solo para el equipo. Las decisiones llegan al instante a las apps de ambas personas.', empty: 'No hay denuncias pendientes.',
+    forbidden: 'No tienes acceso a esta pantalla.', loadFailed: 'No se pudo cargar.', actFailed: 'No se pudo aplicar. Inténtalo de nuevo.',
+    against: 'Denunciado: {{name}} ({{n}} denuncias en 30 días)', by: 'Denunciado por: {{name}}', suspendedUntil: 'Suspendido hasta {{date}}', confirm: 'Confirmar',
+    actions: { dismiss: 'Sin infracción', violation: 'Infracción', suspend: 'Suspender 7 días', falseReport: 'Denuncia falsa' },
+    explain: {
+      dismiss: 'Cerrar sin infracción. A {{by}} se le dice que se revisó y no se encontró ninguna infracción.',
+      violation: 'Bajar 30 la puntuación de {{against}} y avisarle de la infracción. A {{by}} se le dice que se tomaron medidas.',
+      suspend: 'Bajar 30 la puntuación de {{against}} y bloquear llamadas aleatorias y solicitudes durante 7 días.',
+      falseReport: 'Tratar la denuncia como falsa: bajar 10 la puntuación de {{by}} y avisarle. A {{against}} no le pasa nada.',
+    },
+    menu: 'Denuncias (equipo)', verify: 'Para usar la pantalla del equipo, verifica tu correo: abre el enlace del correo de verificación y vuelve a iniciar sesión.',
   },
   settings: {
     title: 'Ajustes de llamada', languageOnly: 'Solo práctica de idiomas', languageOnlyNote: 'Mientras esté activado, tu perfil muestra “Solo idiomas”.',

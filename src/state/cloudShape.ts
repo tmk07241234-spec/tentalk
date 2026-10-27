@@ -25,7 +25,7 @@ export type PublicProfile = Profile & {
 
 export type PrivateState = Pick<
   AppState,
-  'mode' | 'trust' | 'todayGain' | 'callCount' | 'callLog' | 'following' | 'blocked' | 'settings' | 'history' | 'randomPausedUntil' | 'onboarded'
+  'mode' | 'trust' | 'todayGain' | 'callCount' | 'callLog' | 'following' | 'blocked' | 'settings' | 'history' | 'randomPausedUntil' | 'onboarded' | 'moderationSeen'
 >;
 
 export interface CloudAccount {
@@ -48,7 +48,7 @@ export function toCloud(s: AppState): CloudAccount | null {
     state: {
       mode: s.mode, trust: s.trust, todayGain: s.todayGain, callCount: s.callCount, callLog: s.callLog,
       following: s.following, blocked: s.blocked, settings: s.settings, history: s.history,
-      randomPausedUntil: s.randomPausedUntil, onboarded: s.onboarded,
+      randomPausedUntil: s.randomPausedUntil, onboarded: s.onboarded, moderationSeen: s.moderationSeen,
     },
   };
 }

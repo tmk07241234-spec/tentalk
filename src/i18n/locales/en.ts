@@ -51,6 +51,7 @@ const en: Translation = {
     s5: { title: 'Safe conversations', body: 'People who only want language practice get a “Language only” badge. Reporting and blocking are always one tap away. You must be 18 or older.' },
   },
   home: {
+    suspended: 'Because of a guideline violation, you can’t make calls until {{date}}.',
     paused: 'Because you ended a call early, random calls are paused for {{m}} more min. Requests from profiles still work.',
     hello: 'Good evening, {{name}}', learning: 'Learning', add: '+ Add',
     buddy: 'Practice buddy', exchange: 'Language exchange', buddySub: 'Only {{lang}}', exchangeSub: 'Half {{learn}}, half {{native}}',
@@ -62,8 +63,9 @@ const en: Translation = {
   },
   person: { native: 'Native {{lang}}', languageOnly: 'Language only', online: 'Online', trusted: 'Trusted', new: 'New' },
   call: {
+    failure: { mic: 'The microphone is blocked', network: 'Couldn’t connect', suspended: 'Calls are unavailable' }, failureBody: { mic: 'Allow Tentalk to use the microphone in your browser or device settings, then try again.', network: 'Check your connection and try again.', suspended: 'Because of a guideline violation, you can’t make calls until {{date}}.' },
     exchangeLangs: 'Speak {{learn}} or {{native}}, whichever you like. Questions show in the language you are learning', partnerDrew: 'Drawn by {{name}}', nextQuestionIn: 'Next question ({{s}}s)',
-    joining: 'Found someone. Connecting…', micBlocked: 'The microphone is blocked', micBlockedBody: 'Allow Tentalk to use the microphone in your browser or device settings, then try again.', networkError: 'Couldn’t connect', networkErrorBody: 'Check your connection and try again.', audioBlocked: 'Tap the button to hear your partner', audioOn: 'Turn on sound',
+    joining: 'Found someone. Connecting…', audioBlocked: 'Tap the button to hear your partner', audioOn: 'Turn on sound',
     searching: 'Finding a partner', condBuddy: 'Looking for: {{lang}} learners whose native language isn’t {{native}}', condExchange: 'Looking for: native {{learn}} speakers learning {{native}}',
     noPartner: 'No one matched', noPartnerBody: 'Try during call time, when more people are waiting, or use the other mode.', retry: 'Search again',
     required: '{{time}} left of the required 10 minutes', extended: 'Extended · until one of you hangs up',
@@ -125,7 +127,7 @@ const en: Translation = {
     follow: 'Follow', following: 'Following', block: 'Block', blockTitle: 'Block {{name}}?', blockBody: 'You won’t be matched again, and they disappear from lists and history. They aren’t notified. You can unblock them from Me → Blocked people.', blockConfirm: 'Block', unavailable: 'This profile isn’t available.',
   },
   request: {
-    notSent: 'Request not sent', refused: { 'not-accepting': '{{name}} is not accepting requests right now.', busy: '{{name}} is in a call. Try again a little later.', 'no-shared-language': 'You and {{name}} have no language pair to practice together.', 'not-found': 'This person could not be found.', network: 'Couldn’t send. Check your connection and try again.' },
+    notSent: 'Request not sent', refused: { suspended: 'Because of a guideline violation, you can’t send requests right now.', 'not-accepting': '{{name}} is not accepting requests right now.', busy: '{{name}} is in a call. Try again a little later.', 'no-shared-language': 'You and {{name}} have no language pair to practice together.', 'not-found': 'This person could not be found.', network: 'Couldn’t send. Check your connection and try again.' },
     waiting: 'Waiting for {{name}} to answer', waitingBody: 'The call starts as soon as they accept. The request is cancelled in {{seconds}} seconds.', cancel: 'Cancel',
     declined: '{{name}} can’t talk right now', expired: 'No answer', tryLater: 'Try again later, or use a random call.',
     sentTitle: 'Request sent', sentBody: 'When {{name}} accepts, you’ll get a ring. Answer within 30 seconds to start. If you miss it, you can still call from Alerts for 24 hours.', ok: 'OK',
@@ -133,7 +135,7 @@ const en: Translation = {
   notifications: {
     title: 'Alerts', empty: 'No alerts yet.', welcome: 'Welcome to Tentalk! Start with a random call and talk for your first 10 minutes.', theme: 'This week’s theme is “a movie you’d recommend.”',
     followed: '{{name}} followed you', accepted: '{{name}} accepted your request', call: 'Call', incoming: '{{name}} wants to talk for 10 minutes',
-    accept: 'Accept and call', decline: 'Not now', expired: 'Expired', done: 'Done', reportResult: 'We reviewed your report. A violation was confirmed and we took action.',
+    accept: 'Accept and call', decline: 'Not now', expired: 'Expired', done: 'Done', reportResult: 'We reviewed your report. A violation was confirmed and we took action. Thank you.', reportDismissed: 'We reviewed your report and found no violation this time. Thank you for telling us.', penalty: 'A report about you was reviewed and found to break the Community Guidelines. Your trust score went down.', suspended: 'Because of a serious guideline violation, you can’t make calls until {{date}}.', falseReport: 'Your report was found to be untrue. Your trust score went down.',
     justNow: 'Just now', minutes: '{{n}} min ago', hours: '{{n}} h ago', days: '{{n}} d ago', devIncoming: 'Dev: receive a request',
   },
   connections: {
@@ -168,6 +170,19 @@ const en: Translation = {
     noConnections: 'No connections yet. Follow someone after a full 10-minute call to pick them here.',
     notifications: 'Notifications', notifyAccepted: 'When a request I sent is accepted', notifyFollowed: 'When someone follows me', notifyTheme: 'Weekly theme and news',
     notificationsNote: 'Incoming request notifications follow “Who can send you call requests” above.',
+  },
+  admin: {
+    title: 'Reports', note: 'Operators only. Decisions reach both people’s apps right away.', empty: 'No open reports.',
+    forbidden: 'You don’t have access to this screen.', loadFailed: 'Couldn’t load.', actFailed: 'Couldn’t apply that. Try again.',
+    against: 'Reported: {{name}} ({{n}} reports in 30 days)', by: 'Reported by: {{name}}', suspendedUntil: 'Suspended until {{date}}', confirm: 'Confirm',
+    actions: { dismiss: 'No violation', violation: 'Violation', suspend: 'Suspend 7 days', falseReport: 'False report' },
+    explain: {
+      dismiss: 'Close the report with no violation. {{by}} is told it was reviewed and no violation was found.',
+      violation: 'Lower {{against}}’s trust score by 30 and tell them about the violation. {{by}} is told action was taken.',
+      suspend: 'Lower {{against}}’s trust score by 30 and block random calls and requests for 7 days.',
+      falseReport: 'Treat the report as untrue: lower {{by}}’s trust score by 10 and tell them. Nothing happens to {{against}}.',
+    },
+    menu: 'Reports (operators)', verify: 'To use the operator screen, verify your email address: open the link in the verification email, then sign in again.',
   },
   settings: {
     title: 'Call settings', languageOnly: 'Language practice only', languageOnlyNote: 'While on, your profile shows “Language only”.',

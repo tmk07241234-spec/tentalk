@@ -4,6 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { clampTrust } from '@/domain/callRules';
 import { canFollow, type RequestPolicy } from '@/domain/connections';
+import type { ModerationRecord } from '@/domain/moderation';
 import type { Lang, UiLang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import type { Mode } from '@/domain/matching';
@@ -59,7 +60,7 @@ export interface HistoryEntry {
   unlocked: boolean;
 }
 
-export type NotificationType = 'welcome' | 'theme' | 'followed' | 'accepted' | 'incoming' | 'reportResult';
+export type NotificationType = 'welcome' | 'theme' | 'followed' | 'accepted' | 'incoming' | 'reportResult' | 'reportDismissed' | 'penalty' | 'suspended' | 'falseReport';
 
 export interface AppNotification {
   id: string;
@@ -121,6 +122,10 @@ export interface AppState {
   plus: boolean;
   /** After hanging up early, random calls are paused until this time (ms). */
   randomPausedUntil: number;
+  /** Calls are suspended until this time after a confirmed serious report (ms). */
+  suspendedUntil: number;
+  /** Report decisions already applied (see services/moderation). */
+  moderationSeen: string[];
 
   setUiLang: (lang: UiLang | null) => void;
   completeSetup: (input: { account: NonNullable<AppState['account']>; profile: Profile }) => void;
@@ -148,6 +153,8 @@ export interface AppState {
   addRequest: (r: OutgoingRequest) => void;
   setPlus: (on: boolean) => void;
   removeRequest: (partnerId: string) => void;
+  /** Applies report decisions from the server once each: trust changes, notices, suspension. */
+  applyModeration: (record: ModerationRecord) => void;
   signOut: () => void;
 }
 
@@ -184,6 +191,8 @@ const initial = {
   requests: [] as OutgoingRequest[],
   plus: false,
   randomPausedUntil: 0,
+  suspendedUntil: 0,
+  moderationSeen: [] as string[],
 };
 
 const newId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
@@ -246,6 +255,21 @@ export const useApp = create<AppState>()(
       addRequest: (r) => set((s) => ({ requests: [...s.requests.filter((x) => x.partnerId !== r.partnerId), r] })),
       setPlus: (plus) => set((s) => ({ plus, profile: s.profile && !plus ? { ...s.profile, frame: null } : s.profile })),
       removeRequest: (partnerId) => set((s) => ({ requests: s.requests.filter((r) => r.partnerId !== partnerId) })),
+      applyModeration: (record) =>
+        set((s) => {
+          const fresh = record.events.filter((e) => !s.moderationSeen.includes(e.id));
+          if (!fresh.length && record.suspendedUntil === s.suspendedUntil) return s;
+          const kindToNotice = { violation: 'penalty', suspended: 'suspended', falseReport: 'falseReport', reportConfirmed: 'reportResult', reportDismissed: 'reportDismissed' } as const;
+          return {
+            trust: clampTrust(fresh.reduce((t, e) => t + e.trustDelta, s.trust)),
+            suspendedUntil: record.suspendedUntil,
+            moderationSeen: [...s.moderationSeen, ...fresh.map((e) => e.id)].slice(-200),
+            notifications: [
+              ...fresh.map((e) => ({ id: newId(), type: kindToNotice[e.kind] as NotificationType, at: e.at, read: false, expiresAt: e.until ?? undefined })),
+              ...s.notifications,
+            ].slice(0, 100),
+          };
+        }),
       // Keeps the display language: it belongs to the device, not the account.
       signOut: () => set((s) => ({ ...initial, uiLang: s.uiLang })),
     }),
