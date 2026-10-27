@@ -56,7 +56,7 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
-    "deploy:web": "expo export --platform web && npx eas-cli@latest deploy --environment production --prod"
+    "deploy:web": "EXPO_PUBLIC_BUILD_ID=$(git rev-parse --short HEAD) expo export --platform web && npx eas-cli@latest deploy --environment production --prod"
   },
   "private": true,
   "jest": {

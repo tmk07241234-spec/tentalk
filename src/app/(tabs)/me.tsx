@@ -109,7 +109,7 @@ export default function Me() {
         <Button label={t('me.logout')} onPress={logout} />
         <MenuRow label={t('me.deleteAccount')} danger onPress={() => router.push('/info/delete')} />
       </Card>
-      <Body small muted style={{ textAlign: 'center' }}>{t('info.version', { v: Constants.expoConfig?.version ?? '' })}</Body>
+      <Body small muted style={{ textAlign: 'center' }}>{t('info.version', { v: [Constants.expoConfig?.version, process.env.EXPO_PUBLIC_BUILD_ID].filter(Boolean).join(' · ') })}</Body>
     </Screen>
   );
 }
