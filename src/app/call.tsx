@@ -10,13 +10,13 @@ import { Pip } from '@/components/Pip';
 import { Badge, Confetti, SpeechBubble } from '@/components/progress';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Title } from '@/components/ui';
-import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, questionsFor } from '@/data/conversation';
+import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, questionIn, questionsFor } from '@/data/conversation';
 import type { Partner } from '@/data/samplePartners';
 import {
   REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
 import { canFollow } from '@/domain/connections';
-import type { Lang } from '@/domain/languages';
+import type { Lang, UiLang } from '@/domain/languages';
 import { relation } from '@/domain/matching';
 import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
 import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
@@ -36,7 +36,7 @@ const REASONS = ['romance', 'sexual', 'abuse', 'spam', 'minor', 'trolling', 'oth
  * Audio is not connected yet; the call service will plug in where noted.
  */
 export default function Call() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const c = useColors();
   const app = useApp();
   const active = useActiveLearning();
@@ -55,6 +55,8 @@ export default function Call() {
     (chosen ? profile.learning.find((l) => relation({ native: profile.native, learn: l.lang }, chosen))?.lang : undefined) ?? active?.lang ?? 'en');
   // The shared question card. The first one appears on its own; after that either person draws the next.
   const [question, setQuestion] = useState<{ index: number; by: 'auto' | 'me' }>({ index: 0, by: 'auto' });
+  // Also show the card in my app language; stays on for later cards once turned on.
+  const [translate, setTranslate] = useState(false);
   const [cueDone, setCueDone] = useState(false);
   const [muted, setMuted] = useState(false);
   const [sheet, setSheet] = useState<null | 'leave' | 'report' | 'help'>(null);
@@ -262,8 +264,12 @@ export default function Call() {
   if (!partner) return null;
   // Deep questions only when whoever is speaking their learning language can handle them.
   const speakerLevel = lang === me.learn ? active?.level ?? 1 : partner.level;
-  const cards = questionsFor(lang, speakerLevel);
+  const cards = questionsFor(speakerLevel);
   const card = cards[question.index % cards.length];
+  const shown = questionIn(card, lang);
+  const uiLang = i18n.language as UiLang;
+  const mine = questionIn(card, uiLang);
+  const canTranslate = mine.q !== shown.q;
   // Whoever drew the card answers second, so the other person starts.
   const order = question.by === 'me' ? [partner.name, t('call.you')] : [t('call.you'), partner.name];
   const showCue = !buddy && app.settings.switchCue && !cueDone && elapsed >= SWITCH_CUE_SECONDS && required && !nudge;
@@ -312,17 +318,28 @@ export default function Call() {
             <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: '700' }}>{t('call.question')}</Text>
             <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, flexShrink: 1 }}>{t('call.order', { first: order[0], second: order[1] })}</Text>
           </View>
-          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16, lineHeight: 22 }}>{card.q}</Text>
-          {card.options ? (
+          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16, lineHeight: 22 }}>{shown.q}</Text>
+          {shown.options ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-              <OptionChip label={card.options[0]} />
+              <OptionChip label={shown.options[0]} />
               <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>vs</Text>
-              <OptionChip label={card.options[1]} />
+              <OptionChip label={shown.options[1]} />
             </View>
           ) : null}
-          <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{card.hint}</Text>
+          <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{shown.hint}</Text>
+          {canTranslate && translate ? (
+            <View style={{ borderLeftWidth: 2, borderLeftColor: 'rgba(255,255,255,0.5)', paddingLeft: space.sm, gap: 2 }}>
+              <Text style={{ color: '#fff', fontSize: 13 }}>{mine.q}</Text>
+              {mine.options ? <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{mine.options.join(' vs ')}</Text> : null}
+            </View>
+          ) : null}
           <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>{t('call.questionNote')}</Text>
-          <View style={{ alignSelf: 'flex-start', marginTop: 2 }}><GlassButton label={t('call.nextQuestion')} onPress={drawQuestion} /></View>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: 2 }}>
+            <GlassButton label={t('call.nextQuestion')} onPress={drawQuestion} />
+            {canTranslate ? (
+              <GlassButton label={translate ? t('call.hideTranslation') : t('call.showTranslation', { lang: t(`uiLangName.${uiLang}`) })} onPress={() => setTranslate((v) => !v)} />
+            ) : null}
+          </View>
         </View>
 
         {kind === 'random' ? (

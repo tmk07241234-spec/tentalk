@@ -64,7 +64,7 @@ const ja = {
     noPartner: '条件に合う相手がいませんでした', noPartnerBody: '待機している人が多い「通話タイム」に試すか、もう一方のモードを使ってください。', retry: 'もう一度探す',
     required: '必修の10分まで あと{{time}}', extended: '延長中・どちらかが切るまで',
     onlyLang: 'この通話は{{lang}}だけで話します', current: 'いまの言語: {{lang}}', switchTo: '{{lang}}にする',
-    question: 'お題', nextQuestion: '次のお題', you: 'あなた', order: '答える順番: {{first}} → {{second}}', questionNote: '2人が答えたら、あとは自由に話しましょう。',
+    question: 'お題', nextQuestion: '次のお題', showTranslation: '{{lang}}で見る', hideTranslation: '訳を隠す', you: 'あなた', order: '答える順番: {{first}} → {{second}}', questionNote: '2人が答えたら、あとは自由に話しましょう。',
     unlockPending: '2人とも10分話すと、お互いのプロフィールが公開されます', unlockDone: '10分完了。{{name}}さんのプロフィールが公開されました',
     cue: '5分経過。{{lang}}に交代しませんか？', cueSwitch: '交代する', cueKeep: 'このまま',
     silenceTopic: '少し静かですね。次のお題を出してみませんか？', silenceExample: 'こう聞いてみましょう: {{example}}',

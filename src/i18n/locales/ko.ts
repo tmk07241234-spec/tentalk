@@ -66,7 +66,7 @@ const ko: Translation = {
     noPartner: '조건에 맞는 상대가 없어요', noPartnerBody: '대기자가 많은 “통화 타임”에 다시 시도하거나 다른 모드를 이용해 보세요.', retry: '다시 찾기',
     required: '필수 10분까지 {{time}} 남음', extended: '연장 중 · 한 명이 끊을 때까지',
     onlyLang: '이 통화는 {{lang}}로만 대화해요', current: '지금 언어: {{lang}}', switchTo: '{{lang}}로 바꾸기',
-    question: '질문', nextQuestion: '다음 질문', you: '나', order: '대답 순서: {{first}} → {{second}}', questionNote: '둘 다 대답했다면, 그다음은 자유롭게 이야기해요.',
+    question: '질문', nextQuestion: '다음 질문', showTranslation: '{{lang}}로 보기', hideTranslation: '번역 숨기기', you: '나', order: '대답 순서: {{first}} → {{second}}', questionNote: '둘 다 대답했다면, 그다음은 자유롭게 이야기해요.',
     unlockPending: '둘 다 10분을 채우면 서로의 프로필이 공개돼요', unlockDone: '10분 완료. {{name}}님의 프로필이 공개됐어요',
     cue: '5분이 지났어요. {{lang}}로 바꿔 볼까요?', cueSwitch: '바꾸기', cueKeep: '그대로',
     silenceTopic: '조금 조용하네요. 다음 질문을 꺼내 볼까요?', silenceExample: '이렇게 물어보세요: {{example}}',

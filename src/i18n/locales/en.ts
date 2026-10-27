@@ -66,7 +66,7 @@ const en: Translation = {
     noPartner: 'No one matched', noPartnerBody: 'Try during call time, when more people are waiting, or use the other mode.', retry: 'Search again',
     required: '{{time}} left of the required 10 minutes', extended: 'Extended · until one of you hangs up',
     onlyLang: 'This call is in {{lang}} only', current: 'Speaking: {{lang}}', switchTo: 'Switch to {{lang}}',
-    question: 'Question', nextQuestion: 'Next question', you: 'You', order: 'Answer order: {{first}} → {{second}}', questionNote: 'Once you’ve both answered, talk freely about it.',
+    question: 'Question', nextQuestion: 'Next question', showTranslation: 'Show in {{lang}}', hideTranslation: 'Hide translation', you: 'You', order: 'Answer order: {{first}} → {{second}}', questionNote: 'Once you’ve both answered, talk freely about it.',
     unlockPending: 'If you both talk for 10 minutes, your profiles open up', unlockDone: '10 minutes done. {{name}}’s profile is now open',
     cue: '5 minutes in. Switch to {{lang}}?', cueSwitch: 'Switch', cueKeep: 'Keep going',
     silenceTopic: 'A little quiet. Want to draw the next question?', silenceExample: 'Try asking: {{example}}',

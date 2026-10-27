@@ -66,7 +66,7 @@ const es: Translation = {
     noPartner: 'No encontramos a nadie', noPartnerBody: 'Prueba en la hora de llamadas, cuando hay más gente esperando, o usa el otro modo.', retry: 'Buscar otra vez',
     required: 'Quedan {{time}} de los 10 minutos obligatorios', extended: 'Ampliada · hasta que alguien cuelgue',
     onlyLang: 'Esta llamada es solo en {{lang}}', current: 'Idioma actual: {{lang}}', switchTo: 'Cambiar a {{lang}}',
-    question: 'Pregunta', nextQuestion: 'Siguiente pregunta', you: 'Tú', order: 'Orden: {{first}} → {{second}}', questionNote: 'Cuando los dos respondan, hablen libremente del tema.',
+    question: 'Pregunta', nextQuestion: 'Siguiente pregunta', showTranslation: 'Ver en {{lang}}', hideTranslation: 'Ocultar traducción', you: 'Tú', order: 'Orden: {{first}} → {{second}}', questionNote: 'Cuando los dos respondan, hablen libremente del tema.',
     unlockPending: 'Si los dos hablan 10 minutos, sus perfiles se abren', unlockDone: '10 minutos completados. El perfil de {{name}} ya está abierto',
     cue: 'Van 5 minutos. ¿Cambiamos a {{lang}}?', cueSwitch: 'Cambiar', cueKeep: 'Seguir así',
     silenceTopic: 'Un poco de silencio. ¿Sacamos la siguiente pregunta?', silenceExample: 'Prueba a preguntar: {{example}}',
