@@ -11,7 +11,7 @@ const state = {
   profile, mode: 'buddy', trust: 85, todayGain: 2, callCount: 4,
   callLog: [{ date: '2026-10-01', minutes: 12, completed: true }],
   following: ['p1'], blocked: ['p9'],
-  settings: { languageOnly: false, languageOnlyPartners: true, switchCue: true, matchLevel: false },
+  settings: { languageOnly: false, languageOnlyPartners: true, matchLevel: false, requestsFrom: 'everyone', requestAllowList: [], notify: { accepted: true, followed: true, theme: true } },
   history: [], randomPausedUntil: 0, onboarded: true,
   notifications: [{ id: 'n', type: 'welcome', at: 1, read: false }], requests: [], plus: true,
 } as unknown as AppState;

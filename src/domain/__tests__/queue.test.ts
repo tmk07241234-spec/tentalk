@@ -1,4 +1,4 @@
-import { pickQueuePartner, queueKey, seekKey, startLanguage, type QueueEntry } from '../queue';
+import { pickQueuePartner, queueKey, seekKey, type QueueEntry } from '../queue';
 
 const NOW = 1_000_000;
 const entry = (x: Partial<QueueEntry>): QueueEntry => ({
@@ -46,11 +46,5 @@ describe('pickQueuePartner', () => {
     const buddyMe = entry({ uid: 'me', mode: 'buddy', native: 'ja', learn: 'en' });
     expect(pickQueuePartner(buddyMe, [entry({ uid: 'j', mode: 'buddy', native: 'ja', learn: 'en' })], NOW)).toBeNull();
     expect(pickQueuePartner(buddyMe, [entry({ uid: 'k', mode: 'buddy', native: 'ko', learn: 'en' })], NOW)?.uid).toBe('k');
-  });
-});
-
-describe('startLanguage', () => {
-  it('starts an exchange in the language of whoever waited', () => {
-    expect(startLanguage(entry({ native: 'en', learn: 'ja' }))).toBe('ja');
   });
 });

@@ -83,7 +83,6 @@ export interface Settings {
   languageOnly: boolean;
   /** In random calls, only match people with the badge. */
   languageOnlyPartners: boolean;
-  switchCue: boolean;
   matchLevel: boolean;
   /** Who may send me a call request (see acceptsRequestFrom). */
   requestsFrom: RequestPolicy;
@@ -150,7 +149,7 @@ export interface AppState {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  languageOnly: true, languageOnlyPartners: true, switchCue: true, matchLevel: false,
+  languageOnly: true, languageOnlyPartners: true, matchLevel: false,
   requestsFrom: 'everyone', requestAllowList: [],
   notify: { accepted: true, followed: true, theme: true },
 };

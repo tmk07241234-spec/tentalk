@@ -55,11 +55,3 @@ export function pickQueuePartner(me: QueueEntry, entries: readonly QueueEntry[],
   pool.sort((a, b) => a.updatedAt - b.updatedAt);
   return pool[0] ?? null;
 }
-
-/**
- * The language the call starts in: the shared language for buddies; in an exchange,
- * the learning language of whoever waited longer, so the first half is theirs.
- */
-export function startLanguage(waiting: Pick<QueueEntry, 'learn'>): Lang {
-  return waiting.learn;
-}

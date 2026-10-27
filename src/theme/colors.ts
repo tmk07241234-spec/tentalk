@@ -44,7 +44,7 @@ const dark: Colors = {
 };
 
 /** Call screens use fixed dark backgrounds in both themes. */
-export const CALL_BG = { learn: '#1A35A0', native: '#A42E1D', buddy: '#0E6E59' } as const;
+export const CALL_BG = { learn: '#1A35A0', buddy: '#0E6E59' } as const;
 
 export const AVATAR_COLORS = ['#334466', '#3E63DD', '#1F8A5B', '#B7591F', '#C2357A', '#7B4BC9'];
 

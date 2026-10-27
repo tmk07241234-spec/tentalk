@@ -1,12 +1,12 @@
 import { LANGS, type Lang } from '@/domain/languages';
-import { pickQueuePartner, queueKey, seekKey, startLanguage, type QueueEntry } from '@/domain/queue';
+import { pickQueuePartner, queueKey, seekKey, type QueueEntry } from '@/domain/queue';
 import { HttpError } from './auth';
 import { firestore, type Data } from './firestore';
 
 /**
  * Server-side call records.
  * queue/{uid}   one waiting entry per person searching for a random call
- * calls/{id}    a matched call: its two members, mode and starting language
+ * calls/{id}    a matched call: its two members and mode
  * reports/{id}  reports sent from calls, for review
  * None of these are readable by the app directly (the security rules deny them).
  */
@@ -14,7 +14,6 @@ export interface CallRecord {
   members: [string, string];
   kind: 'random' | 'direct';
   mode: 'buddy' | 'exchange';
-  startLang: Lang;
   createdAt: number;
 }
 
@@ -60,7 +59,7 @@ export async function searchStep(uid: string, req: MatchRequest): Promise<{ call
     const partner = pickQueuePartner(me, rows as unknown as QueueEntry[], Date.now());
     if (partner) {
       const callId = newId();
-      const call: CallRecord = { members: [partner.uid, uid], kind: 'random', mode: me.mode, startLang: startLanguage(partner), createdAt: Date.now() };
+      const call: CallRecord = { members: [partner.uid, uid], kind: 'random', mode: me.mode, createdAt: Date.now() };
       await firestore.commit([
         { set: `calls/${callId}`, data: call as unknown as Data },
         { set: `queue/${partner.uid}`, data: { ...partner, key: queueKey(partner), callId } as unknown as Data },

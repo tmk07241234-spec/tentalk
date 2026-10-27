@@ -99,5 +99,3 @@ export const HELP_PHRASES: Partial<Record<Lang, string[]>> = {
   es: ['¿Puedes repetirlo más despacio?', '¿Cómo se dice “___” en español?', 'Perdón, no entiendo.', 'Un momento, por favor.'],
 };
 
-/** How the language is named in itself, for the in-call language switch. */
-export const ENDONYM: Partial<Record<Lang, string>> = { en: 'English', ja: '日本語', ko: '한국어', es: 'Español' };

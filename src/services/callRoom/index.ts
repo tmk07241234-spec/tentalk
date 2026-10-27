@@ -1,12 +1,9 @@
 import { Room, RoomEvent, Track, type Participant } from 'livekit-client';
 
-import type { Lang } from '@/domain/languages';
 import { attachAudio, audioSession } from './setup';
 
 /** Messages the two apps send each other during a call. */
-export type CallMessage =
-  | { t: 'question'; id: string }
-  | { t: 'lang'; lang: Lang };
+export type CallMessage = { t: 'question'; id: string };
 
 export interface CallRoomEvents {
   onPartnerJoined: () => void;

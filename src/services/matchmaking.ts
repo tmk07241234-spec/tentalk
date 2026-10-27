@@ -1,5 +1,4 @@
 import { SAMPLE_PARTNERS, type Partner } from '@/data/samplePartners';
-import type { Lang } from '@/domain/languages';
 import { isEligible, pickRandomPartner, type Learner, type MatchPrefs, type Mode } from '@/domain/matching';
 import type { QueueEntry } from '@/domain/queue';
 import { api } from './api';
@@ -45,7 +44,6 @@ export interface CallInfo {
   token: string;
   partnerId: string;
   mode: Mode;
-  startLang: Lang;
 }
 
 /**

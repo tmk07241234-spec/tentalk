@@ -10,10 +10,10 @@ import { Pip } from '@/components/Pip';
 import { Badge, Confetti, SpeechBubble } from '@/components/progress';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Title } from '@/components/ui';
-import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, QUESTIONS, questionIn, questionsFor } from '@/data/conversation';
+import { EXAMPLE_QUESTIONS, HELP_PHRASES, QUESTIONS, questionIn, questionsFor } from '@/data/conversation';
 import type { Partner } from '@/data/samplePartners';
 import {
-  REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
+  REQUIRED_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
 import { canFollow } from '@/domain/connections';
 import type { Lang, UiLang } from '@/domain/languages';
@@ -29,6 +29,8 @@ import { requests, type RequestAnswer } from '@/services/requests';
 import { useActiveLearning, useApp, type HistoryEntry } from '@/state/store';
 import { CALL_BG, space, useColors } from '@/theme/colors';
 
+/** A new question card stays this long before either person can draw the next one. */
+const QUESTION_COOLDOWN_SECONDS = 20;
 type Phase = 'searching' | 'joining' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
 /** If the matched partner has not joined the audio room by then, search again. */
 const PARTNER_JOIN_TIMEOUT_MS = 30_000;
@@ -59,13 +61,11 @@ export default function Call() {
   const [waitLeft, setWaitLeft] = useState(ONLINE_REQUEST_SECONDS);
   const [elapsed, setElapsed] = useState(0);
   const [silence, setSilence] = useState(0);
-  const [lang, setLang] = useState<Lang>(() =>
-    (chosen ? profile.learning.find((l) => relation({ native: profile.native, learn: l.lang }, chosen))?.lang : undefined) ?? active?.lang ?? 'en');
   // The shared question card. The first one appears on its own; after that either person draws the next.
-  const [question, setQuestion] = useState<{ id: string; by: 'auto' | 'me' | 'partner' }>({ id: QUESTIONS[0].id, by: 'auto' });
+  // `at` is the call time it appeared, so the next one can wait a little (see QUESTION_COOLDOWN_SECONDS).
+  const [question, setQuestion] = useState<{ id: string; by: 'auto' | 'me' | 'partner'; at: number }>({ id: QUESTIONS[0].id, by: 'auto', at: 0 });
   // Also show the card in my app language; stays on for later cards once turned on.
   const [translate, setTranslate] = useState(false);
-  const [cueDone, setCueDone] = useState(false);
   const [muted, setMuted] = useState(false);
   const [sheet, setSheet] = useState<null | 'leave' | 'report' | 'help'>(null);
   const [reason, setReason] = useState<(typeof REASONS)[number] | null>(null);
@@ -86,6 +86,9 @@ export default function Call() {
   const directLearn = chosen ? myLearnFor(chosen)?.lang ?? me.learn : me.learn;
   const meNow = { native: me.native, learn: kind === 'direct' ? directLearn : me.learn };
   const mode = kind === 'direct' && chosen ? relation(meNow, chosen) ?? 'buddy' : app.mode;
+  // Question cards show in the language I am learning; each person can also read them in
+  // their own app language. Nobody switches the other person's screen.
+  const lang: Lang = meNow.learn;
   const buddy = mode === 'buddy';
 
   // Direct call with ask=1: wait for the partner's answer (60 s at most).
@@ -98,7 +101,7 @@ export default function Call() {
     requests.askNow(chosen.id, ctrl.signal)
       .then((a) => {
         if (left) return;
-        if (a === 'accepted') { setLang(meNow.learn); setPhase('connected'); }
+        if (a === 'accepted') setPhase('connected');
         else { setAnswer(a); setPhase('noAnswer'); }
       })
       .catch(() => { if (!left) { setAnswer('expired'); setPhase('noAnswer'); } });
@@ -113,7 +116,7 @@ export default function Call() {
   };
 
   const startCall = () => {
-    setElapsed(0); setSilence(0); setCueDone(false); setQuestion({ id: QUESTIONS[0].id, by: 'auto' });
+    setElapsed(0); setSilence(0); setQuestion({ id: QUESTIONS[0].id, by: 'auto', at: 0 });
     setPhase('connected');
   };
 
@@ -140,7 +143,6 @@ export default function Call() {
       .then((p) => {
         if (!p) return setPhase('none');
         setPartner(p);
-        setLang(me.learn);
         startCall();
       })
       .catch(() => {});
@@ -160,21 +162,16 @@ export default function Call() {
   }, [phase, devSpeed, devSilent, live]);
 
   const nudge = silenceNudge(silence);
-  // Questions and language switches are shared: the partner's screen follows.
+  // The question card is shared so both answer the same one; the screen says who drew it.
   const send = (m: CallMessage) => room.current?.send(m);
   const drawQuestion = () => {
-    const cards = questionsFor(lang === me.learn ? active?.level ?? 1 : partner?.level ?? 1);
+    const cards = questionsFor(active?.level ?? 1);
     const next = cards[(cards.findIndex((c) => c.id === question.id) + 1) % cards.length];
-    setQuestion({ id: next.id, by: 'me' });
+    setQuestion({ id: next.id, by: 'me', at: elapsed });
     send({ t: 'question', id: next.id });
   };
-  const switchLang = (to: Lang) => {
-    setLang(to); setCueDone(true);
-    send({ t: 'lang', lang: to });
-  };
   const onMessage = (m: CallMessage) => {
-    if (m.t === 'question' && QUESTIONS.some((q) => q.id === m.id)) setQuestion({ id: m.id, by: 'partner' });
-    if (m.t === 'lang') { setLang(m.lang); setCueDone(true); }
+    if (m.t === 'question' && QUESTIONS.some((q) => q.id === m.id)) setQuestion({ id: m.id, by: 'partner', at: elapsed });
   };
 
   const end = (r: EndReason) => {
@@ -220,7 +217,6 @@ export default function Call() {
       const person = await loadPerson(info.partnerId);
       if (stale) return;
       setPartner(person ?? unknownPartner(info.partnerId));
-      setLang(info.startLang);
       const r = await joinCallRoom(info.url, info.token, {
         onPartnerJoined: () => { if (!joined) { joined = true; startCall(); } },
         onPartnerLeft: () => endFromRoom('partner_left'),
@@ -246,8 +242,7 @@ export default function Call() {
   // Leave the audio room when the screen closes.
   useEffect(() => () => { void room.current?.leave(); room.current = null; }, []);
 
-  const otherLang: Lang = lang === meNow.learn ? profile.native : meNow.learn;
-  const bg = buddy ? CALL_BG.buddy : lang === meNow.learn ? CALL_BG.learn : CALL_BG.native;
+  const bg = buddy ? CALL_BG.buddy : CALL_BG.learn;
 
   if (phase === 'waiting' || phase === 'noAnswer') {
     const name = chosen?.name ?? '';
@@ -363,8 +358,7 @@ export default function Call() {
 
   if (!partner) return null;
   // Deep questions only when whoever is speaking their learning language can handle them.
-  const speakerLevel = lang === me.learn ? active?.level ?? 1 : partner.level;
-  const cards = questionsFor(speakerLevel);
+  const cards = questionsFor(active?.level ?? 1);
   const card = QUESTIONS.find((q) => q.id === question.id) ?? cards[0];
   const shown = questionIn(card, lang);
   const uiLang = i18n.language as UiLang;
@@ -374,7 +368,8 @@ export default function Call() {
   // both screens agree on the order by comparing user ids.
   const meFirst = question.by === 'partner' || (question.by === 'auto' && (!live || (myUid ?? '') < partner.id));
   const order = meFirst ? [t('call.you'), partner.name] : [partner.name, t('call.you')];
-  const showCue = !buddy && app.settings.switchCue && !cueDone && elapsed >= SWITCH_CUE_SECONDS && required && !nudge;
+  // A new card stays up for a moment, so neither person can skip the other's topic right away.
+  const nextIn = Math.ceil(question.at + QUESTION_COOLDOWN_SECONDS - elapsed);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: bg }}>
@@ -405,14 +400,9 @@ export default function Call() {
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: space.sm }}>
-          {buddy ? (
-            <Text style={{ color: '#fff', fontSize: 13 }}>{t('call.onlyLang', { lang: t(`lang.${lang}`) })}</Text>
-          ) : (
-            <>
-              <Text style={{ color: '#fff', fontSize: 13 }}>{t('call.current', { lang: ENDONYM[lang] ?? t(`lang.${lang}`) })}</Text>
-              <GlassButton label={t('call.switchTo', { lang: ENDONYM[otherLang] ?? t(`lang.${otherLang}`) })} onPress={() => switchLang(otherLang)} />
-            </>
-          )}
+          <Text style={{ color: '#fff', fontSize: 13, textAlign: 'center' }}>
+            {buddy ? t('call.onlyLang', { lang: t(`lang.${lang}`) }) : t('call.exchangeLangs', { learn: t(`lang.${lang}`), native: t(`lang.${profile.native}`) })}
+          </Text>
         </View>
 
         <View style={{ backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 18, padding: space.md, gap: 6 }}>
@@ -420,6 +410,7 @@ export default function Call() {
             <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: '700' }}>{t('call.question')}</Text>
             <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, flexShrink: 1 }}>{t('call.order', { first: order[0], second: order[1] })}</Text>
           </View>
+          {question.by === 'partner' ? <Text style={{ color: '#FFD166', fontSize: 11, fontWeight: '700' }}>{t('call.partnerDrew', { name: partner.name })}</Text> : null}
           <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16, lineHeight: 22 }}>{shown.q}</Text>
           {shown.options ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
@@ -437,7 +428,7 @@ export default function Call() {
           ) : null}
           <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>{t('call.questionNote')}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: 2 }}>
-            <GlassButton label={t('call.nextQuestion')} onPress={drawQuestion} />
+            <GlassButton label={nextIn > 0 ? t('call.nextQuestionIn', { s: nextIn }) : t('call.nextQuestion')} disabled={nextIn > 0} onPress={drawQuestion} />
             {canTranslate ? (
               <GlassButton label={translate ? t('call.hideTranslation') : t('call.showTranslation', { lang: t(`uiLangName.${uiLang}`) })} onPress={() => setTranslate((v) => !v)} />
             ) : null}
@@ -459,9 +450,6 @@ export default function Call() {
         {nudge ? (
           <Nudge text={nudge === 'example' ? t('call.silenceExample', { example: EXAMPLE_QUESTIONS[lang] ?? '' }) : t('call.silenceTopic')}
             actions={nudge === 'topic' ? [{ label: t('call.nextQuestion'), onPress: drawQuestion }] : []} />
-        ) : showCue ? (
-          <Nudge text={t('call.cue', { lang: t(`lang.${otherLang}`) })}
-            actions={[{ label: t('call.cueSwitch'), onPress: () => switchLang(otherLang) }, { label: t('call.cueKeep'), onPress: () => setCueDone(true) }]} />
         ) : null}
 
         {__DEV__ ? (
@@ -526,9 +514,10 @@ function Pill({ text }: { text: string }) {
   return <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700', backgroundColor: 'rgba(255,255,255,0.16)', borderRadius: 99, paddingHorizontal: 10, paddingVertical: 3, overflow: 'hidden' }}>{text}</Text>;
 }
 
-function GlassButton({ label, onPress }: { label: string; onPress: () => void }) {
+function GlassButton({ label, onPress, disabled }: { label: string; onPress: () => void; disabled?: boolean }) {
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={{ backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 99, paddingHorizontal: 14, paddingVertical: 6 }}>
+    <Pressable accessibilityRole="button" accessibilityState={{ disabled: !!disabled }} disabled={disabled} onPress={onPress}
+      style={{ backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 99, paddingHorizontal: 14, paddingVertical: 6, opacity: disabled ? 0.5 : 1 }}>
       <Text style={{ color: '#fff', fontWeight: '700', fontSize: 12 }}>{label}</Text>
     </Pressable>
   );

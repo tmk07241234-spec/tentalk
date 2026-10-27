@@ -12,6 +12,6 @@ export async function POST(request: Request) {
     const call = await callFor(uid, callId);
     const me = await firestore.get(`users/${uid}`);
     const access = await roomToken({ room: callId, identity: uid, name: typeof me?.name === 'string' ? me.name : '' });
-    return { ...access, partnerId: call.members.find((m) => m !== uid), mode: call.mode, startLang: call.startLang, kind: call.kind };
+    return { ...access, partnerId: call.members.find((m) => m !== uid), mode: call.mode, kind: call.kind };
   });
 }

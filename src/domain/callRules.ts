@@ -1,7 +1,5 @@
 /** The first 10 minutes of every call are required. After that there is no limit. */
 export const REQUIRED_SECONDS = 600;
-/** In exchange mode, suggest switching language once at the halfway point. */
-export const SWITCH_CUE_SECONDS = 300;
 /** Silence thresholds for the AI helper: new topic, then example questions. */
 export const SILENCE_TOPIC_SECONDS = 30;
 export const SILENCE_EXAMPLE_SECONDS = 60;
