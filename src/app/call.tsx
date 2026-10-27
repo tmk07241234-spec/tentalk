@@ -17,15 +17,16 @@ import {
 } from '@/domain/callRules';
 import { canFollow } from '@/domain/connections';
 import type { Lang, UiLang } from '@/domain/languages';
-import { relation } from '@/domain/matching';
+import { relation, type Mode } from '@/domain/matching';
 import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
 import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
 import { api } from '@/services/api';
 import { connections } from '@/services/connections';
 import { joinCallRoom, type CallMessage, type CallRoom } from '@/services/callRoom';
 import { callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
-import { loadPerson } from '@/services/people';
-import { requests, type RequestAnswer } from '@/services/requests';
+import { loadPerson, usePerson } from '@/services/people';
+import { setInCall } from '@/services/presence';
+import { cancelRequest, requests, sendRequest, watchRequest, type RequestAnswer } from '@/services/requests';
 import { useActiveLearning, useApp, type HistoryEntry } from '@/state/store';
 import { CALL_BG, space, useColors } from '@/theme/colors';
 
@@ -41,7 +42,9 @@ const REASONS = ['romance', 'sexual', 'abuse', 'spam', 'minor', 'trolling', 'oth
  * kind=direct&partner=<id>: a call with a chosen person. With ask=1 we first wait
  * for them to accept; without it the request was already accepted.
  * Random calls of signed-in users are real: the server pairs two searching people and
- * both join the call's LiveKit audio room. Direct calls are still simulated.
+ * both join the call's LiveKit audio room. Direct calls with real users work the same way
+ * once the partner accepts (requestId: waiting for the answer; callId: already accepted).
+ * Calls with the sample people are simulated.
  */
 export default function Call() {
   const { t, i18n } = useTranslation();
@@ -49,13 +52,19 @@ export default function Call() {
   const app = useApp();
   const active = useActiveLearning();
   const profile = app.profile!;
-  const params = useLocalSearchParams<{ kind?: string; partner?: string; ask?: string }>();
+  const params = useLocalSearchParams<{ kind?: string; partner?: string; ask?: string; requestId?: string; callId?: string }>();
   const kind = params.kind === 'direct' ? 'direct' : 'random';
-  const chosen = kind === 'direct' && params.partner ? findSamplePartner(params.partner) ?? null : null;
   const myUid = app.account?.uid;
-  const live = kind === 'random' && !!myUid;
+  const sample = kind === 'direct' && params.partner ? findSamplePartner(params.partner) ?? null : null;
+  const realDirect = kind === 'direct' && !!myUid && !!params.partner && !sample;
+  const { person: realChosen } = usePerson(realDirect ? params.partner : undefined);
+  const chosen = sample ?? realChosen ?? null;
+  const live = !!myUid && (kind === 'random' || realDirect);
 
-  const [phase, setPhase] = useState<Phase>(chosen ? (params.ask === '1' ? 'waiting' : 'connected') : kind === 'direct' ? 'none' : 'searching');
+  const [phase, setPhase] = useState<Phase>(() => {
+    if (realDirect) return params.callId ? 'joining' : params.requestId || params.ask === '1' ? 'waiting' : 'none';
+    return sample ? (params.ask === '1' ? 'waiting' : 'connected') : kind === 'direct' ? 'none' : 'searching';
+  });
   const [partner, setPartner] = useState<Partner | null>(chosen);
   const [answer, setAnswer] = useState<RequestAnswer | null>(null);
   const [waitLeft, setWaitLeft] = useState(ONLINE_REQUEST_SECONDS);
@@ -76,7 +85,9 @@ export default function Call() {
   // Live calls: the audio room, whether anyone is talking, and whether the browser blocked sound.
   const room = useRef<CallRoom | null>(null);
   const speaking = useRef(false);
-  const [callId, setCallId] = useState<string | null>(null);
+  const [callId, setCallId] = useState<string | null>(realDirect ? params.callId ?? null : null);
+  // The mode the server decided for a live call (direct calls: from both people's languages).
+  const [serverMode, setServerMode] = useState<Mode | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [failure, setFailure] = useState<'mic' | 'network' | null>(null);
 
@@ -85,20 +96,51 @@ export default function Call() {
   const myLearnFor = (p: Partner | null) => (p && p.native !== me.native ? (profile.learning.find((l) => relation({ native: me.native, learn: l.lang }, p)) ?? null) : null);
   const directLearn = chosen ? myLearnFor(chosen)?.lang ?? me.learn : me.learn;
   const meNow = { native: me.native, learn: kind === 'direct' ? directLearn : me.learn };
-  const mode = kind === 'direct' && chosen ? relation(meNow, chosen) ?? 'buddy' : app.mode;
+  const mode = serverMode ?? (kind === 'direct' && chosen ? relation(meNow, chosen) ?? 'buddy' : app.mode);
   // Question cards show in the language I am learning; each person can also read them in
   // their own app language. Nobody switches the other person's screen.
   const lang: Lang = meNow.learn;
   const buddy = mode === 'buddy';
 
-  // Direct call with ask=1: wait for the partner's answer (60 s at most).
+  // Live direct call: wait for the partner's answer to the request (60 s at most).
+  // Without a request yet ("call now" on an accepted request), send one first.
   useEffect(() => {
-    if (phase !== 'waiting' || !chosen) return;
+    if (phase !== 'waiting' || !realDirect || !params.partner) return;
+    let left = false;
+    let settled = false; // answered, declined or timed out
+    let requestId = params.requestId ?? null;
+    let stopWatch = () => {};
+    const tick = setInterval(() => setWaitLeft((n) => Math.max(0, n - 1)), 1000);
+    const giveUp = (a: RequestAnswer) => { settled = true; if (!left) { setAnswer(a); setPhase('noAnswer'); } };
+    const timeout = setTimeout(() => { if (requestId) void cancelRequest(requestId); giveUp('expired'); }, ONLINE_REQUEST_SECONDS * 1000);
+    (async () => {
+      if (!requestId) {
+        const r = await sendRequest(params.partner!);
+        if (r.kind !== 'now') return giveUp('expired'); // they went offline meanwhile; the request waits for them
+        requestId = r.id;
+      }
+      if (left) return void cancelRequest(requestId);
+      stopWatch = watchRequest(requestId, (r) => {
+        if (r.status === 'accepted' && r.callId) { settled = true; clearTimeout(timeout); setCallId(r.callId); setPhase('joining'); }
+        else if (r.status === 'declined') giveUp('declined');
+      });
+    })().catch(() => giveUp('expired'));
+    return () => {
+      left = true; stopWatch(); clearInterval(tick); clearTimeout(timeout);
+      // Closing the screen while still waiting withdraws the request.
+      if (requestId && !settled) void cancelRequest(requestId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
+  // Simulated direct call with a sample person and ask=1: wait for the answer (60 s at most).
+  useEffect(() => {
+    if (phase !== 'waiting' || !sample) return;
     const ctrl = new AbortController();
     let left = false; // set when this screen is closed, so a late answer is ignored
     const tick = setInterval(() => setWaitLeft((n) => Math.max(0, n - 1)), 1000);
     const timeout = setTimeout(() => ctrl.abort(), ONLINE_REQUEST_SECONDS * 1000);
-    requests.askNow(chosen.id, ctrl.signal)
+    requests.askNow(sample.id, ctrl.signal)
       .then((a) => {
         if (left) return;
         if (a === 'accepted') setPhase('connected');
@@ -124,7 +166,7 @@ export default function Call() {
   useEffect(() => {
     if (phase !== 'searching') return;
     const ctrl = new AbortController();
-    if (live) {
+    if (live && kind === 'random') {
       searchRandomCall({
         mode, native: me.native, learn: me.learn, level: active?.level ?? 1, languageOnly: app.settings.languageOnly,
         wantLanguageOnly: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel,
@@ -210,13 +252,16 @@ export default function Call() {
     const giveUp = setTimeout(() => {
       if (joined || stale) return;
       void room.current?.leave(); room.current = null;
-      searchAgain();
+      // A random partner who never arrived: look for someone else. A direct one: give up.
+      if (kind === 'random') searchAgain();
+      else { setAnswer('expired'); setPhase('noAnswer'); }
     }, PARTNER_JOIN_TIMEOUT_MS);
     (async () => {
       const info = await callInfo(callId);
       const person = await loadPerson(info.partnerId);
       if (stale) return;
       setPartner(person ?? unknownPartner(info.partnerId));
+      setServerMode(info.mode);
       const r = await joinCallRoom(info.url, info.token, {
         onPartnerJoined: () => { if (!joined) { joined = true; startCall(); } },
         onPartnerLeft: () => endFromRoom('partner_left'),
@@ -238,6 +283,13 @@ export default function Call() {
     return () => { stale = true; clearTimeout(giveUp); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [callId]);
+
+  // Others see me as "in a call" while connected, so they do not send me requests.
+  useEffect(() => {
+    if (!live || phase !== 'connected') return;
+    setInCall(true);
+    return () => setInCall(false);
+  }, [live, phase]);
 
   // Leave the audio room when the screen closes.
   useEffect(() => () => { void room.current?.leave(); room.current = null; }, []);
@@ -277,7 +329,7 @@ export default function Call() {
             <View style={{ alignItems: 'center' }}><Pip pose="sleepy" tone={buddy ? 'buddy' : 'learn'} size={130} /></View>
             <Title>{failure ? t(failure === 'mic' ? 'call.micBlocked' : 'call.networkError') : t('call.noPartner')}</Title>
             <Body muted>{failure ? t(failure === 'mic' ? 'call.micBlockedBody' : 'call.networkErrorBody') : t('call.noPartnerBody')}</Body>
-            <Button variant="primary" label={t('call.retry')} onPress={searchAgain} />
+            {kind === 'random' ? <Button variant="primary" label={t('call.retry')} onPress={searchAgain} /> : null}
           </>
         )}
         <Button label={t('common.cancel')} onPress={() => router.back()} />
@@ -326,7 +378,7 @@ export default function Call() {
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
                 <Avatar name={partner.name} color={partner.color} />
                 <Text style={{ color: c.ink, fontWeight: '700', flex: 1 }}>{partner.name}</Text>
-                <Button small variant={following ? 'secondary' : 'primary'} label={following ? t('call.following') : t('call.follow')} onPress={() => app.follow(partner.id)} />
+                <Button small variant={following ? 'secondary' : 'primary'} label={following ? t('call.following') : t('call.follow')} onPress={() => connections.follow(partner.id)} />
               </View>
               <Body small muted>{t('call.followLater')}</Body>
             </Card>

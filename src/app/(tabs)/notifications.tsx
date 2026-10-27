@@ -10,7 +10,7 @@ import { useNow, useRelativeTime } from '@/components/people';
 import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { SAMPLE_PARTNERS } from '@/data/samplePartners';
 import { usePeopleList } from '@/services/people';
-import { receiveRequest } from '@/services/requests';
+import { answerRequest, receiveRequest } from '@/services/requests';
 import { useApp, type AppNotification } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -30,6 +30,24 @@ export default function Notifications() {
     setHighlight(new Set(useApp.getState().notifications.filter((n) => !n.read).map((n) => n.id)));
     markNotificationsRead();
   }, [markNotificationsRead]));
+
+  /**
+   * Real requests go through the server: accepting an incoming one creates the call;
+   * "call now" on an accepted one sends a fresh request the partner answers live.
+   */
+  const respond = async (n: AppNotification, partnerId: string, accept: boolean) => {
+    markHandled(n.id);
+    if (n.type === 'accepted') {
+      router.push({ pathname: '/call', params: { kind: 'direct', partner: partnerId, ask: '1' } });
+      return;
+    }
+    if (!n.requestId) {
+      if (accept) router.push({ pathname: '/call', params: { kind: 'direct', partner: partnerId } });
+      return;
+    }
+    const r = await answerRequest(n.requestId, accept).catch(() => null);
+    if (accept && r?.callId) router.push({ pathname: '/call', params: { kind: 'direct', partner: partnerId, callId: r.callId } });
+  };
 
   const visible = notifications.filter((n) => !n.partnerId || !blocked.includes(n.partnerId));
   const people = usePeopleList([...new Set(visible.flatMap((n) => (n.partnerId ? [n.partnerId] : [])))]);
@@ -63,8 +81,8 @@ export default function Notifications() {
                 live ? (
                   <View style={{ flexDirection: 'row', gap: space.sm }}>
                     <Button small variant="primary" label={n.type === 'accepted' ? t('notifications.call') : t('notifications.accept')}
-                      onPress={() => { markHandled(n.id); router.push({ pathname: '/call', params: { kind: 'direct', partner: p.id } }); }} />
-                    {n.type === 'incoming' ? <Button small label={t('notifications.decline')} onPress={() => markHandled(n.id)} /> : null}
+                      onPress={() => respond(n, p.id, true)} />
+                    {n.type === 'incoming' ? <Button small label={t('notifications.decline')} onPress={() => respond(n, p.id, false)} /> : null}
                   </View>
                 ) : <Body small muted>{n.handled ? t('notifications.done') : t('notifications.expired')}</Body>
               ) : null}

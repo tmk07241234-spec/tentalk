@@ -7,6 +7,7 @@ import { Body, Button, Card, Eyebrow, Screen, Segmented, Title } from '@/compone
 import { SAMPLE_PARTNERS } from '@/data/samplePartners';
 import { discover, onlineByLevel, type Segment, type SortKey } from '@/domain/discovery';
 import { LEVELS, type Level } from '@/domain/levels';
+import { usePeoplePool } from '@/services/people';
 import { useActiveLearning, useApp } from '@/state/store';
 
 type LevelKey = 'all' | `${Level}`;
@@ -20,17 +21,21 @@ export default function Find() {
   const [level, setLevel] = useState<LevelKey>('all');
   const [hobby, setHobby] = useState<string>('all');
   const [sort, setSort] = useState<SortKey>('online');
+  // Signed-in users see real people; the sample people remain only for accounts made before sign-in existed.
+  const uid = useApp((s) => s.account?.uid);
+  const pool = usePeoplePool({ uid, native: profile?.native ?? 'en', learn: active?.lang ?? 'en' });
+  const people = uid ? pool : SAMPLE_PARTNERS;
   if (!profile || !active) return null;
 
   const me = { native: profile.native, learn: active.lang, level: active.level, hobbies: profile.hobbies };
   const base = { segment, level: null, hobby: hobby === 'all' ? null : hobby, sort, blocked: new Set(blocked) };
   // Level counts are for the current segment before the level filter is applied.
-  const counts = onlineByLevel(discover(me, SAMPLE_PARTNERS, base));
-  const list = discover(me, SAMPLE_PARTNERS, { ...base, level: level === 'all' ? null : (Number(level) as Level) });
+  const counts = onlineByLevel(discover(me, people, base));
+  const list = discover(me, people, { ...base, level: level === 'all' ? null : (Number(level) as Level) });
   const learn = t(`lang.${active.lang}`);
   // In exchange mode the partner's level is in my native language; otherwise in the language we both learn.
   const levelLang = t(`lang.${segment === 'exchange' ? profile.native : active.lang}`);
-  const hobbyCounts = (h: string) => discover(me, SAMPLE_PARTNERS, { ...base, segment: 'hobby', hobby: h }).filter((p) => p.status === 'online').length;
+  const hobbyCounts = (h: string) => discover(me, people, { ...base, segment: 'hobby', hobby: h }).filter((p) => p.status === 'online').length;
 
   return (
     <Screen>

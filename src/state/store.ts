@@ -69,6 +69,8 @@ export interface AppNotification {
   read: boolean;
   /** For accepted / incoming requests: after this the action button is gone. */
   expiresAt?: number;
+  /** The server request behind an incoming or accepted notification (real users only). */
+  requestId?: string;
   handled?: boolean;
 }
 
@@ -106,8 +108,8 @@ export interface AppState {
   callLog: CallLogEntry[];
   following: string[];
   /**
-   * People who follow me. Comes from the server once it exists; until then the call
-   * stand-in fills it (`src/services/connections.ts`).
+   * People who follow me: from the server for real users (services/connections), and
+   * from the stand-in for the sample people.
    */
   followers: string[];
   blocked: string[];
@@ -134,6 +136,7 @@ export interface AppState {
   follow: (id: string) => void;
   unfollow: (id: string) => void;
   addFollower: (id: string) => void;
+  setFollowers: (ids: string[]) => void;
   block: (id: string) => void;
   unblock: (id: string) => void;
   updateProfile: (patch: Partial<Profile>) => void;
@@ -223,6 +226,7 @@ export const useApp = create<AppState>()(
       follow: (id) => set((s) => (s.following.includes(id) || !canFollow(s.history, id) ? s : { following: [...s.following, id] })),
       unfollow: (id) => set((s) => ({ following: s.following.filter((f) => f !== id) })),
       addFollower: (id) => set((s) => (s.followers.includes(id) || s.blocked.includes(id) ? s : { followers: [...s.followers, id] })),
+      setFollowers: (ids) => set((s) => ({ followers: ids.filter((id) => !s.blocked.includes(id)) })),
       block: (id) =>
         set((s) => ({
           blocked: s.blocked.includes(id) ? s.blocked : [...s.blocked, id],

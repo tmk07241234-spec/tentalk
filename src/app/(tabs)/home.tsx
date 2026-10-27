@@ -13,6 +13,8 @@ import type { Mode } from '@/domain/matching';
 import { isProfileComplete } from '@/domain/profile';
 import { WEEKLY_GOAL, currentStreak, homeMood, weekDays, weekSummary, type MascotMood } from '@/domain/progress';
 import { matchmaking } from '@/services/matchmaking';
+import { usePeoplePool } from '@/services/people';
+import { isEligible } from '@/domain/matching';
 import { useActiveLearning, useApp } from '@/state/store';
 import { CALL_BG, radius, space, useColors } from '@/theme/colors';
 
@@ -24,9 +26,11 @@ const MOOD_POSE: Record<MascotMood, PipPose> = { welcome: 'wave', done_today: 'h
 export default function Home() {
   const { t } = useTranslation();
   const c = useColors();
-  const { profile, mode, setMode, setActiveLearn, settings, blocked, callLog, following, randomPausedUntil } = useApp();
+  const { profile, mode, setMode, setActiveLearn, blocked, callLog, following, randomPausedUntil } = useApp();
   const now = useNow(15_000);
   const active = useActiveLearning();
+  const uid = useApp((s) => s.account?.uid);
+  const pool = usePeoplePool({ uid, native: profile?.native ?? 'en', learn: active?.lang ?? 'en' });
   if (!profile || !active) return null;
 
   const learn = t(`lang.${active.lang}`);
@@ -39,10 +43,10 @@ export default function Home() {
   const paused = randomPausedUntil > now;
   // `now` refreshes every 15 s, so clamp to the real pause length.
   const pausedMinutes = Math.min(RANDOM_COOLDOWN_MINUTES, Math.max(1, Math.ceil((randomPausedUntil - now) / 60_000)));
-  const suggestions = matchmaking.onlineSuggestions(
-    { native: profile.native, learn: active.lang },
-    { mode, myLevel: active.level, languageOnlyPartners: settings.languageOnlyPartners, matchLevel: false, blocked: new Set(blocked) },
-  );
+  const learner = { native: profile.native, learn: active.lang };
+  const prefs = { mode, myLevel: active.level, languageOnlyPartners: false, matchLevel: false, blocked: new Set(blocked) };
+  // Real people who are online now; the sample people for accounts without sign-in.
+  const suggestions = uid ? pool.filter((p) => isEligible(learner, p, prefs)) : matchmaking.onlineSuggestions(learner, prefs);
 
   return (
     <Screen>

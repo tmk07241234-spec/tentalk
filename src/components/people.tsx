@@ -55,7 +55,7 @@ export function PersonRow({ person, mutual }: { person: Partner; mutual?: boolea
           <LevelBars level={person.level} />
         </View>
         <Text numberOfLines={1} style={{ color: online ? c.ok : c.muted, fontSize: 12, fontWeight: online ? '700' : '400' }}>
-          {online ? t('person.online') : t('profileView.nextAvailable', { hours: hoursForMe(person) })}
+          {online ? t('person.online') : person.hours ? t('profileView.nextAvailable', { hours: hoursForMe(person) }) : t('profileView.offline')}
           {shared.length ? <Text style={{ color: c.muted, fontWeight: '400' }}>{`  ·  ${shared.map((h) => t(`hobbies.${h}`)).join(', ')}`}</Text> : null}
         </Text>
       </View>

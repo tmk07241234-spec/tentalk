@@ -29,11 +29,11 @@
 | 部分 | いま | 本番 |
 |---|---|---|
 | サインイン | Firebase Authentication。メールとパスワードは全端末、Google は Web と Android（`google-services.json` を入れたビルドのみ。`src/services/firebase/google.ts`） | iPhone の Google と Apple（Apple Developer Program が必要） |
-| 相手と相手探し | ランダム通話は本物（サーバーの待機列。`src/domain/queue.ts`、`src/server/calls.ts`）。おすすめ・探す・リクエスト通話は `src/data/samplePartners.ts` のサンプル | 本物のユーザーのオンライン状態とリクエスト |
-| フォロワー | `src/services/connections.ts`（10分話しきった相手のうち通話10回以上のサンプルが5秒後にフォローし返す） | サーバーとプッシュ通知 |
-| リクエストの受け付け設定 | 届く側だけ判定（`receiveRequest`）。サンプルの相手は設定を持たない | サーバーが送る前に判定し、送る側に「受け付けていません」と表示 |
-| リクエスト | `src/services/requests.ts`（オンラインは2.5秒後、オフラインは6秒後に承認） | サーバーとプッシュ通知 |
-| 通話の音声 | ランダム通話は LiveKit で本物（`src/services/callRoom/`）。リクエスト通話は画面と時間だけ | リクエスト通話も LiveKit |
+| 相手と相手探し | ログインしている人どうしは本物: ランダム通話はサーバーの待機列（`src/domain/queue.ts`、`src/server/calls.ts`）、探す・おすすめは Firestore のプロフィールとオンライン状態（`src/services/people.ts`、`src/services/presence.ts`）。ログインのない古いアカウントだけサンプル（`src/data/samplePartners.ts`） | — |
+| フォロワー | 本物の人どうしはサーバー経由（`/api/follow`。10分話しきったかをサーバーでも確認し、相手の `private/followers` に記録）。サンプルの人は `src/services/connections.ts` の代役 | — |
+| リクエストの受け付け設定 | サーバーが送る前に判定し、送る側に理由を表示 | — |
+| リクエスト | 本物の人どうしはサーバー経由（`src/server/requests.ts`）。オンラインの相手は60秒、オフラインの相手は24時間有効。届いたリクエストと承認は、アプリを開いている間に通知タブへ届く | アプリを閉じていても届くプッシュ通知（マイルストーン5） |
+| 通話の音声 | 本物の人との通話は LiveKit（`src/services/callRoom/`）。サンプルの人との通話は画面と時間だけ | — |
 | お題の共有 | ランダム通話は2人の画面に同時に表示（最初の1枚は自動、次からは「次のお題」を押した人が出す） | — |
 | 沈黙の検出 | ランダム通話は LiveKit の「話している人」から判定。サンプルの通話は開発用ボタン | — |
 | 購入 | `src/services/purchases.ts`（押すと加入状態になる） | App Store / Google Play のアプリ内課金 |
@@ -119,9 +119,13 @@ Web 版と同じ場所（EAS Hosting）で API が動いています（`src/app/
 | `POST /api/match` | ランダム通話の相手探しを1歩進める（探している間、2.5秒ごとに呼ぶ）。`DELETE` で探すのをやめる |
 | `POST /api/call-token` | 組み合わされた通話に入るための LiveKit の入場券 |
 | `POST /api/report` | 通報の保存 |
+| `POST /api/request` | 通話リクエストを送る（`PUT` で答える、`DELETE` で取り消す） |
+| `POST /api/follow` | フォロー / フォロー解除 |
 
 - サーバーが読む値（Expo の Environment variables）: `LIVEKIT_URL`、`LIVEKIT_API_KEY`、`LIVEKIT_API_SECRET`、`FIREBASE_SERVICE_ACCOUNT`。EAS Hosting は Visibility が Secret の値を読めないので、Sensitive にする
 - Firestore の `queue`（待機列）、`calls`（組み合わされた通話）、`reports`（通報）はサーバー専用。アプリからは読み書きできない（`firestore.rules` に書いていないので拒否される）
+- `requests`（通話リクエスト）は、送った人と受け取った人だけが読める。書くのはサーバーだけ
+- `users/{uid}/private/followers` はサーバーだけが書き、本人だけが読める
 - EAS Hosting は1回の API で外へ出せる通信の数が少ないので、相手探しは1回で1歩だけ進める作り
 - 公開: `npx expo export --platform web` → `npx eas-cli@latest deploy --environment production --prod`（`--environment` がないとサーバーの値が入らない）
 
@@ -156,7 +160,7 @@ Android の Google ログイン:
 5. 通知（リクエスト、通話タイム）、Tentalk Plus（アプリ内課金）と広告
 6. ストア申請の準備: 規約類、プライバシーの記載、スクリーンショット、TestFlight / 内部テスト
 
-次の作業: Mac と iPhone の2つのアカウントで、Web 版のランダム通話を実際に試す（音声・お題の共有・言語の切り替え・途中退出）。Apple Developer Program の承認が来たら iPhone 版（TestFlight）。そのあと、リクエスト通話と「探す」を本物のユーザーに切り替える。
+次の作業: Firebase のルールを公開し直したあと、2つのアカウントで「探す」→ プロフィール → リクエスト → 承認 → 通話、フォローとフォロワー、リクエストの受け付け設定を試す。Apple Developer Program の承認が来たら iPhone 版（TestFlight）。そのあとマイルストーン5（プッシュ通知）。
 
 検討中のアイデア（すぐには作らない）:
 

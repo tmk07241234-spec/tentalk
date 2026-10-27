@@ -18,7 +18,8 @@ export const cloud = {
 
   async save(uid: string, data: CloudAccount, parts: { profile: boolean; state: boolean }): Promise<void> {
     const batch = writeBatch(db);
-    if (parts.profile) batch.set(profileRef(uid), data.profile);
+    // Merge so presence fields written separately (lastSeen, inCall) survive a profile save.
+    if (parts.profile) batch.set(profileRef(uid), data.profile, { merge: true });
     if (parts.state) batch.set(stateRef(uid), data.state);
     await batch.commit();
   },
@@ -27,6 +28,7 @@ export const cloud = {
   async remove(uid: string): Promise<void> {
     await media.removeAll(uid);
     await deleteDoc(stateRef(uid));
+    await deleteDoc(doc(db, 'users', uid, 'private', 'followers'));
     await deleteDoc(profileRef(uid));
   },
 };

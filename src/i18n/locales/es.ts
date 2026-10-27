@@ -125,6 +125,7 @@ const es: Translation = {
     follow: 'Seguir', following: 'Siguiendo', block: 'Bloquear', blockTitle: '¿Bloquear a {{name}}?', blockBody: 'No volverán a emparejarte y desaparecerá de las listas y del historial. No se le avisa. Puedes desbloquearlo en Yo → Personas bloqueadas.', blockConfirm: 'Bloquear', unavailable: 'Este perfil no está disponible.',
   },
   request: {
+    notSent: 'No se envió la solicitud', refused: { 'not-accepting': '{{name}} no acepta solicitudes ahora.', busy: '{{name}} está en una llamada. Inténtalo un poco más tarde.', 'no-shared-language': 'No tienes con {{name}} una combinación de idiomas para practicar.', 'not-found': 'No se encontró a esta persona.', network: 'No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.' },
     waiting: 'Esperando la respuesta de {{name}}', waitingBody: 'La llamada empieza en cuanto acepte. La solicitud se cancela en {{seconds}} segundos.', cancel: 'Cancelar',
     declined: '{{name}} no puede hablar ahora', expired: 'No hubo respuesta', tryLater: 'Inténtalo más tarde o usa una llamada aleatoria.',
     sentTitle: 'Solicitud enviada', sentBody: 'Cuando {{name}} acepte, te avisaremos con una llamada. Contesta en 30 segundos para empezar. Si no puedes, podrás llamar desde Avisos durante 24 horas.', ok: 'OK',

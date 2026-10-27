@@ -1,11 +1,13 @@
-import { useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { collection, doc, getDoc, getDocs, limit, query, where } from 'firebase/firestore';
 import { create } from 'zustand';
 
 import type { Partner } from '@/data/samplePartners';
 import type { PublicProfile } from '@/state/cloudShape';
 import { db } from './firebase/db';
+import type { Lang } from '@/domain/languages';
 import { findSamplePartner } from './matchmaking';
+import { presenceStatus } from './presence';
 
 /**
  * Other people, by id: the sample partners, or real users whose public profile is
@@ -15,13 +17,60 @@ import { findSamplePartner } from './matchmaking';
 const usePeople = create<{ byId: Record<string, Partner | null> }>(() => ({ byId: {} }));
 const loading = new Set<string>();
 
-export function partnerFromProfile(id: string, p: PublicProfile): Partner {
-  const learning = p.learning.find((l) => l.lang === p.activeLearn) ?? p.learning[0];
+/**
+ * A real user as a Partner. Someone learning two languages is shown with the one that
+ * relates to the viewer (my native language for an exchange, my learning language for
+ * practice buddies), otherwise with the one they are using now.
+ */
+export function partnerFromProfile(id: string, p: PublicProfile, viewer?: { native: Lang; learn: Lang }): Partner {
+  const learning = (viewer && (p.learning.find((l) => l.lang === viewer.native && p.native === viewer.learn)
+    ?? p.learning.find((l) => l.lang === viewer.learn)))
+    ?? p.learning.find((l) => l.lang === p.activeLearn) ?? p.learning[0];
   return {
-    id, name: p.name, country: '', color: p.color, photoUri: p.photoUri ?? null, calls: 0, bio: p.bio ?? '',
+    id, name: p.name, country: '', color: p.color, photoUri: p.photoUri ?? null, calls: p.calls ?? 0, bio: p.bio ?? '',
     hours: p.hours ?? null, utcOffset: p.utcOffset ?? 0, native: p.native, learn: learning?.lang ?? p.native,
-    level: learning?.level ?? 1, status: 'offline', languageOnly: p.languageOnly ?? false, hobbies: p.hobbies ?? [],
+    level: learning?.level ?? 1, status: presenceStatus(p.lastSeen, p.inCall), languageOnly: p.languageOnly ?? false, hobbies: p.hobbies ?? [],
   };
+}
+
+const POOL_SIZE = 60;
+const POOL_REFRESH_MS = 60_000;
+
+/**
+ * Real users who could be exchange partners (native in my learning language) or
+ * practice buddies (learning the same language), for Find and Home. Refreshes every
+ * minute so online marks stay current. Empty while loading or offline.
+ */
+export function usePeoplePool({ uid, native, learn }: { uid: string | undefined; native: Lang; learn: Lang }): Partner[] {
+  const [pool, setPool] = useState<Partner[]>([]);
+  useEffect(() => {
+    if (!uid) return;
+    const me = { native, learn };
+    let stop = false;
+    const load = async () => {
+      try {
+        const users = collection(db, 'users');
+        const [natives, learners] = await Promise.all([
+          getDocs(query(users, where('native', '==', learn), limit(POOL_SIZE))),
+          getDocs(query(users, where('learnLangs', 'array-contains', learn), limit(POOL_SIZE))),
+        ]);
+        const seen = new Map<string, Partner>();
+        for (const d of [...natives.docs, ...learners.docs]) {
+          if (d.id !== uid && !seen.has(d.id)) seen.set(d.id, partnerFromProfile(d.id, d.data() as PublicProfile, me));
+        }
+        const people = [...seen.values()];
+        if (stop) return;
+        setPool(people);
+        usePeople.setState((s) => ({ byId: { ...s.byId, ...Object.fromEntries(people.map((x) => [x.id, x])) } }));
+      } catch {
+        // offline: keep the last list
+      }
+    };
+    void load();
+    const timer = setInterval(load, POOL_REFRESH_MS);
+    return () => { stop = true; clearInterval(timer); };
+  }, [uid, native, learn]);
+  return pool;
 }
 
 export async function loadPerson(id: string): Promise<Partner | null> {

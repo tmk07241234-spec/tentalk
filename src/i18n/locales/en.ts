@@ -125,6 +125,7 @@ const en: Translation = {
     follow: 'Follow', following: 'Following', block: 'Block', blockTitle: 'Block {{name}}?', blockBody: 'You won’t be matched again, and they disappear from lists and history. They aren’t notified. You can unblock them from Me → Blocked people.', blockConfirm: 'Block', unavailable: 'This profile isn’t available.',
   },
   request: {
+    notSent: 'Request not sent', refused: { 'not-accepting': '{{name}} is not accepting requests right now.', busy: '{{name}} is in a call. Try again a little later.', 'no-shared-language': 'You and {{name}} have no language pair to practice together.', 'not-found': 'This person could not be found.', network: 'Couldn’t send. Check your connection and try again.' },
     waiting: 'Waiting for {{name}} to answer', waitingBody: 'The call starts as soon as they accept. The request is cancelled in {{seconds}} seconds.', cancel: 'Cancel',
     declined: '{{name}} can’t talk right now', expired: 'No answer', tryLater: 'Try again later, or use a random call.',
     sentTitle: 'Request sent', sentBody: 'When {{name}} accepts, you’ll get a ring. Answer within 30 seconds to start. If you miss it, you can still call from Alerts for 24 hours.', ok: 'OK',

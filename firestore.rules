@@ -24,5 +24,13 @@ service cloud.firestore {
         allow read, write: if isOwner(uid);
       }
     }
+
+    // Call requests: the sender and the receiver can watch them; only the server
+    // (the app's API) creates and answers them.
+    match /requests/{id} {
+      allow read: if signedIn() && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+    }
+
+    // queue, calls and reports are server-only: no rule here, so the app cannot read them.
   }
 }

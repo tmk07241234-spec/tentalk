@@ -13,8 +13,10 @@ import { canFollow } from '@/domain/connections';
 import { commonHobbies } from '@/domain/discovery';
 import { relation } from '@/domain/matching';
 import { clockAt, requestExpiresAt } from '@/domain/schedule';
+import { connections } from '@/services/connections';
 import { usePerson } from '@/services/people';
-import { requests } from '@/services/requests';
+import { findSamplePartner } from '@/services/matchmaking';
+import { requests, sendRequest, type SendError } from '@/services/requests';
 import { useApp, type OutgoingRequest } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -29,6 +31,7 @@ export default function PersonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const app = useApp();
   const [sheet, setSheet] = useState<null | 'block' | 'sent'>(null);
+  const [refusal, setRefusal] = useState<SendError | null>(null);
   const { person, missing } = usePerson(id);
   const profile = app.profile;
   const now = useNow();
@@ -52,7 +55,23 @@ export default function PersonScreen() {
   const requested = app.requests.some((r) => r.partnerId === person.id && r.expiresAt > now);
   const L = (code: string) => t(`lang.${code}`);
 
+  const realPerson = !!app.account?.uid && !findSamplePartner(person.id);
   const request = async () => {
+    if (realPerson) {
+      // The server checks whether they accept requests from me and whether they are online.
+      try {
+        const r = await sendRequest(person.id);
+        if (r.kind === 'now') {
+          router.replace({ pathname: '/call', params: { kind: 'direct', partner: person.id, requestId: r.id } });
+          return;
+        }
+        app.addRequest(offlineRequest(person.id));
+        setSheet('sent');
+      } catch (e) {
+        setRefusal((e as { reason?: SendError }).reason ?? 'network');
+      }
+      return;
+    }
     if (online) {
       router.replace({ pathname: '/call', params: { kind: 'direct', partner: person.id, ask: '1' } });
       return;
@@ -68,7 +87,7 @@ export default function PersonScreen() {
         <View style={{ flexDirection: 'row', gap: space.sm }}>
           {followable ? (
             <View style={{ flex: 1 }}>
-              <Button label={following ? t('profileView.following') : t('profileView.follow')} onPress={() => (following ? app.unfollow(person.id) : app.follow(person.id))}
+              <Button label={following ? t('profileView.following') : t('profileView.follow')} onPress={() => (following ? connections.unfollow(person.id) : connections.follow(person.id))}
                 icon={<Ionicons name={following ? 'checkmark' : 'add'} size={18} color={c.ink} />} />
             </View>
           ) : null}
@@ -135,6 +154,12 @@ export default function PersonScreen() {
         <Body muted>{t('profileView.blockBody')}</Body>
         <Button variant="danger" label={t('profileView.blockConfirm')} onPress={() => { app.block(person.id); setSheet(null); router.back(); }} />
         <Button label={t('common.cancel')} onPress={() => setSheet(null)} />
+      </Sheet>
+
+      <Sheet visible={refusal !== null} onClose={() => setRefusal(null)}>
+        <Title>{t('request.notSent')}</Title>
+        <Body muted>{refusal ? t(`request.refused.${refusal}`, { name: person.name }) : ''}</Body>
+        <Button variant="primary" label={t('request.ok')} onPress={() => setRefusal(null)} />
       </Sheet>
 
       <Sheet visible={sheet === 'sent'} onClose={() => setSheet(null)}>

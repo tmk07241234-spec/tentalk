@@ -6,6 +6,9 @@ import { useTranslation } from 'react-i18next';
 // Importing the i18n module also initialises i18next before any screen renders.
 import { deviceUiLang } from '@/i18n';
 import { auth } from '@/services/auth';
+import { startFollowersListener } from '@/services/connections';
+import { startPresence } from '@/services/presence';
+import { startRequestListeners } from '@/services/requests';
 import { useApp } from '@/state/store';
 import { startCloudSync } from '@/state/sync';
 import { useColors } from '@/theme/colors';
@@ -36,6 +39,10 @@ export default function RootLayout() {
   }, [uiLang, i18n]);
 
   useEffect(() => (hydrated ? startCloudSync() : undefined), [hydrated]);
+  const uid = useApp((s) => s.account?.uid);
+  useEffect(() => (hydrated && uid ? startPresence() : undefined), [hydrated, uid]);
+  useEffect(() => (hydrated && uid ? startRequestListeners(uid) : undefined), [hydrated, uid]);
+  useEffect(() => (hydrated && uid ? startFollowersListener(uid) : undefined), [hydrated, uid]);
 
   if (!hydrated) return null;
 
