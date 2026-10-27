@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "882002640714",
+    "project_id": "tentalk-c6061",
+    "storage_bucket": "tentalk-c6061.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882002640714:android:ef39c835fcf7b9a2c74bb3",
+        "android_client_info": {
+          "package_name": "com.tentalk.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882002640714-mdatcjoumusgaunou1iiqrbvk386kqtp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tentalk.app",
+            "certificate_hash": "fddb942f793e1adb0f4f7a151a97a1dee55940f3"
+          }
+        },
+        {
+          "client_id": "882002640714-19dme5tkiiictqanarnk0493d3sp41t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBScvJYGaoQYzZP8-unnRKraZHKSeqlLtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882002640714-19dme5tkiiictqanarnk0493d3sp41t8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
