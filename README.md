@@ -29,16 +29,17 @@
 | 部分 | いま | 本番 |
 |---|---|---|
 | サインイン | Firebase Authentication。メールとパスワードは全端末、Google は Web と Android（`google-services.json` を入れたビルドのみ。`src/services/firebase/google.ts`） | iPhone の Google と Apple（Apple Developer Program が必要） |
-| 相手と相手探し | `src/data/samplePartners.ts` のサンプル、`src/services/matchmaking.ts` | サーバーの言語ペアごとの待機列とプロフィール |
+| 相手と相手探し | ランダム通話は本物（サーバーの待機列。`src/domain/queue.ts`、`src/server/calls.ts`）。おすすめ・探す・リクエスト通話は `src/data/samplePartners.ts` のサンプル | 本物のユーザーのオンライン状態とリクエスト |
 | フォロワー | `src/services/connections.ts`（10分話しきった相手のうち通話10回以上のサンプルが5秒後にフォローし返す） | サーバーとプッシュ通知 |
 | リクエストの受け付け設定 | 届く側だけ判定（`receiveRequest`）。サンプルの相手は設定を持たない | サーバーが送る前に判定し、送る側に「受け付けていません」と表示 |
 | リクエスト | `src/services/requests.ts`（オンラインは2.5秒後、オフラインは6秒後に承認） | サーバーとプッシュ通知 |
-| 通話の音声 | つながない（画面と時間だけ） | WebRTC（LiveKit などの通話サービス） |
-| 言語交換の言語 | 自分の学習言語から始まる | 通話サービスが前半の言語を決めて2人に同じものを表示（交代の合図は5分） |
-| お題の共有 | 自分の画面だけ（最初の1枚は自動、次からは「次のお題」を押した人が出す） | 通話サービスで2人の画面に同時に表示 |
-| 沈黙の検出 | 開発用ボタンで再現 | 端末内の発話検出 |
+| 通話の音声 | ランダム通話は LiveKit で本物（`src/services/callRoom/`）。リクエスト通話は画面と時間だけ | リクエスト通話も LiveKit |
+| 言語交換の言語 | ランダム通話は、先に待っていた人の学習言語から始まり、切り替えは2人の画面に反映 | — |
+| お題の共有 | ランダム通話は2人の画面に同時に表示（最初の1枚は自動、次からは「次のお題」を押した人が出す） | — |
+| 沈黙の検出 | ランダム通話は LiveKit の「話している人」から判定。サンプルの通話は開発用ボタン | — |
 | 購入 | `src/services/purchases.ts`（押すと加入状態になる） | App Store / Google Play のアプリ内課金 |
 | 広告 | サンプルのカード | 広告配信サービス（導入時にプライバシーポリシーへ追記） |
+| 通報 | サーバーに保存（Firestore の `reports`）。確認する管理画面はまだない | 管理画面、直前60秒の音声 |
 | お問い合わせ・アカウント削除 | `src/services/support.ts`（送信したことにする） | サーバー |
 | データの保存 | Firestore にプロフィール、設定、フォロー、ブロック、履歴、信頼スコア（`src/state/cloudShape.ts`、ルールは `firestore.rules`）。写真と自己紹介の音声は Storage（`src/services/media.ts`、ルールは `storage.rules`）。通知は端末の中だけ | 通知はサーバー、信頼スコアはサーバーで計算 |
 
@@ -109,6 +110,21 @@ src/
 
 ルールを変えたら、リポジトリのファイルとコンソールの両方を更新します。
 
+## 通話のサーバー
+
+Web 版と同じ場所（EAS Hosting）で API が動いています（`src/app/api/*+api.ts`、中身は `src/server/`）。スマホのアプリも `https://tentalk.expo.app/api/...` を使います。
+
+| API | 役目 |
+|---|---|
+| `POST /api/match` | ランダム通話の相手探しを1歩進める（探している間、2.5秒ごとに呼ぶ）。`DELETE` で探すのをやめる |
+| `POST /api/call-token` | 組み合わされた通話に入るための LiveKit の入場券 |
+| `POST /api/report` | 通報の保存 |
+
+- サーバーが読む値（Expo の Environment variables）: `LIVEKIT_URL`、`LIVEKIT_API_KEY`、`LIVEKIT_API_SECRET`、`FIREBASE_SERVICE_ACCOUNT`。EAS Hosting は Visibility が Secret の値を読めないので、Sensitive にする
+- Firestore の `queue`（待機列）、`calls`（組み合わされた通話）、`reports`（通報）はサーバー専用。アプリからは読み書きできない（`firestore.rules` に書いていないので拒否される）
+- EAS Hosting は1回の API で外へ出せる通信の数が少ないので、相手探しは1回で1歩だけ進める作り
+- 公開: `npx expo export --platform web` → `npx eas-cli@latest deploy --environment production --prod`（`--environment` がないとサーバーの値が入らない）
+
 ## EAS（ビルドと Web の公開）
 
 設定は `eas.json`（ビルドの種類）と `app.config.js`（`app.json` に Google ログインを足す）。アプリの ID は iOS / Android とも `com.tentalk.app`（ストアに出したあとは変えられません）。
@@ -118,7 +134,7 @@ src/
 | development | 開発用（`npm start` の画面をスマホで開く。Expo Go の代わり） | `npx eas-cli@latest build --profile development --platform android` |
 | preview | テスト版の .apk（そのまま端末に入れられる） | `npx eas-cli@latest build --profile preview --platform android` |
 | production | ストア提出用（.aab） | `npx eas-cli@latest build --profile production --platform android` |
-| Web | EAS Hosting に公開（本番: https://tentalk.expo.app ） | `npm run deploy:web`（本番の URL にするときは `npx eas-cli@latest deploy --prod`） |
+| Web | EAS Hosting に公開（本番: https://tentalk.expo.app ） | `npm run deploy:web` |
 
 最初の1回だけ:
 
@@ -136,11 +152,11 @@ Android の Google ログイン:
 ## 次のマイルストーン
 
 3. Firebase の導入: サインイン、アカウント削除、Firestore と Storage への保存（済）
-4. 通話サービスの導入: 本物の音声通話、マッチングサーバー、通報の受付と管理画面
+4. 通話サービスの導入: 本物の音声通話、マッチングサーバー（ランダム通話は済み）、リクエスト通話、通報の管理画面
 5. 通知（リクエスト、通話タイム）、Tentalk Plus（アプリ内課金）と広告
 6. ストア申請の準備: 規約類、プライバシーの記載、スクリーンショット、TestFlight / 内部テスト
 
-次の作業: 上の「EAS」の最初の1回をやる（アカウント作成、`eas init`、`google-services.json`）→ Web の公開と Android のテスト版（preview）で動作確認。コード側の準備（`eas.json`、開発ビルド、Android の Google ログイン）は済み。その後マイルストーン4へ。
+次の作業: Mac と iPhone の2つのアカウントで、Web 版のランダム通話を実際に試す（音声・お題の共有・言語の切り替え・途中退出）。Apple Developer Program の承認が来たら iPhone 版（TestFlight）。そのあと、リクエスト通話と「探す」を本物のユーザーに切り替える。
 
 検討中のアイデア（すぐには作らない）:
 

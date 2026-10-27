@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
@@ -10,11 +10,17 @@ import { useApp } from '@/state/store';
 import { startCloudSync } from '@/state/sync';
 import { useColors } from '@/theme/colors';
 
-/** Waits for the persisted store to load so the first redirect is correct. */
+/**
+ * Waits for the persisted store to load so the first redirect is correct. On the web
+ * the pre-built page has no saved data, so it always starts as "not loaded"; that keeps
+ * the first browser render identical to the page and avoids a hydration mismatch.
+ */
 function useHydrated() {
-  const [done, setDone] = useState(useApp.persist.hasHydrated());
-  useEffect(() => useApp.persist.onFinishHydration(() => setDone(true)), []);
-  return done;
+  return useSyncExternalStore(
+    (onChange) => useApp.persist.onFinishHydration(onChange),
+    () => useApp.persist.hasHydrated(),
+    () => false,
+  );
 }
 
 export default function RootLayout() {

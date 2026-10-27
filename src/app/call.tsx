@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ import { Pip } from '@/components/Pip';
 import { Badge, Confetti, SpeechBubble } from '@/components/progress';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Title } from '@/components/ui';
-import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, questionIn, questionsFor } from '@/data/conversation';
+import { ENDONYM, EXAMPLE_QUESTIONS, HELP_PHRASES, QUESTIONS, questionIn, questionsFor } from '@/data/conversation';
 import type { Partner } from '@/data/samplePartners';
 import {
   REQUIRED_SECONDS, SWITCH_CUE_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
@@ -20,20 +20,26 @@ import type { Lang, UiLang } from '@/domain/languages';
 import { relation } from '@/domain/matching';
 import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
 import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
+import { api } from '@/services/api';
 import { connections } from '@/services/connections';
-import { findSamplePartner, matchmaking } from '@/services/matchmaking';
+import { joinCallRoom, type CallMessage, type CallRoom } from '@/services/callRoom';
+import { callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
+import { loadPerson } from '@/services/people';
 import { requests, type RequestAnswer } from '@/services/requests';
 import { useActiveLearning, useApp, type HistoryEntry } from '@/state/store';
 import { CALL_BG, space, useColors } from '@/theme/colors';
 
-type Phase = 'searching' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
+type Phase = 'searching' | 'joining' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
+/** If the matched partner has not joined the audio room by then, search again. */
+const PARTNER_JOIN_TIMEOUT_MS = 30_000;
 const REASONS = ['romance', 'sexual', 'abuse', 'spam', 'minor', 'trolling', 'other'] as const;
 
 /**
  * kind=random: search → 10 required minutes → open-ended extension → result.
  * kind=direct&partner=<id>: a call with a chosen person. With ask=1 we first wait
  * for them to accept; without it the request was already accepted.
- * Audio is not connected yet; the call service will plug in where noted.
+ * Random calls of signed-in users are real: the server pairs two searching people and
+ * both join the call's LiveKit audio room. Direct calls are still simulated.
  */
 export default function Call() {
   const { t, i18n } = useTranslation();
@@ -44,6 +50,8 @@ export default function Call() {
   const params = useLocalSearchParams<{ kind?: string; partner?: string; ask?: string }>();
   const kind = params.kind === 'direct' ? 'direct' : 'random';
   const chosen = kind === 'direct' && params.partner ? findSamplePartner(params.partner) ?? null : null;
+  const myUid = app.account?.uid;
+  const live = kind === 'random' && !!myUid;
 
   const [phase, setPhase] = useState<Phase>(chosen ? (params.ask === '1' ? 'waiting' : 'connected') : kind === 'direct' ? 'none' : 'searching');
   const [partner, setPartner] = useState<Partner | null>(chosen);
@@ -54,7 +62,7 @@ export default function Call() {
   const [lang, setLang] = useState<Lang>(() =>
     (chosen ? profile.learning.find((l) => relation({ native: profile.native, learn: l.lang }, chosen))?.lang : undefined) ?? active?.lang ?? 'en');
   // The shared question card. The first one appears on its own; after that either person draws the next.
-  const [question, setQuestion] = useState<{ index: number; by: 'auto' | 'me' }>({ index: 0, by: 'auto' });
+  const [question, setQuestion] = useState<{ id: string; by: 'auto' | 'me' | 'partner' }>({ id: QUESTIONS[0].id, by: 'auto' });
   // Also show the card in my app language; stays on for later cards once turned on.
   const [translate, setTranslate] = useState(false);
   const [cueDone, setCueDone] = useState(false);
@@ -65,6 +73,12 @@ export default function Call() {
   const [adClosed, setAdClosed] = useState(false);
   const [devSpeed, setDevSpeed] = useState(1);
   const [devSilent, setDevSilent] = useState(false);
+  // Live calls: the audio room, whether anyone is talking, and whether the browser blocked sound.
+  const room = useRef<CallRoom | null>(null);
+  const speaking = useRef(false);
+  const [callId, setCallId] = useState<string | null>(null);
+  const [audioBlocked, setAudioBlocked] = useState(false);
+  const [failure, setFailure] = useState<'mic' | 'network' | null>(null);
 
   const me = { native: profile.native, learn: active?.lang ?? 'en' };
   // A chosen person may relate to any of my learning languages; random calls use the Home mode.
@@ -92,39 +106,81 @@ export default function Call() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
+  const searchAgain = () => {
+    setCallId(null); setFailure(null); setAudioBlocked(false);
+    if (live) setPartner(null);
+    setPhase('searching');
+  };
+
+  const startCall = () => {
+    setElapsed(0); setSilence(0); setCueDone(false); setQuestion({ id: QUESTIONS[0].id, by: 'auto' });
+    setPhase('connected');
+  };
+
   // Search for a partner whenever we enter the searching phase.
   useEffect(() => {
     if (phase !== 'searching') return;
     const ctrl = new AbortController();
+    if (live) {
+      searchRandomCall({
+        mode, native: me.native, learn: me.learn, level: active?.level ?? 1, languageOnly: app.settings.languageOnly,
+        wantLanguageOnly: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel,
+      }, ctrl.signal)
+        .then((id) => {
+          if (ctrl.signal.aborted) return;
+          if (!id) return setPhase('none');
+          setCallId(id);
+          setPhase('joining');
+        })
+        .catch(() => { if (!ctrl.signal.aborted) { setFailure('network'); setPhase('none'); } });
+      return () => ctrl.abort();
+    }
     matchmaking
       .findPartner(me, { mode, myLevel: active?.level ?? 3, languageOnlyPartners: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel, blocked: new Set(app.blocked) }, ctrl.signal)
       .then((p) => {
         if (!p) return setPhase('none');
         setPartner(p);
-        setElapsed(0); setSilence(0); setCueDone(false); setQuestion({ index: 0, by: 'auto' }); setLang(me.learn);
-        setPhase('connected');
-        // TODO(call service): join the audio room for this match here.
+        setLang(me.learn);
+        startCall();
       })
       .catch(() => {});
     return () => ctrl.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
-  // Call clock. Silence comes from on-device voice activity detection later; a dev toggle stands in for now.
+  // Call clock. Silence: nobody speaking in a live call; a dev toggle stands in for simulated calls.
   useEffect(() => {
     if (phase !== 'connected') return;
     const id = setInterval(() => {
+      const quiet = live ? !speaking.current : devSilent;
       setElapsed((e) => e + 0.25 * devSpeed);
-      setSilence((s) => (devSilent ? s + 0.25 * devSpeed : 0));
+      setSilence((s) => (quiet ? s + 0.25 * devSpeed : 0));
     }, 250);
     return () => clearInterval(id);
-  }, [phase, devSpeed, devSilent]);
+  }, [phase, devSpeed, devSilent, live]);
 
   const nudge = silenceNudge(silence);
-  // TODO(call service): send the drawn question to the partner so both screens show it.
-  const drawQuestion = () => setQuestion((q) => ({ index: q.index + 1, by: 'me' }));
+  // Questions and language switches are shared: the partner's screen follows.
+  const send = (m: CallMessage) => room.current?.send(m);
+  const drawQuestion = () => {
+    const cards = questionsFor(lang === me.learn ? active?.level ?? 1 : partner?.level ?? 1);
+    const next = cards[(cards.findIndex((c) => c.id === question.id) + 1) % cards.length];
+    setQuestion({ id: next.id, by: 'me' });
+    send({ t: 'question', id: next.id });
+  };
+  const switchLang = (to: Lang) => {
+    setLang(to); setCueDone(true);
+    send({ t: 'lang', lang: to });
+  };
+  const onMessage = (m: CallMessage) => {
+    if (m.t === 'question' && QUESTIONS.some((q) => q.id === m.id)) setQuestion({ id: m.id, by: 'partner' });
+    if (m.t === 'lang') { setLang(m.lang); setCueDone(true); }
+  };
 
   const end = (r: EndReason) => {
+    if (phase !== 'connected') return;
+    if (r === 'report' && callId) void api('/api/report', { callId, reason: reason ?? 'other' }).catch(() => {});
+    void room.current?.leave(); room.current = null;
     const o = callOutcome({ elapsedSeconds: elapsed, reason: r, kind, todayGain: app.todayGain });
     const before = app.callLog;
     const after = [...before, { date: dayKey(new Date()), minutes: Math.round(elapsed / 60), completed: o.completedRequired }];
@@ -137,7 +193,6 @@ export default function Call() {
       if (r !== 'report' && canFollow([record], partner.id)) connections.afterCompletedCall(partner.id);
       if (r === 'report') app.block(partner.id);
     }
-    // TODO(call service): leave the audio room; send the report with the reason to the server.
     // callCount after this call; ads never show for reports, and never full-screen.
     const ad = r !== 'report' && shouldShowAd({ plus: app.plus, callCount: app.callCount + 1 });
     setAdClosed(false);
@@ -145,6 +200,51 @@ export default function Call() {
     setSheet(null);
     setPhase('result');
   };
+  // The audio room's callbacks outlive renders; these always run the current handlers.
+  const endFromRoom = useEffectEvent(end);
+  const messageFromRoom = useEffectEvent(onMessage);
+
+  // Matched: load the partner, then join the audio room and wait for them to arrive.
+  // Keyed on the call only, so moving on to the connected phase keeps the room open.
+  useEffect(() => {
+    if (!callId) return;
+    let stale = false;
+    let joined = false;
+    const giveUp = setTimeout(() => {
+      if (joined || stale) return;
+      void room.current?.leave(); room.current = null;
+      searchAgain();
+    }, PARTNER_JOIN_TIMEOUT_MS);
+    (async () => {
+      const info = await callInfo(callId);
+      const person = await loadPerson(info.partnerId);
+      if (stale) return;
+      setPartner(person ?? unknownPartner(info.partnerId));
+      setLang(info.startLang);
+      const r = await joinCallRoom(info.url, info.token, {
+        onPartnerJoined: () => { if (!joined) { joined = true; startCall(); } },
+        onPartnerLeft: () => endFromRoom('partner_left'),
+        onMessage: (m) => messageFromRoom(m),
+        onSpeaking: (anyone) => { speaking.current = anyone; },
+        onAudioBlocked: setAudioBlocked,
+        onDisconnected: () => endFromRoom('connection_lost'),
+      }).catch((e: unknown) => {
+        throw Object.assign(new Error('join failed'), { mic: /permission|NotAllowed|denied/i.test(String((e as Error)?.name) + String((e as Error)?.message)) });
+      });
+      if (stale) return void r.leave();
+      room.current = r;
+    })().catch((e: { mic?: boolean }) => {
+      if (stale) return;
+      void room.current?.leave(); room.current = null;
+      setFailure(e?.mic ? 'mic' : 'network');
+      setPhase('none');
+    });
+    return () => { stale = true; clearTimeout(giveUp); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callId]);
+
+  // Leave the audio room when the screen closes.
+  useEffect(() => () => { void room.current?.leave(); room.current = null; }, []);
 
   const otherLang: Lang = lang === meNow.learn ? profile.native : meNow.learn;
   const bg = buddy ? CALL_BG.buddy : lang === meNow.learn ? CALL_BG.learn : CALL_BG.native;
@@ -167,22 +267,22 @@ export default function Call() {
   }
   const required = elapsed < REQUIRED_SECONDS;
 
-  if (phase === 'searching' || phase === 'none') {
+  if (phase === 'searching' || phase === 'joining' || phase === 'none') {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
-        {phase === 'searching' ? (
+        {phase !== 'none' ? (
           <>
             <View style={{ alignItems: 'center' }}><Pip pose="listen" tone={buddy ? 'buddy' : 'learn'} size={130} motion="bounce" /></View>
-            <Title>{t('call.searching')}</Title>
+            <Title>{phase === 'joining' ? t('call.joining') : t('call.searching')}</Title>
             <Body>{t('pip.searching')}</Body>
             <Body muted>{buddy ? t('call.condBuddy', { lang: t(`lang.${me.learn}`), native: t(`lang.${me.native}`) }) : t('call.condExchange', { learn: t(`lang.${me.learn}`), native: t(`lang.${me.native}`) })}</Body>
           </>
         ) : (
           <>
             <View style={{ alignItems: 'center' }}><Pip pose="sleepy" tone={buddy ? 'buddy' : 'learn'} size={130} /></View>
-            <Title>{t('call.noPartner')}</Title>
-            <Body muted>{t('call.noPartnerBody')}</Body>
-            <Button variant="primary" label={t('call.retry')} onPress={() => setPhase('searching')} />
+            <Title>{failure ? t(failure === 'mic' ? 'call.micBlocked' : 'call.networkError') : t('call.noPartner')}</Title>
+            <Body muted>{failure ? t(failure === 'mic' ? 'call.micBlockedBody' : 'call.networkErrorBody') : t('call.noPartnerBody')}</Body>
+            <Button variant="primary" label={t('call.retry')} onPress={searchAgain} />
           </>
         )}
         <Button label={t('common.cancel')} onPress={() => router.back()} />
@@ -253,7 +353,7 @@ export default function Call() {
             </View>
           ) : null}
           {kind === 'random' && (outcome.reason !== 'hangup' || outcome.trustDelta >= 0) ? (
-            <Button variant="primary" label={t('call.talkAgain')} onPress={() => setPhase('searching')} />
+            <Button variant="primary" label={t('call.talkAgain')} onPress={searchAgain} />
           ) : null}
           <Button label={t('call.home')} onPress={() => router.back()} />
         </ScrollView>
@@ -265,13 +365,15 @@ export default function Call() {
   // Deep questions only when whoever is speaking their learning language can handle them.
   const speakerLevel = lang === me.learn ? active?.level ?? 1 : partner.level;
   const cards = questionsFor(speakerLevel);
-  const card = cards[question.index % cards.length];
+  const card = QUESTIONS.find((q) => q.id === question.id) ?? cards[0];
   const shown = questionIn(card, lang);
   const uiLang = i18n.language as UiLang;
   const mine = questionIn(card, uiLang);
   const canTranslate = mine.q !== shown.q;
-  // Whoever drew the card answers second, so the other person starts.
-  const order = question.by === 'me' ? [partner.name, t('call.you')] : [t('call.you'), partner.name];
+  // Whoever drew the card answers second, so the other person starts. For the first card
+  // both screens agree on the order by comparing user ids.
+  const meFirst = question.by === 'partner' || (question.by === 'auto' && (!live || (myUid ?? '') < partner.id));
+  const order = meFirst ? [t('call.you'), partner.name] : [partner.name, t('call.you')];
   const showCue = !buddy && app.settings.switchCue && !cueDone && elapsed >= SWITCH_CUE_SECONDS && required && !nudge;
 
   return (
@@ -308,7 +410,7 @@ export default function Call() {
           ) : (
             <>
               <Text style={{ color: '#fff', fontSize: 13 }}>{t('call.current', { lang: ENDONYM[lang] ?? t(`lang.${lang}`) })}</Text>
-              <GlassButton label={t('call.switchTo', { lang: ENDONYM[otherLang] ?? t(`lang.${otherLang}`) })} onPress={() => { setLang(otherLang); setCueDone(true); }} />
+              <GlassButton label={t('call.switchTo', { lang: ENDONYM[otherLang] ?? t(`lang.${otherLang}`) })} onPress={() => switchLang(otherLang)} />
             </>
           )}
         </View>
@@ -350,12 +452,16 @@ export default function Call() {
           </View>
         ) : null}
 
+        {audioBlocked ? (
+          <Nudge text={t('call.audioBlocked')} actions={[{ label: t('call.audioOn'), onPress: () => void room.current?.startAudio() }]} />
+        ) : null}
+
         {nudge ? (
           <Nudge text={nudge === 'example' ? t('call.silenceExample', { example: EXAMPLE_QUESTIONS[lang] ?? '' }) : t('call.silenceTopic')}
             actions={nudge === 'topic' ? [{ label: t('call.nextQuestion'), onPress: drawQuestion }] : []} />
         ) : showCue ? (
           <Nudge text={t('call.cue', { lang: t(`lang.${otherLang}`) })}
-            actions={[{ label: t('call.cueSwitch'), onPress: () => { setLang(otherLang); setCueDone(true); } }, { label: t('call.cueKeep'), onPress: () => setCueDone(true) }]} />
+            actions={[{ label: t('call.cueSwitch'), onPress: () => switchLang(otherLang) }, { label: t('call.cueKeep'), onPress: () => setCueDone(true) }]} />
         ) : null}
 
         {__DEV__ ? (
@@ -368,7 +474,7 @@ export default function Call() {
         <View style={{ marginTop: 'auto', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: space.lg }}>
           <RoundButton icon="flag-outline" label={t('call.report')} onPress={() => setSheet('report')} />
           <RoundButton icon="chatbox-ellipses-outline" label={t('call.help')} onPress={() => setSheet('help')} />
-          <RoundButton icon={muted ? 'mic-off' : 'mic-outline'} label={t('call.mute')} onPress={() => setMuted((m) => !m)} active={muted} />
+          <RoundButton icon={muted ? 'mic-off' : 'mic-outline'} label={t('call.mute')} onPress={() => { const m = !muted; setMuted(m); void room.current?.setMuted(m); }} active={muted} />
           {!required && kind === 'random' ? (
             <Pressable accessibilityRole="button" onPress={() => end('hangup')} style={{ backgroundColor: '#fff', borderRadius: 99, paddingHorizontal: 18, height: 50, justifyContent: 'center' }}>
               <Text style={{ color: '#111', fontWeight: '700' }}>{t('call.nextPerson')}</Text>
@@ -456,4 +562,9 @@ function RoundButton({ icon, label, onPress, danger, active }: {
       <Ionicons name={icon} size={22} color={active ? '#111' : '#fff'} style={danger ? { transform: [{ rotate: '135deg' }] } : undefined} />
     </Pressable>
   );
+}
+
+/** Stand-in when a matched person's profile cannot be loaded (e.g. deleted meanwhile). */
+function unknownPartner(id: string): Partner {
+  return { id, name: '—', country: '', color: '#8A8FA3', calls: 0, bio: '', hours: null, utcOffset: 0, native: 'en', learn: 'en', level: 1, status: 'online', languageOnly: false, hobbies: [] };
 }

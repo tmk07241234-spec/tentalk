@@ -6,7 +6,7 @@ import { Pip } from '@/components/Pip';
 import { PersonRow } from '@/components/people';
 import { Body, Screen, Segmented, Title } from '@/components/ui';
 import { connectionGroups, type ConnectionGroup } from '@/domain/connections';
-import { findSamplePartner } from '@/services/matchmaking';
+import { usePeopleList } from '@/services/people';
 import { useApp } from '@/state/store';
 import { space } from '@/theme/colors';
 
@@ -20,7 +20,7 @@ export default function Connections() {
   const [group, setGroup] = useState<ConnectionGroup>('mutual');
   const groups = connectionGroups(following, followers, blocked);
   const mutual = new Set(groups.mutual);
-  const people = groups[group].map(findSamplePartner).filter((p) => p !== undefined);
+  const people = usePeopleList(groups[group]);
 
   return (
     <Screen>

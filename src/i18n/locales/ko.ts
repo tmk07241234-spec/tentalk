@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const ko: Translation = {
-  common: { next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
+  common: { loading: '불러오는 중…', next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
   lang: { ja: '일본어', en: '영어', ko: '한국어', es: '스페인어', pt: '포르투갈어', vi: '베트남어', de: '독일어' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: '홈', find: '찾기', connections: '연결', notifications: '알림', history: '기록', me: '나' },
@@ -62,6 +62,7 @@ const ko: Translation = {
   },
   person: { native: '{{lang}} 원어민', languageOnly: '어학 전용', online: '온라인', trusted: '신뢰됨', new: '신규' },
   call: {
+    joining: '상대를 찾았어요. 연결 중…', micBlocked: '마이크를 쓸 수 없어요', micBlockedBody: '브라우저나 기기 설정에서 Tentalk의 마이크를 허용한 뒤 다시 시도해 주세요.', networkError: '연결하지 못했어요', networkErrorBody: '네트워크 상태를 확인하고 다시 시도해 주세요.', audioBlocked: '상대 목소리를 들으려면 버튼을 눌러 주세요', audioOn: '소리 켜기',
     searching: '상대를 찾고 있어요', condBuddy: '조건: {{lang}} 학습 중 · 모국어가 {{native}}가 아닌 사람', condExchange: '조건: {{native}}를 배우는 {{learn}} 원어민',
     noPartner: '조건에 맞는 상대가 없어요', noPartnerBody: '대기자가 많은 “통화 타임”에 다시 시도하거나 다른 모드를 이용해 보세요.', retry: '다시 찾기',
     required: '필수 10분까지 {{time}} 남음', extended: '연장 중 · 한 명이 끊을 때까지',

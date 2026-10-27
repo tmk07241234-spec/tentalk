@@ -23,10 +23,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "output": "single"
+      "output": "static"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://tentalk.expo.app",
+          "apiRoutes": true,
+          "asyncRoutes": false
+        }
+      ],
       "expo-localization",
       [
         "expo-image-picker",
@@ -37,6 +44,14 @@
       [
         "expo-audio",
         {
+          "microphonePermission": "Tentalk uses the microphone for calls and for recording your voice intro."
+        }
+      ],
+      "@livekit/react-native-expo-plugin",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          "cameraPermission": "Tentalk does not use the camera during calls.",
           "microphonePermission": "Tentalk uses the microphone for calls and for recording your voice intro."
         }
       ]

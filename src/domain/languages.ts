@@ -1,5 +1,6 @@
 /** Languages a person can have as native or learning language. */
-export type Lang = 'ja' | 'en' | 'ko' | 'es' | 'pt' | 'vi' | 'de';
+export const LANGS = ['ja', 'en', 'ko', 'es', 'pt', 'vi', 'de'] as const;
+export type Lang = (typeof LANGS)[number];
 
 /** Languages the app UI is translated into. */
 export const UI_LANGS = ['ja', 'en', 'ko', 'es'] as const;

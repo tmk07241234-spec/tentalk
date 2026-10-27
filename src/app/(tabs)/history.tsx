@@ -7,7 +7,7 @@ import { Pip } from '@/components/Pip';
 import { Pill, useNow, useRelativeTime } from '@/components/people';
 import { Body, Card, Screen, Title } from '@/components/ui';
 import { formatClock } from '@/domain/callRules';
-import { findSamplePartner } from '@/services/matchmaking';
+import { usePeopleList } from '@/services/people';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -19,6 +19,7 @@ export default function History() {
   const now = useNow();
   const { history, blocked, following } = useApp();
   const list = history.filter((h) => !blocked.includes(h.partnerId));
+  const people = usePeopleList([...new Set(list.map((h) => h.partnerId))]);
 
   return (
     <Screen>
@@ -31,7 +32,7 @@ export default function History() {
         </View>
       ) : null}
       {list.map((h) => {
-        const p = findSamplePartner(h.partnerId);
+        const p = people.find((x) => x.id === h.partnerId);
         const open = h.kind === 'direct' || h.unlocked;
         const name = open && p ? p.name : t('history.unknown');
         return (

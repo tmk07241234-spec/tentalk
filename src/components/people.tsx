@@ -21,6 +21,7 @@ export function Pill({ label, tone = 'muted' }: { label: string; tone?: 'muted' 
 
 /** The partner's available hours, converted to this device's local time. */
 export function hoursForMe(p: Partner): string {
+  if (!p.hours) return '—';
   const r = shiftRange(p.hours, p.utcOffset, deviceOffset());
   return `${r.start}–${r.end}`;
 }
@@ -39,7 +40,7 @@ export function PersonRow({ person, mutual }: { person: Partner; mutual?: boolea
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={person.name} onPress={() => router.push({ pathname: '/person/[id]', params: { id: person.id } })}
       style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.surface, borderRadius: radius.lg, padding: space.md, opacity: pressed ? 0.85 : online ? 1 : 0.8 })}>
-      <Avatar name={person.name} color={person.color} online={online} />
+      <Avatar name={person.name} color={person.color} photoUri={person.photoUri} online={online} />
       <View style={{ flex: 1, gap: 3, minWidth: 0 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <Text style={{ color: c.ink, fontWeight: '700', fontSize: 15 }}>{person.name}</Text>
@@ -49,7 +50,7 @@ export function PersonRow({ person, mutual }: { person: Partner; mutual?: boolea
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text numberOfLines={1} style={{ color: c.muted, fontSize: 12, flexShrink: 1 }}>
-            {t(`country.${person.country}`)} · {t('person.native', { lang: t(`lang.${person.native}`) })} · {t(`lang.${person.learn}`)}
+            {person.country ? `${t(`country.${person.country}`)} · ` : ''}{t('person.native', { lang: t(`lang.${person.native}`) })} · {t(`lang.${person.learn}`)}
           </Text>
           <LevelBars level={person.level} />
         </View>

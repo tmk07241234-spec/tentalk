@@ -1,5 +1,5 @@
 const ja = {
-  common: { next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
+  common: { loading: '読み込み中…', next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
   lang: { ja: '日本語', en: '英語', ko: '韓国語', es: 'スペイン語', pt: 'ポルトガル語', vi: 'ベトナム語', de: 'ドイツ語' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'ホーム', find: '探す', connections: 'つながり', notifications: '通知', history: '履歴', me: '自分' },
@@ -60,6 +60,7 @@ const ja = {
   },
   person: { native: '{{lang}}ネイティブ', languageOnly: '語学のみ', online: 'オンライン', trusted: '信頼済み', new: '新規' },
   call: {
+    joining: '相手が見つかりました。つないでいます…', micBlocked: 'マイクが使えません', micBlockedBody: 'ブラウザか端末の設定で、Tentalk のマイクを許可してから、もう一度お試しください。', networkError: 'つながりませんでした', networkErrorBody: '通信の状態を確かめて、もう一度お試しください。', audioBlocked: '相手の声を出すには、ボタンを押してください', audioOn: '音声をオン',
     searching: '相手を探しています', condBuddy: '条件: {{lang}}を学習中・母語が{{native}}以外', condExchange: '条件: {{learn}}ネイティブで{{native}}を学習中',
     noPartner: '条件に合う相手がいませんでした', noPartnerBody: '待機している人が多い「通話タイム」に試すか、もう一方のモードを使ってください。', retry: 'もう一度探す',
     required: '必修の10分まで あと{{time}}', extended: '延長中・どちらかが切るまで',

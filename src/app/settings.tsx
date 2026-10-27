@@ -9,7 +9,7 @@ import { Body, Button, Card, ChoiceChips, Eyebrow, Screen, Title } from '@/compo
 import { connectionGroups, type RequestPolicy } from '@/domain/connections';
 import { UI_LANGS, type UiLang } from '@/domain/languages';
 import { deviceUiLang } from '@/i18n';
-import { findSamplePartner } from '@/services/matchmaking';
+import { usePeopleList } from '@/services/people';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -24,7 +24,8 @@ export default function SettingsScreen() {
   const { settings, updateSettings, uiLang, setUiLang, blocked, unblock, following, followers } = useApp();
   // People who can be picked for "only people I choose": everyone I am connected with.
   const groups = connectionGroups(following, followers, blocked);
-  const connected = [...new Set([...groups.following, ...groups.followers])].map(findSamplePartner).filter((p) => p !== undefined);
+  const connected = usePeopleList([...new Set([...groups.following, ...groups.followers])]);
+  const blockedPeople = usePeopleList(blocked);
   const allowed = new Set(settings.requestAllowList);
   const toggleAllowed = (id: string, on: boolean) =>
     updateSettings({ requestAllowList: on ? [...settings.requestAllowList, id] : settings.requestAllowList.filter((x) => x !== id) });
@@ -100,7 +101,7 @@ export default function SettingsScreen() {
         <Eyebrow>{t('settings.blocked')}</Eyebrow>
         {blocked.length === 0 ? <Body small muted>{t('settings.noneBlocked')}</Body> : null}
         {blocked.map((id) => {
-          const p = findSamplePartner(id);
+          const p = blockedPeople.find((x) => x.id === id);
           return (
             <View key={id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
               <Avatar name={p?.name ?? '?'} color={p?.color ?? '#8A8FA3'} size={36} />

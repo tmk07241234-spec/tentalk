@@ -13,7 +13,7 @@ import { canFollow } from '@/domain/connections';
 import { commonHobbies } from '@/domain/discovery';
 import { relation } from '@/domain/matching';
 import { clockAt, requestExpiresAt } from '@/domain/schedule';
-import { findSamplePartner } from '@/services/matchmaking';
+import { usePerson } from '@/services/people';
 import { requests } from '@/services/requests';
 import { useApp, type OutgoingRequest } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
@@ -29,10 +29,11 @@ export default function PersonScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const app = useApp();
   const [sheet, setSheet] = useState<null | 'block' | 'sent'>(null);
-  const person = findSamplePartner(id ?? '');
+  const { person, missing } = usePerson(id);
   const profile = app.profile;
   const now = useNow();
 
+  if (!person && !missing) return <Screen><Body muted>{t('common.loading')}</Body></Screen>;
   if (!person || !profile || app.blocked.includes(person.id)) {
     return (
       <Screen footer={<Button label={t('common.close')} onPress={() => router.back()} />}>
@@ -85,11 +86,11 @@ export default function PersonScreen() {
       </Pressable>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-        <Avatar name={person.name} color={person.color} size={76} online={online} />
+        <Avatar name={person.name} color={person.color} photoUri={person.photoUri} size={76} online={online} />
         <View style={{ flex: 1, gap: 4 }}>
           <Title>{person.name}</Title>
           <Body small muted>
-            {t(`country.${person.country}`)} · {t('profileView.localTime', { time: clockAt(person.utcOffset, new Date()) })} · {online ? t('person.online') : t('profileView.offline')}
+            {person.country ? `${t(`country.${person.country}`)} · ` : ''}{t('profileView.localTime', { time: clockAt(person.utcOffset, new Date()) })} · {online ? t('person.online') : t('profileView.offline')}
           </Body>
           <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
             {rel ? <Pill label={rel === 'buddy' ? t('home.buddy') : t('home.exchange')} tone={rel === 'buddy' ? 'buddy' : 'learn'} /> : null}

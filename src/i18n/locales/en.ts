@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const en: Translation = {
-  common: { next: 'Next', back: 'Back', skip: 'Skip', start: 'Get started', close: 'Close', cancel: 'Cancel', save: 'Save', step: 'Step {{n}} of {{total}}' },
+  common: { loading: 'Loading…', next: 'Next', back: 'Back', skip: 'Skip', start: 'Get started', close: 'Close', cancel: 'Cancel', save: 'Save', step: 'Step {{n}} of {{total}}' },
   lang: { ja: 'Japanese', en: 'English', ko: 'Korean', es: 'Spanish', pt: 'Portuguese', vi: 'Vietnamese', de: 'German' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'Home', find: 'Find', connections: 'People', notifications: 'Alerts', history: 'History', me: 'Me' },
@@ -62,6 +62,7 @@ const en: Translation = {
   },
   person: { native: 'Native {{lang}}', languageOnly: 'Language only', online: 'Online', trusted: 'Trusted', new: 'New' },
   call: {
+    joining: 'Found someone. Connecting…', micBlocked: 'The microphone is blocked', micBlockedBody: 'Allow Tentalk to use the microphone in your browser or device settings, then try again.', networkError: 'Couldn’t connect', networkErrorBody: 'Check your connection and try again.', audioBlocked: 'Tap the button to hear your partner', audioOn: 'Turn on sound',
     searching: 'Finding a partner', condBuddy: 'Looking for: {{lang}} learners whose native language isn’t {{native}}', condExchange: 'Looking for: native {{learn}} speakers learning {{native}}',
     noPartner: 'No one matched', noPartnerBody: 'Try during call time, when more people are waiting, or use the other mode.', retry: 'Search again',
     required: '{{time}} left of the required 10 minutes', extended: 'Extended · until one of you hangs up',

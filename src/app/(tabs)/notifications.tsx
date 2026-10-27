@@ -9,7 +9,7 @@ import { Pip } from '@/components/Pip';
 import { useNow, useRelativeTime } from '@/components/people';
 import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { SAMPLE_PARTNERS } from '@/data/samplePartners';
-import { findSamplePartner } from '@/services/matchmaking';
+import { usePeopleList } from '@/services/people';
 import { receiveRequest } from '@/services/requests';
 import { useApp, type AppNotification } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
@@ -32,6 +32,7 @@ export default function Notifications() {
   }, [markNotificationsRead]));
 
   const visible = notifications.filter((n) => !n.partnerId || !blocked.includes(n.partnerId));
+  const people = usePeopleList([...new Set(visible.flatMap((n) => (n.partnerId ? [n.partnerId] : [])))]);
   const now = useNow();
 
   return (
@@ -44,7 +45,7 @@ export default function Notifications() {
         </View>
       ) : null}
       {visible.map((n) => {
-        const p = n.partnerId ? findSamplePartner(n.partnerId) : undefined;
+        const p = n.partnerId ? people.find((x) => x.id === n.partnerId) : undefined;
         const name = p?.name ?? '';
         const live = (n.type === 'accepted' || n.type === 'incoming') && !n.handled && (!n.expiresAt || n.expiresAt > now);
         const text = n.type === 'followed' || n.type === 'accepted' || n.type === 'incoming' ? t(`notifications.${n.type}`, { name }) : t(`notifications.${n.type}`);

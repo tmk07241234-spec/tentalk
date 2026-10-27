@@ -5,11 +5,14 @@ import type { HoursRange } from '@/domain/schedule';
 /** Stand-in people until the server exists. Hours are in the person's own local time. */
 export interface Partner extends Candidate, Person {
   name: string;
+  /** ISO country code; empty for real users, who do not share it. */
   country: string;
   color: string;
+  photoUri?: string | null;
   calls: number;
   bio: string;
-  hours: HoursRange;
+  /** Available hours in the person's local time; null when not set. */
+  hours: HoursRange | null;
   /** Minutes east of UTC. */
   utcOffset: number;
 }

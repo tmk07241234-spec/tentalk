@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const es: Translation = {
-  common: { next: 'Siguiente', back: 'Atrás', skip: 'Omitir', start: 'Empezar', close: 'Cerrar', cancel: 'Cancelar', save: 'Guardar', step: 'Paso {{n}} de {{total}}' },
+  common: { loading: 'Cargando…', next: 'Siguiente', back: 'Atrás', skip: 'Omitir', start: 'Empezar', close: 'Cerrar', cancel: 'Cancelar', save: 'Guardar', step: 'Paso {{n}} de {{total}}' },
   lang: { ja: 'japonés', en: 'inglés', ko: 'coreano', es: 'español', pt: 'portugués', vi: 'vietnamita', de: 'alemán' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'Inicio', find: 'Buscar', connections: 'Contactos', notifications: 'Avisos', history: 'Historial', me: 'Yo' },
@@ -62,6 +62,7 @@ const es: Translation = {
   },
   person: { native: 'Nativo de {{lang}}', languageOnly: 'Solo idiomas', online: 'En línea', trusted: 'De confianza', new: 'Nuevo' },
   call: {
+    joining: 'Encontramos a alguien. Conectando…', micBlocked: 'El micrófono está bloqueado', micBlockedBody: 'Permite que Tentalk use el micrófono en el navegador o en los ajustes del dispositivo e inténtalo de nuevo.', networkError: 'No se pudo conectar', networkErrorBody: 'Revisa tu conexión e inténtalo de nuevo.', audioBlocked: 'Toca el botón para oír a tu compañero', audioOn: 'Activar sonido',
     searching: 'Buscando compañero', condBuddy: 'Buscando: personas que aprenden {{lang}} y cuyo idioma nativo no es el {{native}}', condExchange: 'Buscando: nativos de {{learn}} que aprenden {{native}}',
     noPartner: 'No encontramos a nadie', noPartnerBody: 'Prueba en la hora de llamadas, cuando hay más gente esperando, o usa el otro modo.', retry: 'Buscar otra vez',
     required: 'Quedan {{time}} de los 10 minutos obligatorios', extended: 'Ampliada · hasta que alguien cuelgue',
