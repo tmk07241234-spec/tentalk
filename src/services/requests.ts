@@ -67,13 +67,14 @@ export interface LiveRequest {
 }
 
 /** Why a request could not be sent, as reported by the server. */
-export type SendError = 'not-accepting' | 'busy' | 'no-shared-language' | 'not-found' | 'suspended' | 'network';
+export type SendError = 'not-accepting' | 'busy' | 'no-shared-language' | 'not-found' | 'suspended'
+  | 'too-soon' | 'already-pending' | 'declined-recently' | 'rate-limited' | 'network';
 
 export async function sendRequest(to: string): Promise<{ id: string; kind: 'now' | 'later' }> {
   try {
     return await api<{ id: string; kind: 'now' | 'later' }>('/api/request', { to });
   } catch (e) {
-    const known: SendError[] = ['not-accepting', 'busy', 'no-shared-language', 'not-found', 'suspended'];
+    const known: SendError[] = ['not-accepting', 'busy', 'no-shared-language', 'not-found', 'suspended', 'too-soon', 'already-pending', 'declined-recently', 'rate-limited'];
     const msg = (e as Error).message as SendError;
     throw Object.assign(new Error(msg), { reason: known.includes(msg) ? msg : 'network' });
   }

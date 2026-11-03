@@ -7,7 +7,7 @@ import { LevelBars } from '@/components/level';
 import { Pip, type PipPose } from '@/components/Pip';
 import { PersonRow, useNow } from '@/components/people';
 import { GoalBar, SpeechBubble, WeekDots } from '@/components/progress';
-import { Body, Card, Eyebrow, Screen, Segmented, Title } from '@/components/ui';
+import { Body, Card, Eyebrow, RefreshButton, Screen, Segmented, Title } from '@/components/ui';
 import { RANDOM_COOLDOWN_MINUTES } from '@/domain/callRules';
 import type { Mode } from '@/domain/matching';
 import { isProfileComplete } from '@/domain/profile';
@@ -30,7 +30,7 @@ export default function Home() {
   const now = useNow(15_000);
   const active = useActiveLearning();
   const uid = useApp((s) => s.account?.uid);
-  const pool = usePeoplePool({ uid, native: profile?.native ?? 'en', learn: active?.lang ?? 'en' });
+  const { pool, refreshing, refresh } = usePeoplePool({ uid, native: profile?.native ?? 'en', learn: active?.lang ?? 'en' });
   if (!profile || !active) return null;
 
   const learn = t(`lang.${active.lang}`);
@@ -50,7 +50,7 @@ export default function Home() {
   const suggestions = uid ? pool.filter((p) => isEligible(learner, p, prefs)) : matchmaking.onlineSuggestions(learner, prefs);
 
   return (
-    <Screen>
+    <Screen refreshing={refreshing} onRefresh={uid ? refresh : undefined}>
       <Title>{t('home.hello', { name: profile.name })}</Title>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
@@ -132,7 +132,10 @@ export default function Home() {
         <Body small muted>{t('home.themeSub')}</Body>
       </Card>
 
-      <Eyebrow>{buddy ? t('home.suggestedBuddy') : t('home.suggestedExchange')}</Eyebrow>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Eyebrow>{buddy ? t('home.suggestedBuddy') : t('home.suggestedExchange')}</Eyebrow>
+        {uid ? <RefreshButton onPress={refresh} refreshing={refreshing} label={t('common.refresh')} /> : null}
+      </View>
       {suggestions.length === 0 ? <Body small muted>{t('home.noOnline')}</Body> : null}
       {suggestions.filter((p) => !following.includes(p.id)).map((p) => <PersonRow key={p.id} person={p} />)}
     </Screen>

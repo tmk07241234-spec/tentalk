@@ -1,5 +1,5 @@
 const ja = {
-  common: { updateReady: '新しいバージョンがあります。タップして更新', loading: '読み込み中…', next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
+  common: { refresh: '更新', updateReady: '新しいバージョンがあります。タップして更新', loading: '読み込み中…', next: '次へ', back: '戻る', skip: 'スキップ', start: 'はじめる', close: '閉じる', cancel: 'キャンセル', save: '保存', step: 'ステップ {{n}} / {{total}}' },
   lang: { ja: '日本語', en: '英語', ko: '韓国語', es: 'スペイン語', pt: 'ポルトガル語', vi: 'ベトナム語', de: 'ドイツ語' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'ホーム', find: '探す', connections: 'つながり', notifications: '通知', history: '履歴', me: '自分' },
@@ -125,7 +125,7 @@ const ja = {
     follow: 'フォロー', following: 'フォロー中', block: 'ブロック', blockTitle: '{{name}}さんをブロックしますか？', blockBody: '今後マッチせず、一覧や履歴にも表示されません。相手には通知されません。「自分」→「ブロックした人」から解除できます。', blockConfirm: 'ブロックする', unavailable: 'このプロフィールは表示できません。',
   },
   request: {
-    notSent: 'リクエストを送れませんでした', refused: { suspended: 'ガイドラインへの違反により、いまはリクエストを送れません。', 'not-accepting': '{{name}}さんは、いまリクエストを受け付けていません。', busy: '{{name}}さんはいま通話中です。少し時間をおいてから送ってください。', 'no-shared-language': '{{name}}さんとは、いっしょに練習できる言語の組み合わせがありません。', 'not-found': 'この人は見つかりませんでした。', network: '送信できませんでした。通信を確かめて、もう一度お試しください。' },
+    notSent: 'リクエストを送れませんでした', refused: { 'too-soon': '{{name}}さんには少し前にリクエストを送っています。10分ほどたってから送ってください。', 'already-pending': '{{name}}さんへのリクエストは、まだ返事を待っています。', 'declined-recently': '{{name}}さんは、いまは都合がつかないようです。日をあらためてみてください。', 'rate-limited': '短い時間にたくさんリクエストを送っています。しばらくたってから送ってください。', suspended: 'ガイドラインへの違反により、いまはリクエストを送れません。', 'not-accepting': '{{name}}さんは、いまリクエストを受け付けていません。', busy: '{{name}}さんはいま通話中です。少し時間をおいてから送ってください。', 'no-shared-language': '{{name}}さんとは、いっしょに練習できる言語の組み合わせがありません。', 'not-found': 'この人は見つかりませんでした。', network: '送信できませんでした。通信を確かめて、もう一度お試しください。' },
     waiting: '{{name}}さんの返事を待っています', waitingBody: '承認されるとすぐに通話が始まります。{{seconds}}秒で自動的に取り消されます。', cancel: '取り消す',
     declined: '{{name}}さんはいま通話できないようです', expired: '返事がありませんでした', tryLater: '時間をおいてもう一度リクエストするか、ランダム通話を使ってください。',
     sentTitle: 'リクエストを送りました', sentBody: '{{name}}さんが承認すると着信でお知らせします。30秒以内に出ると通話が始まります。出られなかった場合も24時間は通知から通話できます。', ok: 'OK',

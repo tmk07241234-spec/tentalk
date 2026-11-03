@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const en: Translation = {
-  common: { updateReady: 'A new version is available. Tap to update', loading: 'Loading…', next: 'Next', back: 'Back', skip: 'Skip', start: 'Get started', close: 'Close', cancel: 'Cancel', save: 'Save', step: 'Step {{n}} of {{total}}' },
+  common: { refresh: 'Refresh', updateReady: 'A new version is available. Tap to update', loading: 'Loading…', next: 'Next', back: 'Back', skip: 'Skip', start: 'Get started', close: 'Close', cancel: 'Cancel', save: 'Save', step: 'Step {{n}} of {{total}}' },
   lang: { ja: 'Japanese', en: 'English', ko: 'Korean', es: 'Spanish', pt: 'Portuguese', vi: 'Vietnamese', de: 'German' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: 'Home', find: 'Find', connections: 'People', notifications: 'Alerts', history: 'History', me: 'Me' },
@@ -127,7 +127,7 @@ const en: Translation = {
     follow: 'Follow', following: 'Following', block: 'Block', blockTitle: 'Block {{name}}?', blockBody: 'You won’t be matched again, and they disappear from lists and history. They aren’t notified. You can unblock them from Me → Blocked people.', blockConfirm: 'Block', unavailable: 'This profile isn’t available.',
   },
   request: {
-    notSent: 'Request not sent', refused: { suspended: 'Because of a guideline violation, you can’t send requests right now.', 'not-accepting': '{{name}} is not accepting requests right now.', busy: '{{name}} is in a call. Try again a little later.', 'no-shared-language': 'You and {{name}} have no language pair to practice together.', 'not-found': 'This person could not be found.', network: 'Couldn’t send. Check your connection and try again.' },
+    notSent: 'Request not sent', refused: { 'too-soon': 'You asked {{name}} a moment ago. Wait about 10 minutes before asking again.', 'already-pending': 'Your request to {{name}} is still waiting for an answer.', 'declined-recently': '{{name}} can’t talk right now. Try another day.', 'rate-limited': 'You’ve sent many requests in a short time. Please wait a while.', suspended: 'Because of a guideline violation, you can’t send requests right now.', 'not-accepting': '{{name}} is not accepting requests right now.', busy: '{{name}} is in a call. Try again a little later.', 'no-shared-language': 'You and {{name}} have no language pair to practice together.', 'not-found': 'This person could not be found.', network: 'Couldn’t send. Check your connection and try again.' },
     waiting: 'Waiting for {{name}} to answer', waitingBody: 'The call starts as soon as they accept. The request is cancelled in {{seconds}} seconds.', cancel: 'Cancel',
     declined: '{{name}} can’t talk right now', expired: 'No answer', tryLater: 'Try again later, or use a random call.',
     sentTitle: 'Request sent', sentBody: 'When {{name}} accepts, you’ll get a ring. Answer within 30 seconds to start. If you miss it, you can still call from Alerts for 24 hours.', ok: 'OK',

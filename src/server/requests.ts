@@ -1,10 +1,12 @@
 import { acceptsRequestFrom, type RequestRules } from '@/domain/connections';
 import { relation, type Mode } from '@/domain/matching';
 import { isSuspended, type ModerationRecord } from '@/domain/moderation';
+import { emptyLimits, requestBlocked, withAnswer, withSent, type RequestLimits } from '@/domain/requestLimits';
 import { HttpError } from './auth';
 import { firestore, type Data } from './firestore';
 
 /**
+ * limits/{uid}   request limits per sender (domain/requestLimits); server-only.
  * requests/{id}  a 10-minute call request. "now" requests go to someone online and
  * expire after a minute; "later" ones wait up to a day for someone offline. The two
  * people can read their requests (firestore.rules); only the server writes them.
@@ -43,8 +45,11 @@ function pairMode(a: ProfileDoc, b: ProfileDoc): Mode | null {
 
 export async function sendRequest(uid: string, to: unknown): Promise<{ id: string; kind: RequestRecord['kind'] }> {
   if (typeof to !== 'string' || !/^[A-Za-z0-9]{10,40}$/.test(to) || to === uid) throw new HttpError(400, 'Invalid person.');
-  const docs = await firestore.getMany([`users/${uid}`, `users/${to}`, `users/${to}/private/state`, `users/${to}/private/followers`, `users/${uid}/private/moderation`]);
+  const docs = await firestore.getMany([`users/${uid}`, `users/${to}`, `users/${to}/private/state`, `users/${to}/private/followers`, `users/${uid}/private/moderation`, `limits/${uid}`]);
   if (isSuspended(docs[`users/${uid}/private/moderation`] as ModerationRecord | null)) throw new HttpError(403, 'suspended');
+  const limits = (docs[`limits/${uid}`] as RequestLimits | null) ?? emptyLimits();
+  const blocked = requestBlocked(limits, to, Date.now());
+  if (blocked) throw new HttpError(429, blocked);
   const mine = docs[`users/${uid}`] as ProfileDoc | null;
   const theirs = docs[`users/${to}`] as ProfileDoc | null;
   const theirState = docs[`users/${to}/private/state`];
@@ -65,7 +70,10 @@ export async function sendRequest(uid: string, to: unknown): Promise<{ id: strin
   const id = newId();
   const now = Date.now();
   const record: RequestRecord = { from: uid, to, kind, status: 'pending', mode, createdAt: now, expiresAt: now + (kind === 'now' ? NOW_MS : LATER_MS), answeredAt: null, callId: null };
-  await firestore.commit([{ set: `requests/${id}`, data: record as unknown as Data }]);
+  await firestore.commit([
+    { set: `requests/${id}`, data: record as unknown as Data },
+    { set: `limits/${uid}`, data: withSent(limits, to, kind, now, record.expiresAt) as unknown as Data },
+  ]);
   return { id, kind };
 }
 
@@ -82,14 +90,18 @@ export async function answerRequest(uid: string, id: unknown, accept: unknown): 
   if (r.to !== uid) throw new HttpError(404, 'not-found');
   if (r.status !== 'pending' || r.expiresAt < Date.now()) throw new HttpError(410, 'expired');
   const answeredAt = Date.now();
+  // The sender's limits learn the answer: accepted frees them to call, declined blocks for a day.
+  const limits = (await firestore.get(`limits/${r.from}`) as RequestLimits | null) ?? emptyLimits();
+  const senderLimits = { set: `limits/${r.from}`, data: withAnswer(limits, r.to, accept === true, answeredAt) as unknown as Data };
   if (accept !== true) {
-    await firestore.commit([{ set: `requests/${rid}`, data: { ...r, status: 'declined', answeredAt } as unknown as Data }]);
+    await firestore.commit([{ set: `requests/${rid}`, data: { ...r, status: 'declined', answeredAt } as unknown as Data }, senderLimits]);
     return { callId: null };
   }
   const callId = r.kind === 'now' ? newId() : null;
   await firestore.commit([
     ...(callId ? [{ set: `calls/${callId}`, data: { members: [r.from, r.to], kind: 'direct', mode: r.mode, createdAt: answeredAt } }] : []),
     { set: `requests/${rid}`, data: { ...r, status: 'accepted', answeredAt, callId } as unknown as Data },
+    senderLimits,
   ]);
   return { callId };
 }

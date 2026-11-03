@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { PersonRow, SmallChips } from '@/components/people';
-import { Body, Button, Card, Eyebrow, Screen, Segmented, Title } from '@/components/ui';
+import { Body, Button, Card, Eyebrow, RefreshButton, Screen, Segmented, Title } from '@/components/ui';
 import { SAMPLE_PARTNERS } from '@/data/samplePartners';
 import { discover, onlineByLevel, type Segment, type SortKey } from '@/domain/discovery';
 import { LEVELS, type Level } from '@/domain/levels';
@@ -23,7 +24,7 @@ export default function Find() {
   const [sort, setSort] = useState<SortKey>('online');
   // Signed-in users see real people; the sample people remain only for accounts made before sign-in existed.
   const uid = useApp((s) => s.account?.uid);
-  const pool = usePeoplePool({ uid, native: profile?.native ?? 'en', learn: active?.lang ?? 'en' });
+  const { pool, refreshing, refresh } = usePeoplePool({ uid, native: profile?.native ?? 'en', learn: active?.lang ?? 'en' });
   const people = uid ? pool : SAMPLE_PARTNERS;
   if (!profile || !active) return null;
 
@@ -38,8 +39,11 @@ export default function Find() {
   const hobbyCounts = (h: string) => discover(me, people, { ...base, segment: 'hobby', hobby: h }).filter((p) => p.status === 'online').length;
 
   return (
-    <Screen>
-      <Title>{t('find.title')}</Title>
+    <Screen refreshing={refreshing} onRefresh={uid ? refresh : undefined}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Title>{t('find.title')}</Title>
+        {uid ? <RefreshButton onPress={refresh} refreshing={refreshing} label={t('common.refresh')} /> : null}
+      </View>
       <Segmented<Segment>
         value={segment}
         onChange={(s) => { setSegment(s); setLevel('all'); setHobby('all'); }}

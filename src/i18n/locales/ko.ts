@@ -1,7 +1,7 @@
 import type { Translation } from './ja';
 
 const ko: Translation = {
-  common: { updateReady: '새 버전이 있어요. 눌러서 업데이트', loading: '불러오는 중…', next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
+  common: { refresh: '새로고침', updateReady: '새 버전이 있어요. 눌러서 업데이트', loading: '불러오는 중…', next: '다음', back: '뒤로', skip: '건너뛰기', start: '시작하기', close: '닫기', cancel: '취소', save: '저장', step: '{{n}} / {{total}} 단계' },
   lang: { ja: '일본어', en: '영어', ko: '한국어', es: '스페인어', pt: '포르투갈어', vi: '베트남어', de: '독일어' },
   uiLangName: { ja: '日本語', en: 'English', ko: '한국어', es: 'Español' },
   tabs: { home: '홈', find: '찾기', connections: '연결', notifications: '알림', history: '기록', me: '나' },
@@ -127,7 +127,7 @@ const ko: Translation = {
     follow: '팔로우', following: '팔로잉', block: '차단', blockTitle: '{{name}}님을 차단할까요?', blockBody: '앞으로 매칭되지 않고 목록과 기록에서도 보이지 않아요. 상대에게는 알리지 않아요. “나” → “차단한 사람”에서 해제할 수 있어요.', blockConfirm: '차단하기', unavailable: '이 프로필은 볼 수 없어요.',
   },
   request: {
-    notSent: '요청을 보내지 못했어요', refused: { suspended: '가이드라인 위반으로 지금은 요청을 보낼 수 없어요.', 'not-accepting': '{{name}}님은 지금 요청을 받지 않아요.', busy: '{{name}}님은 지금 통화 중이에요. 잠시 후에 보내 주세요.', 'no-shared-language': '{{name}}님과 함께 연습할 수 있는 언어 조합이 없어요.', 'not-found': '이 사람을 찾을 수 없어요.', network: '보내지 못했어요. 네트워크를 확인하고 다시 시도해 주세요.' },
+    notSent: '요청을 보내지 못했어요', refused: { 'too-soon': '{{name}}님에게 조금 전에 요청을 보냈어요. 10분쯤 지난 뒤에 보내 주세요.', 'already-pending': '{{name}}님에게 보낸 요청이 아직 답을 기다리고 있어요.', 'declined-recently': '{{name}}님은 지금은 어려운 것 같아요. 다른 날에 다시 시도해 보세요.', 'rate-limited': '짧은 시간에 요청을 많이 보냈어요. 잠시 후에 보내 주세요.', suspended: '가이드라인 위반으로 지금은 요청을 보낼 수 없어요.', 'not-accepting': '{{name}}님은 지금 요청을 받지 않아요.', busy: '{{name}}님은 지금 통화 중이에요. 잠시 후에 보내 주세요.', 'no-shared-language': '{{name}}님과 함께 연습할 수 있는 언어 조합이 없어요.', 'not-found': '이 사람을 찾을 수 없어요.', network: '보내지 못했어요. 네트워크를 확인하고 다시 시도해 주세요.' },
     waiting: '{{name}}님의 답을 기다리고 있어요', waitingBody: '수락하면 바로 통화가 시작돼요. {{seconds}}초 후 자동으로 취소돼요.', cancel: '취소',
     declined: '{{name}}님은 지금 통화할 수 없대요', expired: '응답이 없었어요', tryLater: '나중에 다시 요청하거나 랜덤 통화를 이용해 보세요.',
     sentTitle: '요청을 보냈어요', sentBody: '{{name}}님이 수락하면 전화로 알려 드려요. 30초 안에 받으면 통화가 시작돼요. 놓쳐도 24시간 동안 알림에서 통화할 수 있어요.', ok: '확인',

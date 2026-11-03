@@ -41,8 +41,13 @@ const POOL_REFRESH_MS = 60_000;
  * practice buddies (learning the same language), for Find and Home. Refreshes every
  * minute so online marks stay current. Empty while loading or offline.
  */
-export function usePeoplePool({ uid, native, learn }: { uid: string | undefined; native: Lang; learn: Lang }): Partner[] {
+export function usePeoplePool({ uid, native, learn }: { uid: string | undefined; native: Lang; learn: Lang }): {
+  pool: Partner[]; refreshing: boolean; refresh: () => void;
+} {
   const [pool, setPool] = useState<Partner[]>([]);
+  // Bumped by refresh() to load again now; `refreshing` is true until that load finishes.
+  const [version, setVersion] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     if (!uid) return;
     const me = { native, learn };
@@ -64,13 +69,15 @@ export function usePeoplePool({ uid, native, learn }: { uid: string | undefined;
         usePeople.setState((s) => ({ byId: { ...s.byId, ...Object.fromEntries(people.map((x) => [x.id, x])) } }));
       } catch {
         // offline: keep the last list
+      } finally {
+        if (!stop) setRefreshing(false);
       }
     };
     void load();
     const timer = setInterval(load, POOL_REFRESH_MS);
     return () => { stop = true; clearInterval(timer); };
-  }, [uid, native, learn]);
-  return pool;
+  }, [uid, native, learn, version]);
+  return { pool, refreshing, refresh: () => { setRefreshing(true); setVersion((v) => v + 1); } };
 }
 
 export async function loadPerson(id: string): Promise<Partner | null> {

@@ -1,15 +1,21 @@
 import type { ReactNode } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View, type TextInputProps, type ViewStyle } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View, type TextInputProps, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { radius, space, useColors } from '@/theme/colors';
 
-/** Scrollable page with the side gutter and safe-area padding. */
-export function Screen({ children, footer }: { children: ReactNode; footer?: ReactNode }) {
+/**
+ * Scrollable page with the side gutter and safe-area padding. With `onRefresh`, pulling
+ * the page down reloads it (phones; the web shows a reload button where the screen puts one).
+ */
+export function Screen({ children, footer, refreshing, onRefresh }: {
+  children: ReactNode; footer?: ReactNode; refreshing?: boolean; onRefresh?: () => void;
+}) {
   const c = useColors();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }} edges={['top', 'left', 'right']}>
-      <ScrollView contentContainerStyle={styles.screen} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={styles.screen} keyboardShouldPersistTaps="handled"
+        refreshControl={onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={c.muted} /> : undefined}>
         {children}
       </ScrollView>
       {footer ? <View style={[styles.footer, { backgroundColor: c.bg }]}>{footer}</View> : null}
@@ -144,3 +150,14 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   chip: { borderWidth: 1, borderRadius: 99, paddingHorizontal: 14, paddingVertical: 8 },
 });
+
+/** Web only: browsers have no pull-to-refresh inside the page, so lists show this button instead. */
+export function RefreshButton({ onPress, refreshing, label }: { onPress: () => void; refreshing: boolean; label: string }) {
+  const c = useColors();
+  if (Platform.OS !== 'web') return null;
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={refreshing} hitSlop={8} style={{ padding: 4, opacity: refreshing ? 0.4 : 1 }}>
+      {refreshing ? <ActivityIndicator color={c.muted} /> : <Text style={{ color: c.learn, fontSize: 13, fontWeight: '700' }}>↻ {label}</Text>}
+    </Pressable>
+  );
+}
