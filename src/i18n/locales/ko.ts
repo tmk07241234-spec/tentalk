@@ -182,7 +182,7 @@ const ko: Translation = {
       suspend: '{{against}}님의 신뢰 점수를 30 낮추고 7일 동안 랜덤 통화와 요청을 막아요.',
       falseReport: '신고가 사실과 다르다고 보고 {{by}}님의 신뢰 점수를 10 낮추고 알려요. {{against}}님에게는 아무 일도 없어요.',
     },
-    menu: '신고 확인 (운영)', verify: '운영 화면을 쓰려면 이메일 주소 확인이 필요해요. 확인 메일의 링크를 연 뒤 다시 로그인해 주세요.',
+    menu: '신고 확인 (운영)', verify: '운영 화면을 쓰려면 이메일 주소 확인이 필요해요. 확인 메일의 링크를 연 뒤 “확인했어요”를 눌러 주세요.', sendVerification: '확인 메일 보내기', recheck: '확인했어요', verificationSent: '{{email}}로 확인 메일을 보냈어요. 오지 않으면 스팸함도 확인해 주세요.', verificationFailed: '보내지 못했어요. 잠시 후 다시 시도해 주세요.',
   },
   settings: {
     title: '통화 설정', languageOnly: '어학 목적 대화만', languageOnlyNote: '켜 두면 프로필에 “어학 전용”이 표시돼요.',

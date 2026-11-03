@@ -23,11 +23,18 @@ export default function Me() {
   const { profile, trust, account, signOut, callLog, seedDemoProgress, plus } = useApp();
   // Operators get a link to the report screen; the server decides who they are.
   const [operator, setOperator] = useState<{ admin: boolean; needsVerification: boolean } | null>(null);
+  const [verifyNote, setVerifyNote] = useState('');
+  // Bumped after the address is confirmed, to ask the server again.
+  const [checkVersion, setCheckVersion] = useState(0);
   const uid = account?.uid;
   useEffect(() => {
     if (!uid) return;
     api<{ admin: boolean; needsVerification: boolean }>('/api/admin?check=1', undefined, 'GET').then(setOperator).catch(() => {});
-  }, [uid]);
+  }, [uid, checkVersion]);
+  const sendVerification = () => auth.sendVerificationEmail()
+    .then(() => setVerifyNote(t('admin.verificationSent', { email: account?.email ?? '' })))
+    .catch(() => setVerifyNote(t('admin.verificationFailed')));
+  const recheck = () => auth.refreshSession().then(() => setCheckVersion((v) => v + 1)).catch(() => {});
   if (!profile) return null;
 
   const logout = async () => {
@@ -95,7 +102,16 @@ export default function Me() {
       <Card>
         <MenuRow label={t('appSettings.title')} icon="settings-outline" first onPress={() => router.push('/settings')} />
         {operator?.admin ? <MenuRow label={t('admin.menu')} icon="shield-checkmark-outline" onPress={() => router.push('/admin')} /> : null}
-        {operator?.needsVerification ? <Body small muted>{t('admin.verify')}</Body> : null}
+        {operator?.needsVerification ? (
+          <View style={{ gap: space.sm }}>
+            <Body small muted>{t('admin.verify')}</Body>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
+              <Button small label={t('admin.sendVerification')} onPress={sendVerification} />
+              <Button small label={t('admin.recheck')} onPress={recheck} />
+            </View>
+            {verifyNote ? <Body small muted>{verifyNote}</Body> : null}
+          </View>
+        ) : null}
       </Card>
 
       <Card>

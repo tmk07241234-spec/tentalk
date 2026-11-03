@@ -61,6 +61,10 @@ export interface AuthService {
   /** Signs in, or creates the account when the address is new. */
   continueWithEmail(email: string, password: string): Promise<SignInResult>;
   sendPasswordReset(email: string): Promise<void>;
+  /** Sends the signed-in user another address-confirmation email. */
+  sendVerificationEmail(): Promise<void>;
+  /** Picks up changes made outside the app (e.g. the address was just confirmed). */
+  refreshSession(): Promise<void>;
   /** True when Firebase will ask for a fresh sign-in before a sensitive change. */
   needsReauth(): boolean;
   /** Confirms the user again: with the password for email accounts, a popup for Google. */
@@ -113,6 +117,17 @@ export const auth: AuthService = {
 
   async sendPasswordReset(email) {
     await sendPasswordResetEmail(firebaseAuth, email);
+  },
+
+  async sendVerificationEmail() {
+    if (firebaseAuth.currentUser) await sendEmailVerification(firebaseAuth.currentUser);
+  },
+
+  async refreshSession() {
+    const user = firebaseAuth.currentUser;
+    if (!user) return;
+    await user.reload();
+    await user.getIdToken(true);
   },
 
   needsReauth() {
