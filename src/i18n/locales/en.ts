@@ -182,7 +182,7 @@ const en: Translation = {
       suspend: 'Lower {{against}}’s trust score by 30 and block random calls and requests for 7 days.',
       falseReport: 'Treat the report as untrue: lower {{by}}’s trust score by 10 and tell them. Nothing happens to {{against}}.',
     },
-    menu: 'Reports (operators)', verify: 'To use the operator screen, verify your email address. After opening the link in the email, tap “I’ve verified”.', sendVerification: 'Send verification email', recheck: 'I’ve verified', verificationSent: 'We sent a verification email to {{email}}. Check your spam folder if it doesn’t arrive.', verificationFailed: 'Couldn’t send. Please try again in a little while.',
+    menu: 'Reports (operators)', verify: 'To use the operator screen, verify your email address. After opening the link in the email, tap “I’ve verified”.', sendVerification: 'Send verification email', recheck: 'I’ve verified', notYetVerified: 'Not verified yet. Open the link in the latest verification email, then tap again.', verificationSent: 'We sent a verification email to {{email}}. Check your spam folder if it doesn’t arrive.', verificationFailed: 'Couldn’t send. Please try again in a little while.',
   },
   settings: {
     title: 'Call settings', languageOnly: 'Language practice only', languageOnlyNote: 'While on, your profile shows “Language only”.',

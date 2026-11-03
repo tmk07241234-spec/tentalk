@@ -13,6 +13,8 @@ export class ApiError extends Error {
 
 /** Calls one of the app's API routes as the signed-in user. */
 export async function api<T>(path: string, body?: unknown, method = 'POST'): Promise<T> {
+  // Right after the page or app opens, the saved sign-in is still being restored.
+  await firebaseAuth.authStateReady();
   const user = firebaseAuth.currentUser;
   if (!user) throw new ApiError(401, 'Not signed in');
   const r = await fetch(`${BASE}${path}`, {

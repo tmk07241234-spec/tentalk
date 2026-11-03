@@ -24,17 +24,24 @@ export default function Me() {
   // Operators get a link to the report screen; the server decides who they are.
   const [operator, setOperator] = useState<{ admin: boolean; needsVerification: boolean } | null>(null);
   const [verifyNote, setVerifyNote] = useState('');
-  // Bumped after the address is confirmed, to ask the server again.
-  const [checkVersion, setCheckVersion] = useState(0);
   const uid = account?.uid;
   useEffect(() => {
     if (!uid) return;
     api<{ admin: boolean; needsVerification: boolean }>('/api/admin?check=1', undefined, 'GET').then(setOperator).catch(() => {});
-  }, [uid, checkVersion]);
+  }, [uid]);
   const sendVerification = () => auth.sendVerificationEmail()
     .then(() => setVerifyNote(t('admin.verificationSent', { email: account?.email ?? '' })))
     .catch(() => setVerifyNote(t('admin.verificationFailed')));
-  const recheck = () => auth.refreshSession().then(() => setCheckVersion((v) => v + 1)).catch(() => {});
+  const recheck = async () => {
+    try {
+      await auth.refreshSession();
+      const r = await api<{ admin: boolean; needsVerification: boolean }>('/api/admin?check=1', undefined, 'GET');
+      setOperator(r);
+      setVerifyNote(r.needsVerification ? t('admin.notYetVerified') : '');
+    } catch {
+      setVerifyNote(t('admin.verificationFailed'));
+    }
+  };
   if (!profile) return null;
 
   const logout = async () => {

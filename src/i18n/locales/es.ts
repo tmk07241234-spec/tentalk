@@ -182,7 +182,7 @@ const es: Translation = {
       suspend: 'Bajar 30 la puntuación de {{against}} y bloquear llamadas aleatorias y solicitudes durante 7 días.',
       falseReport: 'Tratar la denuncia como falsa: bajar 10 la puntuación de {{by}} y avisarle. A {{against}} no le pasa nada.',
     },
-    menu: 'Denuncias (equipo)', verify: 'Para usar la pantalla del equipo, verifica tu correo. Después de abrir el enlace del correo, toca «Ya lo verifiqué».', sendVerification: 'Enviar correo de verificación', recheck: 'Ya lo verifiqué', verificationSent: 'Enviamos un correo de verificación a {{email}}. Si no llega, revisa la carpeta de spam.', verificationFailed: 'No se pudo enviar. Inténtalo de nuevo en un rato.',
+    menu: 'Denuncias (equipo)', verify: 'Para usar la pantalla del equipo, verifica tu correo. Después de abrir el enlace del correo, toca «Ya lo verifiqué».', sendVerification: 'Enviar correo de verificación', recheck: 'Ya lo verifiqué', notYetVerified: 'Aún no está verificado. Abre el enlace del correo de verificación más reciente y vuelve a tocar.', verificationSent: 'Enviamos un correo de verificación a {{email}}. Si no llega, revisa la carpeta de spam.', verificationFailed: 'No se pudo enviar. Inténtalo de nuevo en un rato.',
   },
   settings: {
     title: 'Ajustes de llamada', languageOnly: 'Solo práctica de idiomas', languageOnlyNote: 'Mientras esté activado, tu perfil muestra “Solo idiomas”.',
