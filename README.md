@@ -32,7 +32,7 @@
 | 相手と相手探し | ログインしている人どうしは本物: ランダム通話はサーバーの待機列（`src/domain/queue.ts`、`src/server/calls.ts`）、探す・おすすめは Firestore のプロフィールとオンライン状態（`src/services/people.ts`、`src/services/presence.ts`）。ログインのない古いアカウントだけサンプル（`src/data/samplePartners.ts`） | — |
 | フォロワー | 本物の人どうしはサーバー経由（`/api/follow`。10分話しきったかをサーバーでも確認し、相手の `private/followers` に記録）。サンプルの人は `src/services/connections.ts` の代役 | — |
 | リクエストの受け付け設定 | サーバーが送る前に判定し、送る側に理由を表示 | — |
-| リクエスト | 本物の人どうしはサーバー経由（`src/server/requests.ts`）。オンラインの相手は60秒、オフラインの相手は24時間有効。届いたリクエストと承認は、アプリを開いている間に通知タブへ届く | アプリを閉じていても届くプッシュ通知（マイルストーン5） |
+| リクエスト | 本物の人どうしはサーバー経由（`src/server/requests.ts`）。連投の制限あり（同じ人へは10分あける、返事待ちは1件まで、断られたら24時間、1時間10件・1日30件まで。`src/domain/requestLimits.ts`）。オンラインの相手は60秒、オフラインの相手は24時間有効。届いたリクエストと承認は、アプリを開いている間に通知タブへ届く | アプリを閉じていても届くプッシュ通知（マイルストーン5） |
 | 通話の音声 | 本物の人との通話は LiveKit（`src/services/callRoom/`）。サンプルの人との通話は画面と時間だけ | — |
 | お題の共有 | ランダム通話は2人の画面に同時に表示（最初の1枚は自動、次からは「次のお題」を押した人が出す） | — |
 | 沈黙の検出 | ランダム通話は LiveKit の「話している人」から判定。サンプルの通話は開発用ボタン | — |
@@ -141,6 +141,8 @@ Web 版と同じ場所（EAS Hosting）で API が動いています（`src/app/
 | preview | テスト版の .apk（そのまま端末に入れられる） | `npx eas-cli@latest build --profile preview --platform android` |
 | production | ストア提出用（.aab） | `npx eas-cli@latest build --profile production --platform android` |
 | Web | EAS Hosting に公開（本番: https://tentalk.expo.app ） | `npm run deploy:web` |
+| iPhone | TestFlight（App Store Connect の Apple ID `6830054286`、チーム `96XJRQRXDT`）。署名は EAS が管理。App Store Connect の API キーは Expo の環境変数 `ASC_API_KEY_P8`（ファイル）に保管 | `npx eas-cli@latest build -p ios --profile production` → `npx eas-cli@latest submit -p ios`（API キーを指定） |
+| アプリの更新（EAS Update） | プログラムと画像だけの変更は、ビルドなしでインストール済みのアプリへ届く。届くのは同じ `version`（いまは 1.0.0）のビルドだけ。ネイティブの部品を足したときは version を上げてビルドし直す | `npx eas-cli@latest update --channel production --environment production --message "..."` |
 
 最初の1回だけ:
 
@@ -159,7 +161,7 @@ Android の Google ログイン:
 
 3. Firebase の導入: サインイン、アカウント削除、Firestore と Storage への保存（済）
 4. 通話サービスの導入: 本物の音声通話、マッチングサーバー（ランダム通話は済み）、リクエスト通話、通報の管理画面
-5. 通知（リクエスト、通話タイム）、Tentalk Plus（アプリ内課金）と広告
+5. 通知（リクエスト、通話タイム）と、iPhone のロック画面に「通話中」と出す CallKit（着信もここで鳴らす）、Tentalk Plus（アプリ内課金）と広告
 6. ストア申請の準備: 規約類、プライバシーの記載、スクリーンショット、TestFlight / 内部テスト
 
 次の作業: Firebase のルールを公開し直したあと、2つのアカウントで「探す」→ プロフィール → リクエスト → 承認 → 通話、フォローとフォロワー、リクエストの受け付け設定を試す。Apple Developer Program の承認が来たら iPhone 版（TestFlight）。そのあとマイルストーン5（プッシュ通知）。
