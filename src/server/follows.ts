@@ -1,4 +1,4 @@
-import { canFollow, type CallRecord } from '@/domain/connections';
+import { REQUIRED_SECONDS } from '@/domain/callRules';
 import { HttpError } from './auth';
 import { firestore } from './firestore';
 
@@ -9,9 +9,15 @@ import { firestore } from './firestore';
  */
 export async function setFollow(uid: string, to: unknown, on: unknown): Promise<{ ok: true }> {
   if (typeof to !== 'string' || !/^[A-Za-z0-9]{10,40}$/.test(to) || to === uid) throw new HttpError(400, 'Invalid person.');
-  const [state, doc] = await Promise.all([firestore.get(`users/${uid}/private/state`), firestore.get(`users/${to}/private/followers`)]);
-  // Following is earned by finishing a 10-minute call; the server checks the history too.
-  if (on === true && !canFollow((state?.history ?? []) as CallRecord[], to)) throw new HttpError(403, 'not-allowed');
+  const [calls, doc] = await Promise.all([
+    on === true ? firestore.where('calls', 'members', uid, 100, undefined, 'ARRAY_CONTAINS') : Promise.resolve([]),
+    firestore.get(`users/${to}/private/followers`),
+  ]);
+  // Following is earned by talking: the server's own call records (not the app's history,
+  // which the app could change) must show a call with this person that began at least
+  // 10 minutes ago.
+  const talked = calls.some((c) => (c.members as string[]).includes(to) && (c.createdAt as number) <= Date.now() - REQUIRED_SECONDS * 1000);
+  if (on === true && !talked) throw new HttpError(403, 'not-allowed');
   const ids = Array.isArray(doc?.ids) ? (doc.ids as string[]) : [];
   const next = on === true ? [...new Set([...ids, uid])] : ids.filter((x) => x !== uid);
   if (next.length !== ids.length) await firestore.commit([{ set: `users/${to}/private/followers`, data: { ids: next } }]);

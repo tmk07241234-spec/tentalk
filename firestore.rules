@@ -6,16 +6,23 @@ service cloud.firestore {
     function signedIn() { return request.auth != null; }
     function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
 
-    // Public profile: any signed-in user can read it (to show it to call partners);
-    // only its owner can write it.
+    // Public profile: any signed-in user can read one (to show it to call partners),
+    // and search a limited number at a time (Find); only its owner can write it,
+    // with only the fields the app uses.
     match /users/{uid} {
-      allow read: if signedIn();
+      allow get: if signedIn();
+      allow list: if signedIn() && request.query.limit <= 60;
       allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['name', 'color', 'photoUri', 'native', 'learning', 'activeLearn',
+             'bio', 'hobbies', 'hours', 'utcOffset', 'frame', 'voice', 'languageOnly', 'learnLangs', 'calls',
+             'lastSeen', 'inCall'])
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 20
         && request.resource.data.bio is string
-        && request.resource.data.bio.size() <= 300;
+        && request.resource.data.bio.size() <= 300
+        && (!('hobbies' in request.resource.data) || request.resource.data.hobbies.size() <= 20)
+        && (!('learning' in request.resource.data) || request.resource.data.learning.size() <= 3);
       allow delete: if isOwner(uid);
 
       // Settings, follows, blocks, call history and trust score: owner only.

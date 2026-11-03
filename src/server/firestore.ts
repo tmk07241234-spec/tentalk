@@ -103,12 +103,12 @@ export const firestore = {
     return d ? docData(d) : null;
   },
 
-  /** Documents in `collection` whose `field` equals `value` (at most `limit`). */
-  async where(collection: string, field: string, value: unknown, limit: number, transaction?: string): Promise<Data[]> {
+  /** Documents in `collection` whose `field` equals `value` (or, with ARRAY_CONTAINS, lists it); at most `limit`. */
+  async where(collection: string, field: string, value: unknown, limit: number, transaction?: string, op: 'EQUAL' | 'ARRAY_CONTAINS' = 'EQUAL'): Promise<Data[]> {
     const rows = await call<{ document?: RawDoc }[]>(':runQuery', {
       structuredQuery: {
         from: [{ collectionId: collection }],
-        where: { fieldFilter: { field: { fieldPath: field }, op: 'EQUAL', value: toValue(value) } },
+        where: { fieldFilter: { field: { fieldPath: field }, op, value: toValue(value) } },
         limit,
       },
       ...(transaction ? { transaction } : {}),

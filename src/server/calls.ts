@@ -92,8 +92,13 @@ export async function callFor(uid: string, callId: string): Promise<CallRecord> 
   return call;
 }
 
+const MAX_REPORTS_PER_DAY = 10;
+
 export async function saveReport(uid: string, callId: string, reason: string): Promise<void> {
-  const call = await callFor(uid, callId);
+  const [call, mine] = await Promise.all([callFor(uid, callId), firestore.where('reports', 'by', uid, 100)]);
   const against = call.members.find((m) => m !== uid)!;
+  // One report per call, and a daily cap, so reports cannot be used to flood the review queue.
+  if (mine.some((r) => r.callId === callId)) return;
+  if (mine.filter((r) => (r.createdAt as number) > Date.now() - 24 * 3600_000).length >= MAX_REPORTS_PER_DAY) throw new HttpError(429, 'rate-limited');
   await firestore.commit([{ set: `reports/${newId()}`, data: { by: uid, against, callId, reason: reason.slice(0, 40), createdAt: Date.now(), status: 'open' } }]);
 }

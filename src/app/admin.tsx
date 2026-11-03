@@ -38,7 +38,12 @@ export default function Admin() {
     let stale = false;
     api<{ reports: ReportRow[] }>('/api/admin', undefined, 'GET')
       .then((r) => { if (!stale) { setReports(r.reports); setError(''); } })
-      .catch((e: { status?: number }) => { if (!stale) setError(e.status === 403 ? t('admin.forbidden') : t('admin.loadFailed')); });
+      .catch((e: { status?: number }) => {
+        if (stale) return;
+        // Not an operator (or signed out): leave without showing that this screen exists.
+        if (e.status === 403 || e.status === 401) router.replace('/');
+        else setError(t('admin.loadFailed'));
+      });
     return () => { stale = true; };
   }, [version, t]);
 
@@ -56,12 +61,13 @@ export default function Admin() {
     }
   };
 
+  if (reports === null && !error) return <Screen><Body muted>{t('common.loading')}</Body></Screen>;
+
   return (
     <Screen footer={<Button label={t('common.close')} onPress={() => router.back()} />}>
       <Title>{t('admin.title')}</Title>
       <Body small muted>{t('admin.note')}</Body>
       {error ? <Body style={{ color: c.bad }}>{error}</Body> : null}
-      {reports === null && !error ? <Body muted>{t('common.loading')}</Body> : null}
       {reports?.length === 0 ? <Body muted>{t('admin.empty')}</Body> : null}
       {reports?.map((r) => (
         <Card key={r.id} style={{ gap: space.sm }}>
