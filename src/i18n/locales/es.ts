@@ -119,6 +119,7 @@ const es: Translation = {
     note: 'Sin número de seguidores ni rankings de popularidad. No se muestra a quien está en una llamada.',
   },
   profileView: {
+    report: 'Denunciar', reportBody: 'Envíalo si su nombre, presentación, foto o audio es un problema. Nuestro equipo lo revisará. No se le avisará.', reportedTitle: 'Denuncia recibida', reportedBody: 'Nuestro equipo la revisará. Si bloqueas a {{name}}, no volverán a emparejarte ni lo verás en las listas.',
     followAfterCall: 'Solo puedes seguir a alguien después de una llamada completa de 10 minutos. Empieza hablando.',
     offline: 'Desconectado', nextAvailable: 'Disponible: {{hours}}', localTime: 'Hora local {{time}}', learning: 'Aprendiendo', hours: 'Horario disponible', hoursMine: '{{hours}} (tu hora)',
     calls: '{{n}} llamadas completadas', commonHobbies: 'Aficiones en común', modeBuddy: 'Como compañeros de práctica, hablarán solo en {{lang}} durante 10 minutos.', modeExchange: 'Como intercambio, hablarán mitad en {{learn}} y mitad en {{native}}.',
@@ -154,7 +155,7 @@ const es: Translation = {
     addLanguage: '+ Añadir idioma', remove: 'Quitar', levelHelp: 'Toca el nivel para elegirlo viendo las cinco descripciones.', hobbies: 'Aficiones', hours: 'Horario disponible', from: 'Desde', to: 'Hasta',
     hoursNote: 'En este horario aparecerás en las sugerencias. Los demás lo ven en su propia hora.', voice: 'Presentación de voz',
     save: 'Guardar', saved: 'Guardado',
-    errors: { name: 'Introduce un nombre (hasta 20 caracteres).', bio: '“Sobre ti” admite hasta 200 caracteres.', learnSame: 'Un idioma que aprendes no puede ser tu idioma nativo.', learnDuplicate: 'Has elegido el mismo idioma dos veces.', learnNone: 'Elige al menos un idioma para aprender.', learnTooMany: 'Puedes aprender hasta 2 idiomas.', hours: 'Elige una hora de inicio y de fin válidas.' },
+    errors: { inappropriate: 'Tu nombre o tu presentación contiene palabras no permitidas.', contact: 'No se pueden compartir datos de contacto (usuarios de redes, enlaces, teléfonos). Por seguridad, la gente solo se conoce por llamadas de Tentalk.', name: 'Introduce un nombre (hasta 20 caracteres).', bio: '“Sobre ti” admite hasta 200 caracteres.', learnSame: 'Un idioma que aprendes no puede ser tu idioma nativo.', learnDuplicate: 'Has elegido el mismo idioma dos veces.', learnNone: 'Elige al menos un idioma para aprender.', learnTooMany: 'Puedes aprender hasta 2 idiomas.', hours: 'Elige una hora de inicio y de fin válidas.' },
   },
   appSettings: {
     title: 'Ajustes de la app',

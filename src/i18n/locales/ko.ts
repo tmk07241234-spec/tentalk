@@ -119,6 +119,7 @@ const ko: Translation = {
     note: '팔로워 수나 인기순은 없어요. 통화 중인 사람은 표시되지 않아요.',
   },
   profileView: {
+    report: '신고', reportBody: '이름, 자기소개, 사진, 음성 등에 문제가 있으면 보내 주세요. 운영팀이 확인해요. 상대에게는 알리지 않아요.', reportedTitle: '신고가 접수됐어요', reportedBody: '운영팀이 확인할게요. {{name}}님을 차단하면 앞으로 매칭되지 않고 목록에도 보이지 않아요.',
     followAfterCall: '팔로우는 10분 대화를 끝까지 한 상대만 할 수 있어요. 먼저 대화해 보세요.',
     offline: '오프라인', nextAvailable: '다음 대화 가능: {{hours}}', localTime: '현지 시각 {{time}}', learning: '학습 중', hours: '대화 가능한 시간', hoursMine: '{{hours}} (내 시간 기준)',
     calls: '완료한 통화 {{n}}회', commonHobbies: '공통 취미', modeBuddy: '연습 친구로서 10분 동안 {{lang}}로만 대화해요.', modeExchange: '언어 교환으로 {{learn}}와 {{native}}를 반씩 사용해요.',
@@ -154,7 +155,7 @@ const ko: Translation = {
     addLanguage: '+ 언어 추가', remove: '삭제', levelHelp: '레벨을 누르면 5단계 설명을 보면서 고를 수 있어요.', hobbies: '취미', hours: '대화 가능한 시간', from: '시작', to: '종료',
     hoursNote: '이 시간에는 추천에 표시돼요. 다른 사람에게는 그 사람의 시간으로 바꿔 보여요.', voice: '음성 소개',
     save: '저장', saved: '저장했어요',
-    errors: { name: '이름을 입력해 주세요 (20자까지).', bio: '자기소개는 200자까지예요.', learnSame: '모국어와 같은 언어는 학습 언어로 고를 수 없어요.', learnDuplicate: '같은 언어가 두 번 선택됐어요.', learnNone: '학습 언어를 하나 이상 골라 주세요.', learnTooMany: '학습 언어는 2개까지예요.', hours: '시작과 종료 시각을 올바르게 골라 주세요.' },
+    errors: { inappropriate: '이름이나 자기소개에 쓸 수 없는 말이 들어 있어요.', contact: '연락처(SNS 아이디, 링크, 전화번호 등)는 올릴 수 없어요. 안전을 위해 교류는 Tentalk 통화로만 해요.', name: '이름을 입력해 주세요 (20자까지).', bio: '자기소개는 200자까지예요.', learnSame: '모국어와 같은 언어는 학습 언어로 고를 수 없어요.', learnDuplicate: '같은 언어가 두 번 선택됐어요.', learnNone: '학습 언어를 하나 이상 골라 주세요.', learnTooMany: '학습 언어는 2개까지예요.', hours: '시작과 종료 시각을 올바르게 골라 주세요.' },
   },
   appSettings: {
     title: '앱 설정',

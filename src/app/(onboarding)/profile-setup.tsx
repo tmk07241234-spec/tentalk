@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { Body, Button, ErrorText, Field, Screen, StepLabel, Title } from '@/components/ui';
+import { contentProblem } from '@/domain/contentFilter';
 import { deviceOffset } from '@/domain/schedule';
 import { SETUP_STEPS, useOnboarding } from '@/state/onboarding';
 import { useApp } from '@/state/store';
@@ -28,6 +29,8 @@ export default function ProfileStep() {
 
   const next = () => {
     if (!name.trim()) return setError(t('profileSetup.nameRequired'));
+    const content = contentProblem(name);
+    if (content) return setError(t(`profileEdit.errors.${content}`));
     if (!draft.method || !draft.uid || !draft.native || !draft.learn) return router.replace('/welcome');
     completeSetup({
       account: { method: draft.method, uid: draft.uid, email: draft.email },

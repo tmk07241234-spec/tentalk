@@ -1,5 +1,6 @@
 import { REQUIRED_SECONDS } from '@/domain/callRules';
 import { HttpError } from './auth';
+import { pushTarget, sendPush } from './push';
 import { firestore } from './firestore';
 
 /**
@@ -9,10 +10,11 @@ import { firestore } from './firestore';
  */
 export async function setFollow(uid: string, to: unknown, on: unknown): Promise<{ ok: true }> {
   if (typeof to !== 'string' || !/^[A-Za-z0-9]{10,40}$/.test(to) || to === uid) throw new HttpError(400, 'Invalid person.');
-  const [calls, doc] = await Promise.all([
+  const [calls, docs] = await Promise.all([
     on === true ? firestore.where('calls', 'members', uid, 100, undefined, 'ARRAY_CONTAINS') : Promise.resolve([]),
-    firestore.get(`users/${to}/private/followers`),
+    firestore.getMany([`users/${to}/private/followers`, `users/${to}/private/push`, `users/${to}/private/state`, `users/${uid}`]),
   ]);
+  const doc = docs[`users/${to}/private/followers`];
   // Following is earned by talking: the server's own call records (not the app's history,
   // which the app could change) must show a call with this person that began at least
   // 10 minutes ago.
@@ -20,6 +22,10 @@ export async function setFollow(uid: string, to: unknown, on: unknown): Promise<
   if (on === true && !talked) throw new HttpError(403, 'not-allowed');
   const ids = Array.isArray(doc?.ids) ? (doc.ids as string[]) : [];
   const next = on === true ? [...new Set([...ids, uid])] : ids.filter((x) => x !== uid);
-  if (next.length !== ids.length) await firestore.commit([{ set: `users/${to}/private/followers`, data: { ids: next } }]);
+  if (next.length !== ids.length) {
+    await firestore.commit([{ set: `users/${to}/private/followers`, data: { ids: next } }]);
+    const notify = (docs[`users/${to}/private/state`]?.settings as { notify?: { followed?: boolean } } | undefined)?.notify;
+    if (on === true && notify?.followed !== false) await sendPush(pushTarget(docs[`users/${to}/private/push`]), 'followed', docs[`users/${uid}`]?.name as string | undefined);
+  }
   return { ok: true };
 }

@@ -117,6 +117,7 @@ const ja = {
     note: 'フォロワー数や人気順はありません。通話中の人は表示されません。',
   },
   profileView: {
+    report: '通報', reportBody: '名前・自己紹介・写真・音声などに問題がある場合に送ってください。運営が確認します。相手には知らされません。', reportedTitle: '通報を受け付けました', reportedBody: '運営が確認します。{{name}}さんをブロックすると、今後マッチせず一覧にも表示されません。',
     followAfterCall: 'フォローできるのは、10分話しきった相手だけです。まずは話してみましょう。',
     offline: 'オフライン', nextAvailable: '次に話せる: {{hours}}', localTime: '現地時刻 {{time}}', learning: '学習中', hours: '話せる時間帯', hoursMine: '{{hours}}（あなたの時間）',
     calls: '完了した通話 {{n}}回', commonHobbies: '共通の趣味', modeBuddy: '練習仲間として、10分間{{lang}}だけで話します。', modeExchange: '言語交換として、{{learn}}と{{native}}を半分ずつ話します。',
@@ -152,7 +153,7 @@ const ja = {
     addLanguage: '＋ 言語を追加', remove: '削除', levelHelp: 'レベルを押すと、5段階の説明を見ながら選べます。', hobbies: '趣味', hours: '話せる時間帯', from: '開始', to: '終了',
     hoursNote: 'この時間はおすすめに表示されます。他の人には相手の時間に直して表示されます。', voice: '自己紹介の音声',
     save: '保存', saved: '保存しました',
-    errors: { name: '名前を入力してください（20文字まで）。', bio: '自己紹介は200文字までです。', learnSame: '母語と同じ言語は学習言語にできません。', learnDuplicate: '同じ言語が2回選ばれています。', learnNone: '学習言語を1つ以上選んでください。', learnTooMany: '学習言語は2つまでです。', hours: '開始と終了の時刻を正しく選んでください。' },
+    errors: { inappropriate: '名前か自己紹介に、使えない言葉が含まれています。', contact: '連絡先（SNSのIDやURL、電話番号など）は載せられません。安全のため、やり取りは Tentalk の通話だけにしています。', name: '名前を入力してください（20文字まで）。', bio: '自己紹介は200文字までです。', learnSame: '母語と同じ言語は学習言語にできません。', learnDuplicate: '同じ言語が2回選ばれています。', learnNone: '学習言語を1つ以上選んでください。', learnTooMany: '学習言語は2つまでです。', hours: '開始と終了の時刻を正しく選んでください。' },
   },
   appSettings: {
     title: 'アプリの設定',

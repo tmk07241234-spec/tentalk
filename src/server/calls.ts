@@ -94,11 +94,19 @@ export async function callFor(uid: string, callId: string): Promise<CallRecord> 
 
 const MAX_REPORTS_PER_DAY = 10;
 
-export async function saveReport(uid: string, callId: string, reason: string): Promise<void> {
-  const [call, mine] = await Promise.all([callFor(uid, callId), firestore.where('reports', 'by', uid, 100)]);
-  const against = call.members.find((m) => m !== uid)!;
-  // One report per call, and a daily cap, so reports cannot be used to flood the review queue.
-  if (mine.some((r) => r.callId === callId)) return;
+/**
+ * A report from a call (callId) or about a profile (against: the person's id).
+ * One per call or person, and a daily cap, so reports cannot flood the review queue.
+ */
+export async function saveReport(uid: string, input: { callId?: string; against?: string }, reason: string): Promise<void> {
+  const [call, mine] = await Promise.all([
+    input.callId ? callFor(uid, input.callId) : Promise.resolve(null),
+    firestore.where('reports', 'by', uid, 100),
+  ]);
+  const against = call ? call.members.find((m) => m !== uid)! : input.against;
+  if (!against || !/^[A-Za-z0-9]{10,40}$/.test(against) || against === uid) throw new HttpError(400, 'Invalid report.');
+  const callId = input.callId ?? null;
+  if (mine.some((r) => (callId ? r.callId === callId : !r.callId && r.against === against))) return;
   if (mine.filter((r) => (r.createdAt as number) > Date.now() - 24 * 3600_000).length >= MAX_REPORTS_PER_DAY) throw new HttpError(429, 'rate-limited');
   await firestore.commit([{ set: `reports/${newId()}`, data: { by: uid, against, callId, reason: reason.slice(0, 40), createdAt: Date.now(), status: 'open' } }]);
 }

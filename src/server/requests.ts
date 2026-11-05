@@ -3,6 +3,7 @@ import { relation, type Mode } from '@/domain/matching';
 import { isSuspended, type ModerationRecord } from '@/domain/moderation';
 import { emptyLimits, requestBlocked, withAnswer, withSent, type RequestLimits } from '@/domain/requestLimits';
 import { HttpError } from './auth';
+import { pushTarget, sendPush } from './push';
 import { firestore, type Data } from './firestore';
 
 /**
@@ -45,7 +46,7 @@ function pairMode(a: ProfileDoc, b: ProfileDoc): Mode | null {
 
 export async function sendRequest(uid: string, to: unknown): Promise<{ id: string; kind: RequestRecord['kind'] }> {
   if (typeof to !== 'string' || !/^[A-Za-z0-9]{10,40}$/.test(to) || to === uid) throw new HttpError(400, 'Invalid person.');
-  const docs = await firestore.getMany([`users/${uid}`, `users/${to}`, `users/${to}/private/state`, `users/${to}/private/followers`, `users/${uid}/private/moderation`, `limits/${uid}`]);
+  const docs = await firestore.getMany([`users/${uid}`, `users/${to}`, `users/${to}/private/state`, `users/${to}/private/followers`, `users/${uid}/private/moderation`, `limits/${uid}`, `users/${to}/private/push`]);
   if (isSuspended(docs[`users/${uid}/private/moderation`] as ModerationRecord | null)) throw new HttpError(403, 'suspended');
   const limits = (docs[`limits/${uid}`] as RequestLimits | null) ?? emptyLimits();
   const blocked = requestBlocked(limits, to, Date.now());
@@ -74,6 +75,7 @@ export async function sendRequest(uid: string, to: unknown): Promise<{ id: strin
     { set: `requests/${id}`, data: record as unknown as Data },
     { set: `limits/${uid}`, data: withSent(limits, to, kind, now, record.expiresAt) as unknown as Data },
   ]);
+  await sendPush(pushTarget(docs[`users/${to}/private/push`]), kind === 'now' ? 'incomingNow' : 'incomingLater', (mine as { name?: string }).name);
   return { id, kind };
 }
 
@@ -91,7 +93,8 @@ export async function answerRequest(uid: string, id: unknown, accept: unknown): 
   if (r.status !== 'pending' || r.expiresAt < Date.now()) throw new HttpError(410, 'expired');
   const answeredAt = Date.now();
   // The sender's limits learn the answer: accepted frees them to call, declined blocks for a day.
-  const limits = (await firestore.get(`limits/${r.from}`) as RequestLimits | null) ?? emptyLimits();
+  const docs = await firestore.getMany([`limits/${r.from}`, `users/${r.from}/private/push`, `users/${r.from}/private/state`, `users/${uid}`]);
+  const limits = (docs[`limits/${r.from}`] as RequestLimits | null) ?? emptyLimits();
   const senderLimits = { set: `limits/${r.from}`, data: withAnswer(limits, r.to, accept === true, answeredAt) as unknown as Data };
   if (accept !== true) {
     await firestore.commit([{ set: `requests/${rid}`, data: { ...r, status: 'declined', answeredAt } as unknown as Data }, senderLimits]);
@@ -103,6 +106,9 @@ export async function answerRequest(uid: string, id: unknown, accept: unknown): 
     { set: `requests/${rid}`, data: { ...r, status: 'accepted', answeredAt, callId } as unknown as Data },
     senderLimits,
   ]);
+  // A "later" request accepted: tell the sender they can call now (unless they turned that off).
+  const senderNotify = (docs[`users/${r.from}/private/state`]?.settings as { notify?: { accepted?: boolean } } | undefined)?.notify;
+  if (!callId && senderNotify?.accepted !== false) await sendPush(pushTarget(docs[`users/${r.from}/private/push`]), 'accepted', docs[`users/${uid}`]?.name as string | undefined);
   return { callId };
 }
 

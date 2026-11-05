@@ -10,6 +10,7 @@ import { UpdateBanner } from '@/components/UpdateBanner';
 import { startFollowersListener } from '@/services/connections';
 import { startModerationListener } from '@/services/moderation';
 import { startPresence } from '@/services/presence';
+import { registerForPush, startPushResponses } from '@/services/push';
 import { startRequestListeners } from '@/services/requests';
 import { useApp } from '@/state/store';
 import { startCloudSync } from '@/state/sync';
@@ -46,6 +47,10 @@ export default function RootLayout() {
   useEffect(() => (hydrated && uid ? startRequestListeners(uid) : undefined), [hydrated, uid]);
   useEffect(() => (hydrated && uid ? startFollowersListener(uid) : undefined), [hydrated, uid]);
   useEffect(() => (hydrated && uid ? startModerationListener(uid) : undefined), [hydrated, uid]);
+  // Push: ask after setup is done (not during sign-up), and keep the language current.
+  const onboarded = useApp((s) => s.onboarded);
+  useEffect(() => { if (hydrated && uid && onboarded) void registerForPush(uid, uiLang ?? deviceUiLang()); }, [hydrated, uid, onboarded, uiLang]);
+  useEffect(() => (hydrated ? startPushResponses() : undefined), [hydrated]);
 
   if (!hydrated) return null;
 

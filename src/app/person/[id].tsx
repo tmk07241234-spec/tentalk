@@ -11,9 +11,11 @@ import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Eyebrow, Screen, Title } from '@/components/ui';
 import { canFollow } from '@/domain/connections';
 import { commonHobbies } from '@/domain/discovery';
+import { REPORT_REASONS, type ReportReason } from '@/domain/moderation';
 import { relation } from '@/domain/matching';
 import { clockAt, requestExpiresAt } from '@/domain/schedule';
 import { connections } from '@/services/connections';
+import { api } from '@/services/api';
 import { usePerson } from '@/services/people';
 import { findSamplePartner } from '@/services/matchmaking';
 import { requests, sendRequest, type SendError } from '@/services/requests';
@@ -30,7 +32,8 @@ export default function PersonScreen() {
   const c = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
   const app = useApp();
-  const [sheet, setSheet] = useState<null | 'block' | 'sent'>(null);
+  const [sheet, setSheet] = useState<null | 'block' | 'sent' | 'report' | 'reported'>(null);
+  const [reason, setReason] = useState<ReportReason | null>(null);
   const [refusal, setRefusal] = useState<SendError | null>(null);
   const { person, missing } = usePerson(id);
   const profile = app.profile;
@@ -145,9 +148,40 @@ export default function PersonScreen() {
         </Card>
       ) : null}
 
-      <Pressable accessibilityRole="button" onPress={() => setSheet('block')} style={{ alignSelf: 'center', padding: space.sm }}>
-        <Text style={{ color: c.muted, textDecorationLine: 'underline', fontSize: 13 }}>{t('profileView.block')}</Text>
-      </Pressable>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: space.lg }}>
+        <Pressable accessibilityRole="button" onPress={() => { setReason(null); setSheet('report'); }} style={{ padding: space.sm }}>
+          <Text style={{ color: c.muted, textDecorationLine: 'underline', fontSize: 13 }}>{t('profileView.report')}</Text>
+        </Pressable>
+        <Pressable accessibilityRole="button" onPress={() => setSheet('block')} style={{ padding: space.sm }}>
+          <Text style={{ color: c.muted, textDecorationLine: 'underline', fontSize: 13 }}>{t('profileView.block')}</Text>
+        </Pressable>
+      </View>
+
+      <Sheet visible={sheet === 'report'} onClose={() => setSheet(null)}>
+        <Title>{t('call.reportTitle', { name: person.name })}</Title>
+        <Body muted>{t('profileView.reportBody')}</Body>
+        <View accessibilityRole="radiogroup" style={{ gap: 6 }}>
+          {REPORT_REASONS.map((r) => (
+            <Pressable key={r} accessibilityRole="radio" accessibilityState={{ checked: reason === r }} onPress={() => setReason(r)}
+              style={{ borderRadius: 10, padding: 10, borderWidth: 1.5, borderColor: reason === r ? c.bad : c.surface2, backgroundColor: c.surface2 }}>
+              <Text style={{ color: c.ink }}>{t(`call.reasons.${r}`)}</Text>
+            </Pressable>
+          ))}
+        </View>
+        <Button variant="danger" label={t('call.sendReport')} disabled={!reason} onPress={() => {
+          // Sample people exist only in this app, so their reports stay local.
+          if (realPerson) void api('/api/report', { against: person.id, reason }).catch(() => {});
+          setSheet('reported');
+        }} />
+        <Button label={t('common.cancel')} onPress={() => setSheet(null)} />
+      </Sheet>
+
+      <Sheet visible={sheet === 'reported'} onClose={() => setSheet(null)}>
+        <Title>{t('profileView.reportedTitle')}</Title>
+        <Body muted>{t('profileView.reportedBody', { name: person.name })}</Body>
+        <Button variant="danger" label={t('profileView.blockConfirm')} onPress={() => { app.block(person.id); setSheet(null); router.back(); }} />
+        <Button label={t('common.close')} onPress={() => setSheet(null)} />
+      </Sheet>
 
       <Sheet visible={sheet === 'block'} onClose={() => setSheet(null)}>
         <Title>{t('profileView.blockTitle', { name: person.name })}</Title>

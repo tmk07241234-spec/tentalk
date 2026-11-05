@@ -1,5 +1,6 @@
 import { decide, MODERATION_ACTIONS, withEvent, type ModerationAction, type ModerationRecord } from '@/domain/moderation';
 import { HttpError } from './auth';
+import { pushTarget, sendPush } from './push';
 import { firestore, type Data } from './firestore';
 
 const RECENT_MS = 30 * 24 * 3600 * 1000;
@@ -41,7 +42,7 @@ export async function actOnReport(adminUid: string, id: unknown, action: unknown
   if (report.status !== 'open') throw new HttpError(409, 'already-decided');
   const by = report.by as string, against = report.against as string;
   const paths = { by: `users/${by}/private/moderation`, against: `users/${against}/private/moderation` };
-  const docs = await firestore.getMany([paths.by, paths.against]);
+  const docs = await firestore.getMany([paths.by, paths.against, `users/${by}/private/push`, `users/${against}/private/push`]);
   const now = Date.now();
   const d = decide(action as ModerationAction, id, now);
   await firestore.commit([
@@ -49,5 +50,8 @@ export async function actOnReport(adminUid: string, id: unknown, action: unknown
     { set: paths.by, data: withEvent(docs[paths.by] as ModerationRecord | null, d.reporter) as unknown as Data },
     ...(d.against ? [{ set: paths.against, data: withEvent(docs[paths.against] as ModerationRecord | null, d.against) as unknown as Data }] : []),
   ]);
+  // Only "you have a message"; the details are shown in the app.
+  await sendPush(pushTarget(docs[`users/${by}/private/push`]), 'moderation');
+  if (d.against) await sendPush(pushTarget(docs[`users/${against}/private/push`]), 'moderation');
   return { ok: true };
 }

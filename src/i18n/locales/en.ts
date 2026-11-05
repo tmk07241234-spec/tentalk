@@ -119,6 +119,7 @@ const en: Translation = {
     note: 'No follower counts or popularity rankings. People in a call are hidden.',
   },
   profileView: {
+    report: 'Report', reportBody: 'Send this if their name, bio, photo or voice intro is a problem. Our team will review it. They won’t be told.', reportedTitle: 'Report received', reportedBody: 'Our team will review it. If you block {{name}}, you won’t be matched again or see them in lists.',
     followAfterCall: 'You can follow someone only after a full 10-minute call. Start by talking.',
     offline: 'Offline', nextAvailable: 'Next available: {{hours}}', localTime: 'Local time {{time}}', learning: 'Learning', hours: 'Available hours', hoursMine: '{{hours}} (your time)',
     calls: '{{n}} completed calls', commonHobbies: 'Hobbies you share', modeBuddy: 'As practice buddies, you’ll talk only in {{lang}} for 10 minutes.', modeExchange: 'As a language exchange, you’ll talk half in {{learn}} and half in {{native}}.',
@@ -154,7 +155,7 @@ const en: Translation = {
     addLanguage: '+ Add language', remove: 'Remove', levelHelp: 'Tap a level to choose with the five descriptions.', hobbies: 'Hobbies', hours: 'Available hours', from: 'From', to: 'To',
     hoursNote: 'You’ll appear in suggestions during these hours. Others see them in their own time.', voice: 'Voice intro',
     save: 'Save', saved: 'Saved',
-    errors: { name: 'Enter a name (up to 20 characters).', bio: 'About you can be up to 200 characters.', learnSame: 'A learning language can’t be your native language.', learnDuplicate: 'The same language is selected twice.', learnNone: 'Choose at least one learning language.', learnTooMany: 'You can learn up to 2 languages.', hours: 'Choose a valid start and end time.' },
+    errors: { inappropriate: 'Your name or bio contains words that aren’t allowed.', contact: 'Contact details (social media IDs, links, phone numbers) can’t be shared. For safety, people meet only through Tentalk calls.', name: 'Enter a name (up to 20 characters).', bio: 'About you can be up to 200 characters.', learnSame: 'A learning language can’t be your native language.', learnDuplicate: 'The same language is selected twice.', learnNone: 'Choose at least one learning language.', learnTooMany: 'You can learn up to 2 languages.', hours: 'Choose a valid start and end time.' },
   },
   appSettings: {
     title: 'App settings',

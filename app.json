@@ -3,7 +3,7 @@
     "name": "Tentalk",
     "slug": "tentalk",
     "owner": "tentalk",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -62,7 +62,8 @@
           "cameraPermission": "Tentalk does not use the camera during calls.",
           "microphonePermission": "Tentalk uses the microphone for calls and for recording your voice intro."
         }
-      ]
+      ],
+      "expo-notifications"
     ],
     "scheme": "tentalk",
     "experiments": {

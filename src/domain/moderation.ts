@@ -7,6 +7,10 @@ import { EARLY_HANGUP_PENALTY, VIOLATION_PENALTY } from './callRules';
  * suspend      confirmed and serious: also no calls for SUSPENSION_DAYS
  * falseReport  the report itself was abuse: the reporter loses trust
  */
+/** Reasons a person can give when reporting someone (in a call or from a profile). */
+export const REPORT_REASONS = ['romance', 'sexual', 'abuse', 'spam', 'minor', 'trolling', 'other'] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+
 export type ModerationAction = 'dismiss' | 'violation' | 'suspend' | 'falseReport';
 export const MODERATION_ACTIONS: ModerationAction[] = ['dismiss', 'violation', 'suspend', 'falseReport'];
 

@@ -1,3 +1,4 @@
+import { contentProblem } from './contentFilter';
 import { MAX_LEARNING_LANGS, type Lang } from './languages';
 import { isValidRange, type HoursRange } from './schedule';
 import { validateLanguages } from './validation';
@@ -22,11 +23,13 @@ export interface ProfileDraft {
 }
 
 // Hobbies are optional here: a new user may want to save just a voice intro. Home nudges until they are added.
-export type ProfileError = 'name' | 'bio' | 'learnSame' | 'learnDuplicate' | 'learnNone' | 'learnTooMany' | 'hours';
+export type ProfileError = 'name' | 'bio' | 'inappropriate' | 'contact' | 'learnSame' | 'learnDuplicate' | 'learnNone' | 'learnTooMany' | 'hours';
 
 export function validateProfile(d: ProfileDraft): ProfileError | null {
   if (!d.name.trim() || d.name.trim().length > MAX_NAME) return 'name';
   if (d.bio.length > MAX_BIO) return 'bio';
+  const content = contentProblem(d.name) ?? contentProblem(d.bio);
+  if (content) return content;
   if (d.learning.length > MAX_LEARNING_LANGS) return 'learnTooMany';
   const lang = validateLanguages(d.native, d.learning.map((l) => l.lang));
   if (lang === 'sameAsNative') return 'learnSame';

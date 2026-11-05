@@ -18,6 +18,7 @@ import {
 import { canFollow } from '@/domain/connections';
 import type { Lang, UiLang } from '@/domain/languages';
 import { relation, type Mode } from '@/domain/matching';
+import { REPORT_REASONS, type ReportReason } from '@/domain/moderation';
 import { calledToday, currentStreak, dayKey, newBadges, type BadgeId } from '@/domain/progress';
 import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
 import { api } from '@/services/api';
@@ -35,7 +36,6 @@ const QUESTION_COOLDOWN_SECONDS = 20;
 type Phase = 'searching' | 'joining' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
 /** If the matched partner has not joined the audio room by then, search again. */
 const PARTNER_JOIN_TIMEOUT_MS = 30_000;
-const REASONS = ['romance', 'sexual', 'abuse', 'spam', 'minor', 'trolling', 'other'] as const;
 
 /**
  * kind=random: search → 10 required minutes → open-ended extension → result.
@@ -77,7 +77,7 @@ export default function Call() {
   const [translate, setTranslate] = useState(false);
   const [muted, setMuted] = useState(false);
   const [sheet, setSheet] = useState<null | 'leave' | 'report' | 'help'>(null);
-  const [reason, setReason] = useState<(typeof REASONS)[number] | null>(null);
+  const [reason, setReason] = useState<ReportReason | null>(null);
   const [outcome, setOutcome] = useState<(CallOutcome & { reason: EndReason; badges: BadgeId[]; streakUp: number; ad: boolean }) | null>(null);
   const [adClosed, setAdClosed] = useState(false);
   const [devSpeed, setDevSpeed] = useState(1);
@@ -538,7 +538,7 @@ export default function Call() {
         <Title>{t('call.reportTitle', { name: partner.name })}</Title>
         <Body muted>{t('call.reportBody')}</Body>
         <View accessibilityRole="radiogroup" style={{ gap: 6 }}>
-          {REASONS.map((r) => (
+          {REPORT_REASONS.map((r) => (
             <Pressable key={r} accessibilityRole="radio" accessibilityState={{ checked: reason === r }} onPress={() => setReason(r)}
               style={{ borderRadius: 10, padding: 10, borderWidth: 1.5, borderColor: reason === r ? c.bad : c.surface2, backgroundColor: c.surface2 }}>
               <Text style={{ color: c.ink }}>{t(`call.reasons.${r}`)}</Text>
