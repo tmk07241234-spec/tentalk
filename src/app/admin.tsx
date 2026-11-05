@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,14 @@ import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { MODERATION_ACTIONS, type ModerationAction } from '@/domain/moderation';
 import { api } from '@/services/api';
 import { space, useColors } from '@/theme/colors';
+
+interface InquiryRow {
+  id: string;
+  kind: string;
+  message: string;
+  replyTo: string | null;
+  createdAt: number;
+}
 
 interface ReportRow {
   id: string;
@@ -26,6 +34,7 @@ export default function Admin() {
   const { t, i18n } = useTranslation();
   const c = useColors();
   const [reports, setReports] = useState<ReportRow[] | null>(null);
+  const [inquiries, setInquiries] = useState<InquiryRow[]>([]);
   const [error, setError] = useState('');
   const [pending, setPending] = useState<{ report: ReportRow; action: ModerationAction } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -36,8 +45,11 @@ export default function Admin() {
   const now = useNow();
   useEffect(() => {
     let stale = false;
-    api<{ reports: ReportRow[] }>('/api/admin', undefined, 'GET')
-      .then((r) => { if (!stale) { setReports(r.reports); setError(''); } })
+    Promise.all([
+      api<{ reports: ReportRow[] }>('/api/admin', undefined, 'GET'),
+      api<{ inquiries: InquiryRow[] }>('/api/admin?inquiries=1', undefined, 'GET'),
+    ])
+      .then(([r, q]) => { if (!stale) { setReports(r.reports); setInquiries(q.inquiries); setError(''); } })
       .catch((e: { status?: number }) => {
         if (stale) return;
         // Not an operator (or signed out): leave without showing that this screen exists.
@@ -80,6 +92,23 @@ export default function Admin() {
             {MODERATION_ACTIONS.map((a) => (
               <Button key={a} small variant={a === 'dismiss' ? 'secondary' : 'danger'} label={t(`admin.actions.${a}`)} onPress={() => setPending({ report: r, action: a })} />
             ))}
+          </View>
+        </Card>
+      ))}
+
+      <Title>{t('admin.inquiries')}</Title>
+      {inquiries.length === 0 ? <Body muted>{t('admin.noInquiries')}</Body> : null}
+      {inquiries.map((q) => (
+        <Card key={q.id} style={{ gap: space.sm }}>
+          <Text style={{ color: c.ink, fontWeight: '700', fontSize: 15 }}>{t(`info.kinds.${q.kind}`, { defaultValue: q.kind })}</Text>
+          <Body small muted>{date(q.createdAt)}{q.replyTo ? ` · ${q.replyTo}` : ''}</Body>
+          <Body>{q.message}</Body>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
+            {q.replyTo ? (
+              <Button small label={t('admin.reply')}
+                onPress={() => void Linking.openURL(`mailto:${q.replyTo}?subject=${encodeURIComponent(t('admin.replySubject'))}`)} />
+            ) : null}
+            <Button small label={t('admin.markDone')} onPress={() => void api('/api/admin', { inquiry: q.id }).then(() => setVersion((v) => v + 1)).catch(() => setError(t('admin.actFailed')))} />
           </View>
         </Card>
       ))}

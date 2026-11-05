@@ -172,6 +172,7 @@ const ko: Translation = {
     notificationsNote: '받은 요청 알림은 위의 “통화 요청을 받을 상대”에 따라 정해져요.',
   },
   admin: {
+    inquiries: '문의', noInquiries: '처리하지 않은 문의가 없어요.', reply: '메일로 답장', replySubject: 'Tentalk 문의에 대해', markDone: '처리 완료로 표시',
     title: '신고 확인', note: '운영자만 볼 수 있는 화면이에요. 결정은 바로 당사자 앱에 반영돼요.', empty: '처리하지 않은 신고가 없어요.',
     forbidden: '이 화면을 볼 권한이 없어요.', loadFailed: '불러오지 못했어요.', actFailed: '처리하지 못했어요. 다시 시도해 주세요.',
     against: '신고된 사람: {{name}} (30일 이내 신고 {{n}}건)', by: '신고한 사람: {{name}}', suspendedUntil: '{{date}}까지 이용 정지 중', confirm: '결정하기',
@@ -194,7 +195,7 @@ const ko: Translation = {
     englishOnly: '이 문서는 현재 영어로만 제공돼요.', draftNote: '개발용 표시: 이 문서는 초안이에요. 공개 전에 전문가 검토와 [ ] 안의 내용 기입이 필요해요.',
     licenses: '라이선스', licensesNote: 'Tentalk는 다음 오픈소스 소프트웨어를 사용해요.', support: '지원', faq: '자주 묻는 질문', tokusho: '특정상거래법에 따른 표기 (일본)', version: '버전 {{v}}',
     contact: '문의하기', contactKind: '종류', kinds: { bug: '오류', account: '계정', payment: '결제', safety: '안전 관련 상담', other: '기타' },
-    contactMessage: '내용', contactReply: '답장 받을 이메일 (선택)', contactTooShort: '내용을 10자 이상 써 주세요.', send: '보내기',
+    contactMessage: '내용', contactReply: '답장 받을 이메일 (선택)', contactTooShort: '내용을 10자 이상 써 주세요.', contactTooMany: '오늘은 문의를 많이 보내셨어요. 내일 다시 보내 주시거나, 급하면 tentalk.support@gmail.com으로 메일을 보내 주세요.', contactFailed: '보내지 못했어요. 네트워크를 확인하거나 tentalk.support@gmail.com으로 메일을 보내 주세요.', send: '보내기',
     contactSent: '보냈어요', contactSentBody: '영업일 기준 2일 안에 답장해요. 안전 관련 상담은 먼저 확인해요.',
     deleteTitle: '계정 삭제', deleteBody: '프로필, 음성 소개, 통화 기록, 팔로우, 신뢰 점수, 배지가 모두 삭제되며 되돌릴 수 없어요.',
     deleteSubscription: 'Tentalk Plus를 이용 중이라면 계정을 삭제해도 결제는 멈추지 않아요. 먼저 App Store 또는 Google Play의 구독 관리에서 해지해 주세요.',

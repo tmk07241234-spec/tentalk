@@ -59,7 +59,7 @@ export async function searchStep(uid: string, req: MatchRequest): Promise<{ call
       return { callId: mine.callId as string };
     }
     const rows = await firestore.where('queue', 'key', seekKey(me), 25, tx);
-    const partner = pickQueuePartner(me, rows as unknown as QueueEntry[], Date.now());
+    const partner = pickQueuePartner(me, rows.map(({ id: _id, ...e }) => e) as unknown as QueueEntry[], Date.now());
     if (partner) {
       const callId = newId();
       const call: CallRecord = { members: [partner.uid, uid], kind: 'random', mode: me.mode, createdAt: Date.now() };

@@ -13,7 +13,8 @@ export class HttpError extends Error {
 
 interface Caller { uid: string; email: string | null; emailVerified: boolean }
 
-async function caller(request: Request): Promise<Caller> {
+/** The signed-in user, with the email address from their sign-in. */
+export async function caller(request: Request): Promise<Caller> {
   const token = request.headers.get('authorization')?.replace(/^Bearer /, '');
   if (!token) throw new HttpError(401, 'Sign in first.');
   try {

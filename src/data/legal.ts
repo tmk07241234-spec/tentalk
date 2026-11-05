@@ -14,7 +14,7 @@ export interface LegalDoc {
 
 const OPERATOR_JA = '〔運営者名〕';
 const OPERATOR_EN = '[Operator name]';
-const CONTACT = '〔support@example.com〕';
+const CONTACT = 'tentalk.support@gmail.com';
 
 const ja: Record<DocId, LegalDoc> = {
   terms: {

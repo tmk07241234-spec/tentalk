@@ -1,5 +1,6 @@
 import { handle, isAdmin, requireAdmin } from '@/server/auth';
 import { actOnReport, listReports } from '@/server/moderation';
+import { closeInquiry, listInquiries } from '@/server/support';
 
 /** ?check=1: whether the caller is an operator. Otherwise: the open reports (operators only). */
 export async function GET(request: Request) {
@@ -9,15 +10,17 @@ export async function GET(request: Request) {
       return { admin, needsVerification };
     }
     await requireAdmin(request);
+    if (new URL(request.url).searchParams.get('inquiries')) return listInquiries();
     return listReports();
   });
 }
 
-/** An operator's decision on a report: { id, action }. */
+/** An operator's decision on a report: { id, action }; or closing an inquiry: { inquiry, done: true }. */
 export async function POST(request: Request) {
   return handle(async () => {
     const adminUid = await requireAdmin(request);
     const b = ((await request.json().catch(() => null)) ?? {}) as Record<string, unknown>;
+    if (b.inquiry !== undefined) return closeInquiry(adminUid, b.inquiry);
     return actOnReport(adminUid, b.id, b.action);
   });
 }

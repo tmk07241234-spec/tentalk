@@ -39,7 +39,8 @@
 | 購入 | `src/services/purchases.ts`（押すと加入状態になる） | App Store / Google Play のアプリ内課金 |
 | 広告 | サンプルのカード | 広告配信サービス（導入時にプライバシーポリシーへ追記） |
 | 通報 | サーバーに保存し、運営者が「自分 → 通報の確認」で判断（問題なし / 違反あり / 7日間停止 / 虚偽の通報）。結果は当事者のアプリへ届き、停止中はサーバーがランダム通話とリクエストを断る（`src/domain/moderation.ts`、`src/server/moderation.ts`） | 直前60秒の音声の保存 |
-| お問い合わせ・アカウント削除 | `src/services/support.ts`（送信したことにする） | サーバー |
+| お問い合わせ | サーバーに保存し（`inquiries`、1日5件まで）、運営画面で一覧。返信は運営用アドレス（tentalk.support@gmail.com）からメールで | — |
+| アカウント削除 | アプリから本物に削除（Firebase のアカウント、プロフィール、設定、写真と音声、サーバー側のフォロワー一覧と待機列） | — |
 | データの保存 | Firestore にプロフィール、設定、フォロー、ブロック、履歴、信頼スコア（`src/state/cloudShape.ts`、ルールは `firestore.rules`）。写真と自己紹介の音声は Storage（`src/services/media.ts`、ルールは `storage.rules`）。通知は端末の中だけ | 通知はサーバー、信頼スコアはサーバーで計算 |
 
 ## 動かし方
@@ -122,6 +123,7 @@ Web 版と同じ場所（EAS Hosting）で API が動いています（`src/app/
 | `POST /api/request` | 通話リクエストを送る（`PUT` で答える、`DELETE` で取り消す） |
 | `POST /api/follow` | フォロー / フォロー解除 |
 | `GET /api/admin`、`POST /api/admin` | 通報の一覧と判断（運営者だけ） |
+| `POST /api/support` | お問い合わせの保存 |
 | `DELETE /api/account` | アカウント削除のとき、サーバー側の記録（フォロワー、待機列）を消す |
 
 - サーバーが読む値（Expo の Environment variables）: `LIVEKIT_URL`、`LIVEKIT_API_KEY`、`LIVEKIT_API_SECRET`、`FIREBASE_SERVICE_ACCOUNT`、`ADMIN_EMAILS`（運営者のメールアドレス。カンマ区切り。確認済みのアドレスだけ有効）。値を変えたら、Web 版を公開し直すまで反映されない。EAS Hosting は Visibility が Secret の値を読めないので、Sensitive にする

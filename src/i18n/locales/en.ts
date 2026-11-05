@@ -172,6 +172,7 @@ const en: Translation = {
     notificationsNote: 'Incoming request notifications follow “Who can send you call requests” above.',
   },
   admin: {
+    inquiries: 'Inquiries', noInquiries: 'No open inquiries.', reply: 'Reply by email', replySubject: 'About your message to Tentalk', markDone: 'Mark as done',
     title: 'Reports', note: 'Operators only. Decisions reach both people’s apps right away.', empty: 'No open reports.',
     forbidden: 'You don’t have access to this screen.', loadFailed: 'Couldn’t load.', actFailed: 'Couldn’t apply that. Try again.',
     against: 'Reported: {{name}} ({{n}} reports in 30 days)', by: 'Reported by: {{name}}', suspendedUntil: 'Suspended until {{date}}', confirm: 'Confirm',
@@ -194,7 +195,7 @@ const en: Translation = {
     englishOnly: 'This document is currently available in English only.', draftNote: 'Dev only: this is a draft. It needs professional review and the bracketed parts filled in before release.',
     licenses: 'Licenses', licensesNote: 'Tentalk uses the following open-source software.', support: 'Support', faq: 'FAQ', tokusho: 'Commercial disclosure (Japan)', version: 'Version {{v}}',
     contact: 'Contact us', contactKind: 'Topic', kinds: { bug: 'Bug', account: 'Account', payment: 'Payment', safety: 'Safety concern', other: 'Other' },
-    contactMessage: 'Message', contactReply: 'Reply-to email (optional)', contactTooShort: 'Please write at least 10 characters.', send: 'Send',
+    contactMessage: 'Message', contactReply: 'Reply-to email (optional)', contactTooShort: 'Please write at least 10 characters.', contactTooMany: 'You’ve sent several messages today. Please try again tomorrow, or email tentalk.support@gmail.com if it’s urgent.', contactFailed: 'Couldn’t send. Check your connection or email tentalk.support@gmail.com.', send: 'Send',
     contactSent: 'Sent', contactSentBody: 'We’ll reply within 2 business days. Safety concerns are reviewed first.',
     deleteTitle: 'Delete account', deleteBody: 'Your profile, voice intro, call history, follows, trust score, and badges will be deleted. This can’t be undone.',
     deleteSubscription: 'If you have Tentalk Plus, deleting your account does not stop billing. Cancel first in your App Store or Google Play subscription settings.',

@@ -1,21 +1,10 @@
-/** Support boundary: inquiries and account deletion. The real version calls the backend. */
+import { api } from './api';
+
+/** Support boundary: the in-app contact form. Messages are kept on the server for operators. */
 export type InquiryKind = 'bug' | 'account' | 'payment' | 'safety' | 'other';
 
-export interface SupportService {
-  sendInquiry(input: { kind: InquiryKind; message: string; replyTo: string | null }): Promise<void>;
-  /** Deletes the account and its data on the server. Subscriptions must be cancelled in the store separately. */
-  deleteAccount(): Promise<void>;
-}
-
-const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-export const mockSupport: SupportService = {
-  async sendInquiry() {
-    await wait(500);
-  },
-  async deleteAccount() {
-    await wait(500);
+export const support = {
+  async sendInquiry(input: { kind: InquiryKind; message: string; replyTo: string | null }): Promise<void> {
+    await api('/api/support', input);
   },
 };
-
-export const support: SupportService = mockSupport;

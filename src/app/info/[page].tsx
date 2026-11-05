@@ -87,8 +87,14 @@ function Contact() {
   const send = async () => {
     if (message.trim().length < 10) return setError(t('info.contactTooShort'));
     setState('sending');
-    await support.sendInquiry({ kind, message: message.trim(), replyTo: replyTo.trim() || null });
-    setState('sent');
+    setError('');
+    try {
+      await support.sendInquiry({ kind, message: message.trim(), replyTo: replyTo.trim() || null });
+      setState('sent');
+    } catch (e) {
+      setState('idle');
+      setError((e as Error).message === 'rate-limited' ? t('info.contactTooMany') : t('info.contactFailed'));
+    }
   };
 
   if (state === 'sent') {
@@ -139,7 +145,6 @@ function DeleteAccount() {
       return setError(kind === 'wrong-password' ? t('email.wrongPassword') : kind === 'too-many-requests' ? t('email.tooMany') : t('info.deleteFailed'));
     }
     try {
-      await support.deleteAccount();
       await auth.deleteAccount((uid) => cloud.remove(uid));
     } catch {
       setStep('confirm');

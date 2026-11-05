@@ -172,6 +172,7 @@ const es: Translation = {
     notificationsNote: 'Los avisos de solicitudes recibidas siguen lo elegido en «Quién puede pedirte una llamada».',
   },
   admin: {
+    inquiries: 'Consultas', noInquiries: 'No hay consultas pendientes.', reply: 'Responder por correo', replySubject: 'Sobre tu mensaje a Tentalk', markDone: 'Marcar como resuelta',
     title: 'Denuncias', note: 'Solo para el equipo. Las decisiones llegan al instante a las apps de ambas personas.', empty: 'No hay denuncias pendientes.',
     forbidden: 'No tienes acceso a esta pantalla.', loadFailed: 'No se pudo cargar.', actFailed: 'No se pudo aplicar. Inténtalo de nuevo.',
     against: 'Denunciado: {{name}} ({{n}} denuncias en 30 días)', by: 'Denunciado por: {{name}}', suspendedUntil: 'Suspendido hasta {{date}}', confirm: 'Confirmar',
@@ -194,7 +195,7 @@ const es: Translation = {
     englishOnly: 'Este documento solo está disponible en inglés por ahora.', draftNote: 'Solo desarrollo: es un borrador. Necesita revisión profesional y completar lo que está entre corchetes antes de publicar.',
     licenses: 'Licencias', licensesNote: 'Tentalk usa el siguiente software de código abierto.', support: 'Ayuda', faq: 'Preguntas frecuentes', tokusho: 'Aviso comercial (Japón)', version: 'Versión {{v}}',
     contact: 'Contacto', contactKind: 'Tema', kinds: { bug: 'Error', account: 'Cuenta', payment: 'Pago', safety: 'Seguridad', other: 'Otro' },
-    contactMessage: 'Mensaje', contactReply: 'Correo para responderte (opcional)', contactTooShort: 'Escribe al menos 10 caracteres.', send: 'Enviar',
+    contactMessage: 'Mensaje', contactReply: 'Correo para responderte (opcional)', contactTooShort: 'Escribe al menos 10 caracteres.', contactTooMany: 'Hoy ya enviaste varios mensajes. Inténtalo mañana o escribe a tentalk.support@gmail.com si es urgente.', contactFailed: 'No se pudo enviar. Revisa tu conexión o escribe a tentalk.support@gmail.com.', send: 'Enviar',
     contactSent: 'Enviado', contactSentBody: 'Te responderemos en 2 días hábiles. Los temas de seguridad se revisan primero.',
     deleteTitle: 'Eliminar cuenta', deleteBody: 'Se eliminarán tu perfil, tu presentación de voz, el historial de llamadas, los seguidos, la puntuación de confianza y las insignias. No se puede deshacer.',
     deleteSubscription: 'Si tienes Tentalk Plus, eliminar la cuenta no detiene el cobro. Cancela antes en la gestión de suscripciones de App Store o Google Play.',

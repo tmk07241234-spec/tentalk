@@ -170,6 +170,7 @@ const ja = {
     notificationsNote: '届いたリクエストの通知は、上の「受け付ける相手」で決まります。',
   },
   admin: {
+    inquiries: 'お問い合わせ', noInquiries: '未対応のお問い合わせはありません。', reply: 'メールで返信', replySubject: 'Tentalk へのお問い合わせについて', markDone: '対応済みにする',
     title: '通報の確認', note: '運営者だけが見られる画面です。決定はすぐに当事者のアプリへ反映されます。', empty: '未対応の通報はありません。',
     forbidden: 'この画面を見る権限がありません。', loadFailed: '読み込めませんでした。', actFailed: '処理できませんでした。もう一度お試しください。',
     against: '通報された人: {{name}}（30日以内の通報 {{n}}件）', by: '通報した人: {{name}}', suspendedUntil: '{{date}}まで利用停止中', confirm: '決定する',
@@ -192,7 +193,7 @@ const ja = {
     englishOnly: 'この文書は現在英語版のみです。', draftNote: '開発用の表示: この文書は下書きです。公開前に専門家の確認と〔 〕内の記入が必要です。',
     licenses: 'ライセンス', licensesNote: 'Tentalk は次のオープンソースソフトウェアを利用しています。', support: 'サポート', faq: 'よくある質問', tokusho: '特定商取引法に基づく表記', version: 'バージョン {{v}}',
     contact: 'お問い合わせ', contactKind: '種類', kinds: { bug: '不具合', account: 'アカウント', payment: '支払い', safety: '安全に関する相談', other: 'その他' },
-    contactMessage: '内容', contactReply: '返信先のメールアドレス（任意）', contactTooShort: '内容を10文字以上で書いてください。', send: '送信する',
+    contactMessage: '内容', contactReply: '返信先のメールアドレス（任意）', contactTooShort: '内容を10文字以上で書いてください。', contactTooMany: '今日はたくさんお問い合わせをいただいています。明日あらためて送ってください。お急ぎの場合は tentalk.support@gmail.com へメールしてください。', contactFailed: '送れませんでした。通信を確かめるか、tentalk.support@gmail.com へメールしてください。', send: '送信する',
     contactSent: '送信しました', contactSentBody: '2営業日以内に返信します。安全に関する相談は優先して確認します。',
     deleteTitle: 'アカウントを削除', deleteBody: 'プロフィール、自己紹介の音声、通話の履歴、フォロー、信頼スコア、バッジがすべて削除され、元に戻せません。',
     deleteSubscription: 'Tentalk Plus に加入している場合、アカウントを削除しても請求は止まりません。先に App Store または Google Play のサブスクリプション管理から解約してください。',

@@ -104,7 +104,7 @@ export const firestore = {
   },
 
   /** Documents in `collection` whose `field` equals `value` (or, with ARRAY_CONTAINS, lists it); at most `limit`. */
-  async where(collection: string, field: string, value: unknown, limit: number, transaction?: string, op: 'EQUAL' | 'ARRAY_CONTAINS' = 'EQUAL'): Promise<Data[]> {
+  async where(collection: string, field: string, value: unknown, limit: number, transaction?: string, op: 'EQUAL' | 'ARRAY_CONTAINS' = 'EQUAL'): Promise<(Data & { id: string })[]> {
     const rows = await call<{ document?: RawDoc }[]>(':runQuery', {
       structuredQuery: {
         from: [{ collectionId: collection }],
@@ -113,7 +113,7 @@ export const firestore = {
       },
       ...(transaction ? { transaction } : {}),
     });
-    return rows.filter((r) => r.document).map((r) => docData(r.document!));
+    return rows.filter((r) => r.document).map((r) => ({ ...docData(r.document!), id: r.document!.name.split('/').pop()! }));
   },
 
   /** Several documents in one request (EAS Hosting allows only a few requests per API call). */
