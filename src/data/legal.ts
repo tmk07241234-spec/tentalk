@@ -25,8 +25,8 @@ const ja: Record<DocId, LegalDoc> = {
       { h: '3. アカウント', p: ['Apple、Google、メールアドレスのいずれかで登録します。アカウントは本人のみが利用でき、第三者への譲渡や共有はできません。'] },
       { h: '4. 通話のルール', p: [
         '通話は1対1です。最初の10分は必修で、その後は時間の制限はありません。',
-        '必修の10分以内に自分から通話を終了すると、信頼スコアが下がり、ランダム通話が一定時間利用できなくなります。通報による終了、通信の切断、相手による終了はこの対象になりません。',
-        'ランダム通話では、2人とも10分以上話した場合にのみ、お互いのプロフィールが公開されます。',
+        '必修の10分以内に自分から通話を終了すると、信頼スコアが下がり、クイックマッチが一定時間利用できなくなります。通報による終了、通信の切断、相手による終了はこの対象になりません。',
+        'クイックマッチでは、2人とも10分以上話した場合にのみ、お互いのプロフィールが公開されます。',
       ] },
       { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。'] },
       { h: '6. 通報と審査', p: [
@@ -68,7 +68,7 @@ const ja: Record<DocId, LegalDoc> = {
         '18歳未満の利用、他人へのなりすまし。',
       ] },
       { h: 'ルールを守らなかった場合', p: [
-        '必修の10分以内に自分から切る: 信頼スコア −10、ランダム通話を30分停止。',
+        '必修の10分以内に自分から切る: 信頼スコア −10、クイックマッチを30分停止。',
         '違反が確認された: 信頼スコア −30 と利用停止。性的な内容や勧誘は即時停止。',
         '虚偽の通報、または30日で3回以上の確認できない通報: 信頼スコア −10。',
       ] },
@@ -91,9 +91,9 @@ const ja: Record<DocId, LegalDoc> = {
     title: 'よくある質問', updated: '',
     sections: [
       { h: '10分以内に通話が切れてしまったら？', p: ['通信が切れた場合は、60秒以内に再接続すればそのまま続きます。通信の切断はペナルティになりません。'] },
-      { h: 'ランダムで話した相手のプロフィールが見られません', p: ['2人とも10分以上話した場合だけ公開されます。公開された相手は「履歴」からいつでも見られます。'] },
+      { h: 'クイックマッチで話した相手のプロフィールが見られません', p: ['2人とも10分以上話した場合だけ公開されます。公開された相手は「履歴」からいつでも見られます。'] },
       { h: 'チャットはできますか？', p: ['できません。相手とつながる方法は10分通話のリクエストだけです。'] },
-      { h: 'フォローはどうすればできますか？', p: ['10分話しきった相手だけフォローできます。ランダム通話ではプロフィールが公開されたとき、リクエスト通話では10分話しきったあとに、相手のプロフィールにフォローのボタンが出ます。いいねやコメントなどの機能はありません。'] },
+      { h: 'フォローはどうすればできますか？', p: ['10分話しきった相手だけフォローできます。クイックマッチではプロフィールが公開されたとき、リクエスト通話では10分話しきったあとに、相手のプロフィールにフォローのボタンが出ます。いいねやコメントなどの機能はありません。'] },
       { h: '「練習仲間」と「言語交換」の違いは？', p: ['練習仲間は同じ言語を学ぶ、母語が違う人と、その言語だけで話します。言語交換はネイティブと、2つの言語を半分ずつ話します。'] },
       { h: '信頼スコアは他の人に見えますか？', p: ['数字はあなたにしか見えません。他の人には「信頼済み」か「新規」とだけ表示されます。'] },
     ],
@@ -109,8 +109,8 @@ const en: Record<DocId, LegalDoc> = {
       { h: '3. Your account', p: ['You sign up with Apple, Google, or an email address. Your account is for you alone and may not be transferred or shared.'] },
       { h: '4. Call rules', p: [
         'Calls are one on one. The first 10 minutes are required; after that there is no time limit.',
-        'If you end a call yourself before 10 minutes, your trust score goes down and random calls are paused for a while. Ending by report, a dropped connection, or your partner ending the call does not count.',
-        'In random calls, profiles open up only if both of you talk for 10 minutes or more.',
+        'If you end a call yourself before 10 minutes, your trust score goes down and quick matches are paused for a while. Ending by report, a dropped connection, or your partner ending the call does not count.',
+        'In quick matches, profiles open up only if both of you talk for 10 minutes or more.',
       ] },
       { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18.'] },
       { h: '6. Reports and review', p: [
@@ -152,7 +152,7 @@ const en: Record<DocId, LegalDoc> = {
         'Use by anyone under 18, impersonating others.',
       ] },
       { h: 'If rules are broken', p: [
-        'Ending a call yourself before 10 minutes: trust score −10 and no random calls for 30 minutes.',
+        'Ending a call yourself before 10 minutes: trust score −10 and no quick matches for 30 minutes.',
         'Confirmed violation: trust score −30 and suspension. Sexual content or solicitation means immediate suspension.',
         'False reports, or 3 or more unconfirmed reports in 30 days: trust score −10.',
       ] },
@@ -175,9 +175,9 @@ const en: Record<DocId, LegalDoc> = {
     title: 'FAQ', updated: '',
     sections: [
       { h: 'What if the call drops before 10 minutes?', p: ['Reconnect within 60 seconds and the call continues. A dropped connection never counts against you.'] },
-      { h: 'I can’t see a random partner’s profile', p: ['Profiles open only if both of you talk for 10 minutes or more. Opened profiles stay available in History.'] },
+      { h: 'I can’t see a quick-match partner’s profile', p: ['Profiles open only if both of you talk for 10 minutes or more. Opened profiles stay available in History.'] },
       { h: 'Can I chat?', p: ['No. The only way to reach someone is a request for a 10-minute call.'] },
-      { h: 'How do I follow someone?', p: ['You can follow only people you finished a 10-minute call with. After a random call that opened both profiles, or a requested call that reached 10 minutes, a Follow button appears on their profile. There are no likes or comments.'] },
+      { h: 'How do I follow someone?', p: ['You can follow only people you finished a 10-minute call with. After a quick match that opened both profiles, or a requested call that reached 10 minutes, a Follow button appears on their profile. There are no likes or comments.'] },
       { h: 'Practice buddy vs. language exchange?', p: ['Practice buddies learn the same language, have different native languages, and talk only in that language. A language exchange is with a native speaker, half in each language.'] },
       { h: 'Can others see my trust score?', p: ['Only you see the number. Others see only “Trusted” or “New”.'] },
     ],
@@ -193,8 +193,8 @@ const ko: Record<DocId, LegalDoc> = {
       { h: '3. 계정', p: ['Apple, Google, 이메일 주소 중 하나로 가입합니다. 계정은 본인만 사용할 수 있으며 양도하거나 공유할 수 없습니다.'] },
       { h: '4. 통화 규칙', p: [
         '통화는 1대1입니다. 처음 10분은 필수이며, 그 후에는 시간 제한이 없습니다.',
-        '필수 10분 이내에 스스로 통화를 끝내면 신뢰 점수가 내려가고 일정 시간 랜덤 통화를 이용할 수 없습니다. 신고로 인한 종료, 연결 끊김, 상대방의 종료는 해당하지 않습니다.',
-        '랜덤 통화에서는 두 사람 모두 10분 이상 대화한 경우에만 서로의 프로필이 공개됩니다.',
+        '필수 10분 이내에 스스로 통화를 끝내면 신뢰 점수가 내려가고 일정 시간 빠른 통화를 이용할 수 없습니다. 신고로 인한 종료, 연결 끊김, 상대방의 종료는 해당하지 않습니다.',
+        '빠른 통화에서는 두 사람 모두 10분 이상 대화한 경우에만 서로의 프로필이 공개됩니다.',
       ] },
       { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다.'] },
       { h: '6. 신고와 검토', p: [
@@ -236,7 +236,7 @@ const ko: Record<DocId, LegalDoc> = {
         '만 18세 미만의 이용, 다른 사람 사칭.',
       ] },
       { h: '규칙을 지키지 않으면', p: [
-        '필수 10분 이내에 스스로 끊음: 신뢰 점수 −10, 랜덤 통화 30분 정지.',
+        '필수 10분 이내에 스스로 끊음: 신뢰 점수 −10, 빠른 통화 30분 정지.',
         '위반이 확인됨: 신뢰 점수 −30과 이용 정지. 성적인 내용이나 권유는 즉시 정지.',
         '허위 신고, 또는 30일 안에 확인되지 않은 신고 3번 이상: 신뢰 점수 −10.',
       ] },
@@ -259,9 +259,9 @@ const ko: Record<DocId, LegalDoc> = {
     title: '자주 묻는 질문', updated: '',
     sections: [
       { h: '10분 전에 통화가 끊기면?', p: ['60초 안에 다시 연결되면 그대로 이어집니다. 연결 끊김은 불이익이 되지 않습니다.'] },
-      { h: '랜덤으로 대화한 상대의 프로필이 보이지 않아요', p: ['두 사람 모두 10분 이상 대화한 경우에만 공개됩니다. 공개된 상대는 “기록”에서 언제든 볼 수 있습니다.'] },
+      { h: '빠른 매칭으로 대화한 상대의 프로필이 보이지 않아요', p: ['두 사람 모두 10분 이상 대화한 경우에만 공개됩니다. 공개된 상대는 “기록”에서 언제든 볼 수 있습니다.'] },
       { h: '채팅할 수 있나요?', p: ['할 수 없습니다. 상대와 연결되는 방법은 10분 통화 요청뿐입니다.'] },
-      { h: '팔로우는 어떻게 하나요?', p: ['10분 대화를 끝까지 한 상대만 팔로우할 수 있어요. 랜덤 통화에서 프로필이 공개되었거나 요청 통화에서 10분을 채우면 상대 프로필에 팔로우 버튼이 나타나요. 좋아요나 댓글 기능은 없어요.'] },
+      { h: '팔로우는 어떻게 하나요?', p: ['10분 대화를 끝까지 한 상대만 팔로우할 수 있어요. 빠른 통화에서 프로필이 공개되었거나 요청 통화에서 10분을 채우면 상대 프로필에 팔로우 버튼이 나타나요. 좋아요나 댓글 기능은 없어요.'] },
       { h: '“연습 친구”와 “언어 교환”의 차이는?', p: ['연습 친구는 같은 언어를 배우고 모국어가 다른 사람과 그 언어로만 대화합니다. 언어 교환은 원어민과 두 언어를 반씩 사용합니다.'] },
       { h: '신뢰 점수가 다른 사람에게 보이나요?', p: ['숫자는 나만 볼 수 있습니다. 다른 사람에게는 “신뢰됨” 또는 “신규”로만 보입니다.'] },
     ],
@@ -277,8 +277,8 @@ const es: Record<DocId, LegalDoc> = {
       { h: '3. Tu cuenta', p: ['Te registras con Apple, Google o un correo electrónico. La cuenta es solo para ti y no puede transferirse ni compartirse.'] },
       { h: '4. Normas de las llamadas', p: [
         'Las llamadas son uno a uno. Los primeros 10 minutos son obligatorios; después no hay límite de tiempo.',
-        'Si cuelgas antes de 10 minutos, baja tu puntuación de confianza y las llamadas aleatorias se pausan durante un tiempo. No cuenta si terminas por una denuncia, si se corta la conexión o si cuelga la otra persona.',
-        'En las llamadas aleatorias, los perfiles solo se abren si ambos hablan 10 minutos o más.',
+        'Si cuelgas antes de 10 minutos, baja tu puntuación de confianza y las llamadas rápidas se pausan durante un tiempo. No cuenta si terminas por una denuncia, si se corta la conexión o si cuelga la otra persona.',
+        'En las llamadas rápidas, los perfiles solo se abren si ambos hablan 10 minutos o más.',
       ] },
       { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años.'] },
       { h: '6. Denuncias y revisión', p: [
@@ -320,7 +320,7 @@ const es: Record<DocId, LegalDoc> = {
         'El uso por menores de 18 años o hacerse pasar por otra persona.',
       ] },
       { h: 'Si no se cumplen las normas', p: [
-        'Colgar antes de 10 minutos: puntuación de confianza −10 y sin llamadas aleatorias durante 30 minutos.',
+        'Colgar antes de 10 minutos: puntuación de confianza −10 y sin llamadas rápidas durante 30 minutos.',
         'Infracción confirmada: puntuación −30 y suspensión. El contenido sexual o la captación suponen suspensión inmediata.',
         'Denuncias falsas, o 3 o más sin confirmar en 30 días: puntuación −10.',
       ] },
@@ -343,9 +343,9 @@ const es: Record<DocId, LegalDoc> = {
     title: 'Preguntas frecuentes', updated: '',
     sections: [
       { h: '¿Y si la llamada se corta antes de 10 minutos?', p: ['Si te reconectas en 60 segundos, la llamada continúa. Un corte de conexión nunca cuenta en tu contra.'] },
-      { h: 'No veo el perfil de alguien con quien hablé en una llamada aleatoria', p: ['Los perfiles solo se abren si ambos hablan 10 minutos o más. Los perfiles abiertos siguen disponibles en el Historial.'] },
+      { h: 'No veo el perfil de alguien con quien hablé en una llamada rápida', p: ['Los perfiles solo se abren si ambos hablan 10 minutos o más. Los perfiles abiertos siguen disponibles en el Historial.'] },
       { h: '¿Puedo chatear?', p: ['No. La única forma de contactar con alguien es pedir una llamada de 10 minutos.'] },
-      { h: '¿Cómo sigo a alguien?', p: ['Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos. Tras una llamada aleatoria que abrió los perfiles, o una solicitada que llegó a 10 minutos, aparece el botón Seguir en su perfil. No hay «me gusta» ni comentarios.'] },
+      { h: '¿Cómo sigo a alguien?', p: ['Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos. Tras una llamada rápida que abrió los perfiles, o una solicitada que llegó a 10 minutos, aparece el botón Seguir en su perfil. No hay «me gusta» ni comentarios.'] },
       { h: '¿Compañero de práctica o intercambio?', p: ['Los compañeros de práctica aprenden el mismo idioma, tienen idiomas nativos distintos y hablan solo en ese idioma. El intercambio es con un nativo, mitad en cada idioma.'] },
       { h: '¿Los demás ven mi puntuación de confianza?', p: ['Solo tú ves el número. Los demás solo ven “De confianza” o “Nuevo”.'] },
     ],
