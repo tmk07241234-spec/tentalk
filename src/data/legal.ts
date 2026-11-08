@@ -12,8 +12,8 @@ export interface LegalDoc {
   sections: { h: string; p: string[] }[];
 }
 
-const OPERATOR_JA = '〔運営者名〕';
-const OPERATOR_EN = '[Operator name]';
+const OPERATOR_JA = '渡邉 朋生';
+const OPERATOR_EN = 'Tomoki Watanabe';
 const CONTACT = 'tentalk.support@gmail.com';
 
 const ja: Record<DocId, LegalDoc> = {
