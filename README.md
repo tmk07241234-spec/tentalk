@@ -182,7 +182,9 @@ Android の Google ログイン:
 5. 通知（リクエスト、通話タイム）と、iPhone のロック画面に「通話中」と出す CallKit（着信もここで鳴らす）、Tentalk Plus（アプリ内課金）と広告
 6. ストア申請の準備: 規約類、プライバシーの記載、スクリーンショット、TestFlight / 内部テスト
 
-次の作業: App Store Connect にストア掲載文・スクリーンショット・プライバシー回答・審査メモを入れる。そのあと iPhone の CallKit による着信・ロック画面の「通話中」表示、Firebase App Check と Google の API キーの用途制限、規約類の空欄（運営者名・日付）。
+App Store の準備は完了（掲載文4言語・スクリーンショット・年齢区分18+・無料・中国以外で配信・プライバシー回答・審査メモとデモアカウント2つ、審査用ビルド 1.0.1 (9)。内容は `docs/store/listing.md`）。最初の公開は無料で、Tentalk Plus と広告の見本は `src/domain/features.ts` の `PLUS_ENABLED` で隠している。規約類は公開時のアプリの動きに合わせて書き直し済み（専門家の確認は今後）。
+
+次の作業: 審査への提出と、却下された場合の対応。そのあと iPhone の CallKit による着信・ロック画面の「通話中」表示、Firebase App Check と Google の API キーの用途制限、通報記録などの古いものの自動削除、Android 版。
 
 検討中のアイデア（すぐには作らない）:
 
