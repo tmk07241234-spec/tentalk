@@ -1,7 +1,7 @@
 /**
- * Draft legal and support documents. These are starting drafts written from the
- * app's actual rules; they must be reviewed by a qualified professional and the
- * bracketed placeholders filled in before release. Available in Japanese, English,
+ * Legal and support documents, written from the app's actual behaviour (keep them in
+ * step with it: what is stored, who processes it, penalties, paid features). A review
+ * by a qualified professional is still recommended. Available in Japanese, English,
  * Korean, and Spanish; the Japanese text is the reference version.
  */
 export type DocId = 'terms' | 'privacy' | 'guidelines' | 'tokusho' | 'faq';
@@ -18,11 +18,11 @@ const CONTACT = 'tentalk.support@gmail.com';
 
 const ja: Record<DocId, LegalDoc> = {
   terms: {
-    title: '利用規約', updated: '2026年10月（下書き）',
+    title: '利用規約', updated: '2026年11月8日',
     sections: [
       { h: '1. このサービスについて', p: [`Tentalk（以下「本サービス」）は、${OPERATOR_JA}（以下「運営者」）が提供する、1対1の音声通話で語学を練習するためのサービスです。`] },
       { h: '2. 利用できる方', p: ['本サービスは18歳以上の方のみ利用できます。登録時に生年月日を確認し、18歳未満と判明した場合はアカウントを停止します。'] },
-      { h: '3. アカウント', p: ['Apple、Google、メールアドレスのいずれかで登録します。アカウントは本人のみが利用でき、第三者への譲渡や共有はできません。'] },
+      { h: '3. アカウント', p: ['メールアドレス（対応している端末では Google アカウントも）で登録します。アカウントは本人のみが利用でき、第三者への譲渡や共有はできません。'] },
       { h: '4. 通話のルール', p: [
         '通話は1対1です。最初の10分は必修で、その後は時間の制限はありません。',
         '必修の10分以内に自分から通話を終了すると、信頼スコアが下がり、クイックマッチが一定時間利用できなくなります。通報による終了、通信の切断、相手による終了はこの対象になりません。',
@@ -30,34 +30,39 @@ const ja: Record<DocId, LegalDoc> = {
       ] },
       { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。'] },
       { h: '6. 通報と審査', p: [
-        '利用者は通話中いつでも相手を通報して通話を終了できます。通報時に限り、審査のために直前60秒の音声が運営者に送信されます。',
-        '運営者は原則24時間以内に通報を確認し、違反が認められた場合は信頼スコアの減点、利用停止などの措置を取ります。虚偽と判断された通報や、確認できない通報が30日間に3回以上続いた場合は、通報者に措置を取ることがあります。',
+        '利用者は通話中いつでも相手を通報して通話を終了できます。プロフィールからも通報できます。通報すると、通報の理由と、相手・通話の日時などの情報が運営者に送られます。通話の音声は録音も送信もしません。',
+        '運営者はできるだけ早く通報を確認し、違反が認められた場合は信頼スコアの減点、利用停止などの措置を取ります。虚偽と判断された通報には、通報者に措置を取ることがあります。',
       ] },
-      { h: '7. 有料プラン', p: ['有料プラン（Tentalk Plus）は App Store または Google Play の決済で購入でき、期間終了の24時間前までに解約しない限り自動で更新されます。解約は各ストアのサブスクリプション管理から行えます。有料プランは通話時間、マッチング、信頼スコアには影響しません。'] },
+      { h: '7. 料金', p: ['本サービスは無料で利用できます。有料の機能を始める場合は、内容・料金・支払方法を事前にアプリ内で案内し、この規約を更新します。'] },
       { h: '8. 免責', p: ['運営者は、利用者同士の会話の内容や、通話によって生じたトラブルについて、運営者に故意または重大な過失がある場合を除き責任を負いません。'] },
       { h: '9. 規約の変更', p: ['規約を変更する場合は、アプリ内のお知らせで事前に案内します。'] },
-      { h: '10. 準拠法と管轄', p: ['本規約は日本法に準拠します。紛争が生じた場合は〔裁判所名〕を第一審の専属的合意管轄裁判所とします。'] },
+      { h: '10. 準拠法と管轄', p: ['本規約は日本法に準拠します。紛争が生じた場合は、運営者の住所地を管轄する地方裁判所を第一審の専属的合意管轄裁判所とします。'] },
     ],
   },
   privacy: {
-    title: 'プライバシーポリシー', updated: '2026年10月（下書き）',
+    title: 'プライバシーポリシー', updated: '2026年11月8日',
     sections: [
       { h: '1. 取得する情報', p: [
-        'アカウント情報: 登録に使ったApple / Google アカウントの識別子、メールアドレス。',
-        'プロフィール: 名前、アイコン、自己紹介、自己紹介の音声、母語と学習言語、レベル、趣味、話せる時間帯、タイムゾーン。',
-        '生年月日: 18歳以上かどうかの確認にのみ使い、他の利用者には表示しません。',
-        '利用状況: 通話の相手、日時、長さ、信頼スコア、フォロー、ブロック、通知。',
-        '通話の音声は録音・保存しません。ただし通報した場合に限り、端末に一時的に保持している直前60秒の音声を審査のために送信します。',
-        '端末情報: 端末の種類、OS、言語設定、プッシュ通知用のトークン。',
+        'アカウント情報: メールアドレス、アカウントの識別子（Google で登録した場合は Google アカウントの識別子）。',
+        'プロフィール: 名前、写真、自己紹介、自己紹介の音声、母語と学習言語、レベル、趣味、話せる時間帯、時差（端末の時計の設定）。プロフィールは他の利用者に表示されます。',
+        '生年月日: 登録時に端末上で18歳以上かどうかを確認するためだけに使い、運営者のサーバーには保存しません。',
+        '利用状況: 通話の相手、日時、長さ、信頼スコア、フォロー、ブロック、通話リクエスト、オンライン状態（最後に利用した時刻）。',
+        '通報とお問い合わせ: 通報の理由と対象、お問い合わせの内容と返信先のメールアドレス。',
+        '通話の音声は、相手に届けるために通話事業者のサーバーを経由しますが、録音・保存はしません。',
+        'プッシュ通知用のトークンと、アプリの表示言語。位置情報、連絡先、広告ID は取得しません。',
       ] },
       { h: '2. 利用目的', p: ['相手の紹介と通話の提供、不正利用の防止と通報の審査、お問い合わせへの対応、サービスの改善のために利用します。'] },
-      { h: '3. 第三者への提供', p: ['法令に基づく場合を除き、本人の同意なく第三者に提供しません。サービスの提供に必要な範囲で、クラウド、認証、通話の各事業者に処理を委託します。広告を表示する場合は、その事業者と提供する情報をこのポリシーに追記します。'] },
-      { h: '4. 保存期間と削除', p: ['アカウントを削除すると、プロフィール、履歴、フォロー、信頼スコアを削除します。通報の記録は、不正防止のため最長〔期間〕保存した後に削除します。アカウントの削除はアプリ内の「自分」→「アカウントを削除」から行えます。'] },
-      { h: '5. お問い合わせ', p: [`個人情報の取り扱いに関するお問い合わせは ${CONTACT} までご連絡ください。`] },
+      { h: '3. 第三者への提供と委託', p: [
+        '法令に基づく場合を除き、本人の同意なく第三者に提供しません。広告やトラッキングのために情報を提供・利用することはありません。',
+        'サービスの提供に必要な範囲で、次の事業者に処理を委託しています。Google（Firebase：認証、データベース、ファイルの保存）、LiveKit（音声通話の中継）、Expo（サーバーの運用、アプリの更新、プッシュ通知）、Apple（iPhone へのプッシュ通知）。これらの事業者は主に米国などのサーバーで情報を処理し、各社の基準で安全管理を行っています。',
+      ] },
+      { h: '4. 保存期間と削除', p: ['アカウントを削除すると、プロフィール、写真と音声、履歴、フォロー、信頼スコアを削除します。通報と利用停止の記録、お問い合わせは、不正防止と対応のために必要な期間保存し、不要になったものは削除します。アカウントの削除はアプリ内の「自分」→「アカウントを削除」から行えます。'] },
+      { h: '5. 開示・訂正・削除のご請求とお問い合わせ', p: [`ご自身の情報の開示、訂正、利用停止、削除のご請求や、個人情報の取り扱いに関するお問い合わせは ${CONTACT} までご連絡ください。ご本人であることを確認したうえで、遅滞なく対応します。`] },
+      { h: '6. 運営者', p: [`${OPERATOR_JA}。住所は、請求があった場合に遅滞なく開示します。`] },
     ],
   },
   guidelines: {
-    title: 'コミュニティガイドライン', updated: '2026年10月（下書き）',
+    title: 'コミュニティガイドライン', updated: '2026年11月8日',
     sections: [
       { h: 'Tentalk で大切にしていること', p: ['ここは語学を練習する場所です。相手も練習中だということを忘れず、ゆっくり、やさしく話しましょう。'] },
       { h: '禁止していること', p: [
@@ -69,28 +74,25 @@ const ja: Record<DocId, LegalDoc> = {
       ] },
       { h: 'ルールを守らなかった場合', p: [
         '必修の10分以内に自分から切る: 信頼スコア −10、クイックマッチを30分停止。',
-        '違反が確認された: 信頼スコア −30 と利用停止。性的な内容や勧誘は即時停止。',
-        '虚偽の通報、または30日で3回以上の確認できない通報: 信頼スコア −10。',
+        '違反が確認された: 信頼スコア −30。性的な内容や勧誘など重い違反は、あわせて7日間の利用停止。繰り返す場合は、さらに長い利用停止。',
+        '虚偽と判断された通報: 信頼スコア −10。',
       ] },
       { h: '困ったときは', p: ['通話中の旗のボタンから、いつでも1タップで通報して通話を終了できます。1回の通報でペナルティを受けることはありません。'] },
     ],
   },
   tokusho: {
-    title: '特定商取引法に基づく表記', updated: '2026年10月（下書き）',
+    title: '特定商取引法に基づく表記', updated: '2026年11月8日',
     sections: [
-      { h: '販売事業者', p: [OPERATOR_JA] },
-      { h: '運営責任者・所在地・電話番号', p: ['請求があった場合は遅滞なく開示します。'] },
+      { h: '現在の販売', p: ['本サービスは無料で、現在、有料の商品やサービスの販売はありません。有料の機能を始める際に、販売価格、支払方法、解約・返金などをこのページに掲載します。'] },
+      { h: '運営者', p: [OPERATOR_JA] },
+      { h: '所在地・電話番号', p: ['請求があった場合は遅滞なく開示します。'] },
       { h: 'お問い合わせ', p: [CONTACT] },
-      { h: '販売価格', p: ['Tentalk Plus 月額〔480〕円、年額〔3,800〕円（税込）。'] },
-      { h: '支払方法・時期', p: ['App Store または Google Play の決済。各ストアの定めによります。'] },
-      { h: '提供時期', p: ['購入手続きの完了後すぐに利用できます。'] },
-      { h: '解約・返金', p: ['各ストアのサブスクリプション管理から解約できます。返金は各ストアの規定に従います。'] },
     ],
   },
   faq: {
     title: 'よくある質問', updated: '',
     sections: [
-      { h: '10分以内に通話が切れてしまったら？', p: ['通信が切れた場合は、60秒以内に再接続すればそのまま続きます。通信の切断はペナルティになりません。'] },
+      { h: '10分以内に通話が切れてしまったら？', p: ['通信が一時的に途切れた場合は、自動で再接続を試みます。通信の切断によって通話が終わっても、ペナルティにはなりません。'] },
       { h: 'クイックマッチで話した相手のプロフィールが見られません', p: ['2人とも10分以上話した場合だけ公開されます。公開された相手は「履歴」からいつでも見られます。'] },
       { h: 'チャットはできますか？', p: ['できません。相手とつながる方法は10分通話のリクエストだけです。'] },
       { h: 'フォローはどうすればできますか？', p: ['10分話しきった相手だけフォローできます。クイックマッチではプロフィールが公開されたとき、リクエスト通話では10分話しきったあとに、相手のプロフィールにフォローのボタンが出ます。いいねやコメントなどの機能はありません。'] },
@@ -102,11 +104,11 @@ const ja: Record<DocId, LegalDoc> = {
 
 const en: Record<DocId, LegalDoc> = {
   terms: {
-    title: 'Terms of Service', updated: 'October 2026 (draft)',
+    title: 'Terms of Service', updated: 'November 8, 2026',
     sections: [
       { h: '1. About the service', p: [`Tentalk (the “Service”) is provided by ${OPERATOR_EN} (the “Operator”) for practicing languages through one-on-one voice calls.`] },
       { h: '2. Who can use it', p: ['You must be 18 or older. We check your date of birth at sign-up and suspend accounts found to belong to anyone under 18.'] },
-      { h: '3. Your account', p: ['You sign up with Apple, Google, or an email address. Your account is for you alone and may not be transferred or shared.'] },
+      { h: '3. Your account', p: ['You sign up with an email address (or a Google account on supported devices). Your account is for you alone and may not be transferred or shared.'] },
       { h: '4. Call rules', p: [
         'Calls are one on one. The first 10 minutes are required; after that there is no time limit.',
         'If you end a call yourself before 10 minutes, your trust score goes down and quick matches are paused for a while. Ending by report, a dropped connection, or your partner ending the call does not count.',
@@ -114,34 +116,39 @@ const en: Record<DocId, LegalDoc> = {
       ] },
       { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18.'] },
       { h: '6. Reports and review', p: [
-        'You can report your partner and end the call at any time. Only when you report, the last 60 seconds of audio are sent to the Operator for review.',
-        'We aim to review reports within 24 hours and may lower trust scores or suspend accounts when a violation is confirmed. Reports judged false, or 3 or more unconfirmed reports within 30 days, may lead to action against the reporter.',
+        'You can report your partner and end the call at any time, and you can also report from a profile. A report sends the Operator the reason and details such as who it concerns and when the call took place. Call audio is never recorded or sent.',
+        'We review reports as soon as we can and may lower trust scores or suspend accounts when a violation is confirmed. Reports judged false may lead to action against the reporter.',
       ] },
-      { h: '7. Paid plan', p: ['Tentalk Plus is purchased through the App Store or Google Play and renews automatically unless cancelled at least 24 hours before the period ends. You can cancel in your store’s subscription settings. The paid plan does not affect call time, matching, or trust scores.'] },
+      { h: '7. Price', p: ['The Service is free. Before we introduce any paid feature, we will explain its content, price and payment in the app and update these terms.'] },
       { h: '8. Disclaimer', p: ['Except in cases of intent or gross negligence, the Operator is not responsible for what users say to each other or for disputes arising from calls.'] },
       { h: '9. Changes', p: ['We will announce changes to these terms in the app in advance.'] },
-      { h: '10. Governing law', p: ['These terms are governed by the laws of Japan. The [court name] has exclusive jurisdiction in the first instance.'] },
+      { h: '10. Governing law', p: ['These terms are governed by the laws of Japan. The district court with jurisdiction over the Operator’s address has exclusive jurisdiction in the first instance.'] },
     ],
   },
   privacy: {
-    title: 'Privacy Policy', updated: 'October 2026 (draft)',
+    title: 'Privacy Policy', updated: 'November 8, 2026',
     sections: [
       { h: '1. What we collect', p: [
-        'Account: the Apple or Google account identifier you signed up with, and your email address.',
-        'Profile: name, icon, about you, voice intro, native and learning languages, levels, hobbies, available hours, time zone.',
-        'Date of birth: used only to check that you are 18 or older; never shown to other users.',
-        'Usage: call partners, dates, lengths, trust score, follows, blocks, notifications.',
-        'We do not record or store call audio. Only when you report a partner, the last 60 seconds held temporarily on your device are sent for review.',
-        'Device: device model, OS, language setting, push notification token.',
+        'Account: your email address and account identifier (and your Google account identifier if you signed up with Google).',
+        'Profile: name, photo, about you, voice intro, native and learning languages, levels, hobbies, available hours, and time difference (from your device’s clock). Your profile is shown to other users.',
+        'Date of birth: checked on your device at sign-up only to confirm you are 18 or older; it is not stored on our servers.',
+        'Usage: call partners, dates, lengths, trust score, follows, blocks, call requests, and online status (when you last used the app).',
+        'Reports and inquiries: the reason and subject of reports, and the content of inquiries with the reply email address.',
+        'Call audio passes through our calling provider’s servers to reach your partner, but it is never recorded or stored.',
+        'Your push notification token and app language. We do not collect location, contacts, or advertising identifiers.',
       ] },
       { h: '2. How we use it', p: ['To introduce partners and provide calls, prevent abuse and review reports, answer your inquiries, and improve the Service.'] },
-      { h: '3. Sharing', p: ['We do not share your information with third parties without your consent unless required by law. We use cloud, authentication, and calling providers to run the Service. If we show ads, we will list the provider and the data shared in this policy.'] },
-      { h: '4. Retention and deletion', p: ['When you delete your account, we delete your profile, history, follows, and trust score. Report records are kept for up to [period] to prevent abuse and then deleted. You can delete your account in the app from Me → Delete account.'] },
-      { h: '5. Contact', p: [`For privacy questions, contact ${CONTACT}.`] },
+      { h: '3. Sharing and service providers', p: [
+        'We do not share your information with third parties without your consent unless required by law. We never share or use it for advertising or tracking.',
+        'To run the Service we use these providers: Google (Firebase: sign-in, database, file storage), LiveKit (relaying voice calls), Expo (servers, app updates, push notifications), and Apple (push notifications on iPhone). They process data mainly on servers in the United States and other countries and protect it under their own security standards.',
+      ] },
+      { h: '4. Retention and deletion', p: ['When you delete your account, we delete your profile, photo and voice intro, history, follows, and trust score. Records of reports and suspensions, and inquiries, are kept as long as needed to prevent abuse and respond, and deleted when no longer needed. You can delete your account in the app from Me → Delete account.'] },
+      { h: '5. Your rights and contact', p: [`To access, correct, stop the use of, or delete your information, or for any privacy question, contact ${CONTACT}. We will respond without delay after confirming your identity.`] },
+      { h: '6. Operator', p: [`${OPERATOR_EN}. The address is disclosed without delay upon request.`] },
     ],
   },
   guidelines: {
-    title: 'Community guidelines', updated: 'October 2026 (draft)',
+    title: 'Community guidelines', updated: 'November 8, 2026',
     sections: [
       { h: 'What matters here', p: ['This is a place to practice languages. Your partner is learning too, so speak slowly and kindly.'] },
       { h: 'Not allowed', p: [
@@ -153,28 +160,25 @@ const en: Record<DocId, LegalDoc> = {
       ] },
       { h: 'If rules are broken', p: [
         'Ending a call yourself before 10 minutes: trust score −10 and no quick matches for 30 minutes.',
-        'Confirmed violation: trust score −30 and suspension. Sexual content or solicitation means immediate suspension.',
-        'False reports, or 3 or more unconfirmed reports in 30 days: trust score −10.',
+        'Confirmed violation: trust score −30. Serious violations such as sexual content or solicitation also mean a 7-day suspension, and longer if repeated.',
+        'Reports judged false: trust score −10.',
       ] },
       { h: 'If something goes wrong', p: ['Tap the flag during a call to report and end it in one tap. A single report never costs you anything.'] },
     ],
   },
   tokusho: {
-    title: 'Commercial disclosure (Japan)', updated: 'October 2026 (draft)',
+    title: 'Commercial disclosure (Japan)', updated: 'November 8, 2026',
     sections: [
-      { h: 'Seller', p: [OPERATOR_EN] },
-      { h: 'Representative, address, phone', p: ['Disclosed without delay upon request.'] },
+      { h: 'Current sales', p: ['The Service is free and nothing is sold at the moment. When paid features start, this page will list prices, payment, cancellation and refunds.'] },
+      { h: 'Operator', p: [OPERATOR_EN] },
+      { h: 'Address and phone', p: ['Disclosed without delay upon request.'] },
       { h: 'Contact', p: [CONTACT] },
-      { h: 'Price', p: ['Tentalk Plus: [¥480] per month, [¥3,800] per year (tax included).'] },
-      { h: 'Payment', p: ['Through the App Store or Google Play, according to each store’s terms.'] },
-      { h: 'Delivery', p: ['Available immediately after purchase.'] },
-      { h: 'Cancellation and refunds', p: ['Cancel in your store’s subscription settings. Refunds follow each store’s policy.'] },
     ],
   },
   faq: {
     title: 'FAQ', updated: '',
     sections: [
-      { h: 'What if the call drops before 10 minutes?', p: ['Reconnect within 60 seconds and the call continues. A dropped connection never counts against you.'] },
+      { h: 'What if the call drops before 10 minutes?', p: ['If the connection is interrupted briefly, the app tries to reconnect automatically. A call that ends because of a dropped connection never counts against you.'] },
       { h: 'I can’t see a quick-match partner’s profile', p: ['Profiles open only if both of you talk for 10 minutes or more. Opened profiles stay available in History.'] },
       { h: 'Can I chat?', p: ['No. The only way to reach someone is a request for a 10-minute call.'] },
       { h: 'How do I follow someone?', p: ['You can follow only people you finished a 10-minute call with. After a quick match that opened both profiles, or a requested call that reached 10 minutes, a Follow button appears on their profile. There are no likes or comments.'] },
@@ -186,11 +190,11 @@ const en: Record<DocId, LegalDoc> = {
 
 const ko: Record<DocId, LegalDoc> = {
   terms: {
-    title: '이용약관', updated: '2026년 10월 (초안)',
+    title: '이용약관', updated: '2026년 11월 8일',
     sections: [
       { h: '1. 서비스 소개', p: [`Tentalk(이하 “서비스”)는 ${OPERATOR_EN}(이하 “운영자”)가 제공하는, 1대1 음성 통화로 어학을 연습하는 서비스입니다.`] },
       { h: '2. 이용 자격', p: ['만 18세 이상만 이용할 수 있습니다. 가입 시 생년월일을 확인하며, 만 18세 미만으로 확인된 계정은 정지됩니다.'] },
-      { h: '3. 계정', p: ['Apple, Google, 이메일 주소 중 하나로 가입합니다. 계정은 본인만 사용할 수 있으며 양도하거나 공유할 수 없습니다.'] },
+      { h: '3. 계정', p: ['이메일 주소(지원되는 기기에서는 Google 계정도)로 가입합니다. 계정은 본인만 사용할 수 있으며 양도하거나 공유할 수 없습니다.'] },
       { h: '4. 통화 규칙', p: [
         '통화는 1대1입니다. 처음 10분은 필수이며, 그 후에는 시간 제한이 없습니다.',
         '필수 10분 이내에 스스로 통화를 끝내면 신뢰 점수가 내려가고 일정 시간 빠른 통화를 이용할 수 없습니다. 신고로 인한 종료, 연결 끊김, 상대방의 종료는 해당하지 않습니다.',
@@ -198,34 +202,39 @@ const ko: Record<DocId, LegalDoc> = {
       ] },
       { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다.'] },
       { h: '6. 신고와 검토', p: [
-        '이용자는 통화 중 언제든지 상대를 신고하고 통화를 끝낼 수 있습니다. 신고할 때만 검토를 위해 직전 60초의 음성이 운영자에게 전송됩니다.',
-        '운영자는 원칙적으로 24시간 이내에 신고를 확인하고, 위반이 확인되면 신뢰 점수 감점, 이용 정지 등의 조치를 취합니다. 허위로 판단된 신고나, 30일 안에 확인되지 않은 신고가 3번 이상이면 신고자에게 조치할 수 있습니다.',
+        '이용자는 통화 중 언제든지 상대를 신고하고 통화를 끝낼 수 있으며, 프로필에서도 신고할 수 있습니다. 신고하면 신고 사유와 상대, 통화 일시 등의 정보가 운영자에게 전송됩니다. 통화 음성은 녹음하거나 전송하지 않습니다.',
+        '운영자는 가능한 한 빨리 신고를 확인하고, 위반이 확인되면 신뢰 점수 감점, 이용 정지 등의 조치를 취합니다. 허위로 판단된 신고에는 신고자에게 조치할 수 있습니다.',
       ] },
-      { h: '7. 유료 플랜', p: ['유료 플랜(Tentalk Plus)은 App Store 또는 Google Play 결제로 구매하며, 기간 종료 24시간 전까지 해지하지 않으면 자동으로 갱신됩니다. 각 스토어의 구독 관리에서 해지할 수 있습니다. 유료 플랜은 통화 시간, 매칭, 신뢰 점수에 영향을 주지 않습니다.'] },
+      { h: '7. 요금', p: ['서비스는 무료로 이용할 수 있습니다. 유료 기능을 시작할 때는 내용, 요금, 결제 방법을 앱에서 미리 안내하고 이 약관을 변경합니다.'] },
       { h: '8. 면책', p: ['운영자에게 고의 또는 중대한 과실이 있는 경우를 제외하고, 운영자는 이용자 간 대화 내용이나 통화로 생긴 분쟁에 책임을 지지 않습니다.'] },
       { h: '9. 약관 변경', p: ['약관을 변경할 때는 앱 내 공지로 미리 안내합니다.'] },
-      { h: '10. 준거법과 관할', p: ['이 약관은 일본 법률을 따릅니다. 분쟁이 생기면 [법원명]을 제1심의 전속적 합의 관할 법원으로 합니다.'] },
+      { h: '10. 준거법과 관할', p: ['이 약관은 일본 법률을 따릅니다. 분쟁이 생기면 운영자의 주소지를 관할하는 지방법원을 제1심의 전속적 합의 관할 법원으로 합니다.'] },
     ],
   },
   privacy: {
-    title: '개인정보처리방침', updated: '2026년 10월 (초안)',
+    title: '개인정보처리방침', updated: '2026년 11월 8일',
     sections: [
       { h: '1. 수집하는 정보', p: [
-        '계정 정보: 가입에 사용한 Apple / Google 계정의 식별자, 이메일 주소.',
-        '프로필: 이름, 아이콘, 자기소개, 음성 소개, 모국어와 학습 언어, 레벨, 취미, 대화 가능한 시간, 시간대.',
-        '생년월일: 만 18세 이상인지 확인하는 데만 사용하며, 다른 이용자에게 표시하지 않습니다.',
-        '이용 정보: 통화 상대, 일시, 길이, 신뢰 점수, 팔로우, 차단, 알림.',
-        '통화 음성은 녹음하거나 저장하지 않습니다. 단, 신고한 경우에 한해 기기에 임시로 보관된 직전 60초의 음성을 검토를 위해 전송합니다.',
-        '기기 정보: 기기 종류, OS, 언어 설정, 푸시 알림용 토큰.',
+        '계정 정보: 이메일 주소, 계정 식별자(Google로 가입한 경우 Google 계정의 식별자).',
+        '프로필: 이름, 사진, 자기소개, 음성 소개, 모국어와 학습 언어, 레벨, 취미, 대화 가능한 시간, 시차(기기 시계 설정). 프로필은 다른 이용자에게 표시됩니다.',
+        '생년월일: 가입 시 기기에서 만 18세 이상인지 확인하는 데만 사용하며, 운영자의 서버에는 저장하지 않습니다.',
+        '이용 정보: 통화 상대, 일시, 길이, 신뢰 점수, 팔로우, 차단, 통화 요청, 접속 상태(마지막 이용 시각).',
+        '신고와 문의: 신고 사유와 대상, 문의 내용과 답변받을 이메일 주소.',
+        '통화 음성은 상대에게 전달하기 위해 통화 사업자의 서버를 거치지만, 녹음하거나 저장하지 않습니다.',
+        '푸시 알림용 토큰과 앱 표시 언어. 위치 정보, 연락처, 광고 식별자는 수집하지 않습니다.',
       ] },
       { h: '2. 이용 목적', p: ['상대 소개와 통화 제공, 부정 이용 방지와 신고 검토, 문의 대응, 서비스 개선을 위해 이용합니다.'] },
-      { h: '3. 제3자 제공', p: ['법령에 따른 경우를 제외하고 본인의 동의 없이 제3자에게 제공하지 않습니다. 서비스 제공에 필요한 범위에서 클라우드, 인증, 통화 사업자에게 처리를 위탁합니다. 광고를 표시하는 경우 그 사업자와 제공하는 정보를 이 방침에 추가합니다.'] },
-      { h: '4. 보관 기간과 삭제', p: ['계정을 삭제하면 프로필, 기록, 팔로우, 신뢰 점수를 삭제합니다. 신고 기록은 부정 방지를 위해 최대 [기간] 보관한 뒤 삭제합니다. 계정 삭제는 앱의 “나” → “계정 삭제”에서 할 수 있습니다.'] },
-      { h: '5. 문의', p: [`개인정보 처리에 관한 문의는 ${CONTACT}로 연락해 주세요.`] },
+      { h: '3. 제3자 제공과 처리 위탁', p: [
+        '법령에 따른 경우를 제외하고 본인의 동의 없이 제3자에게 제공하지 않습니다. 광고나 추적을 위해 정보를 제공하거나 이용하지 않습니다.',
+        '서비스 제공에 필요한 범위에서 다음 사업자에게 처리를 위탁합니다. Google(Firebase: 인증, 데이터베이스, 파일 저장), LiveKit(음성 통화 중계), Expo(서버 운영, 앱 업데이트, 푸시 알림), Apple(iPhone 푸시 알림). 이 사업자들은 주로 미국 등의 서버에서 정보를 처리하며, 각 사의 기준에 따라 안전하게 관리합니다.',
+      ] },
+      { h: '4. 보관 기간과 삭제', p: ['계정을 삭제하면 프로필, 사진과 음성 소개, 기록, 팔로우, 신뢰 점수를 삭제합니다. 신고와 이용 정지 기록, 문의는 부정 방지와 대응에 필요한 기간 동안 보관하고, 필요 없어지면 삭제합니다. 계정 삭제는 앱의 “나” → “계정 삭제”에서 할 수 있습니다.'] },
+      { h: '5. 열람·정정·삭제 요청과 문의', p: [`내 정보의 열람, 정정, 이용 정지, 삭제 요청이나 개인정보 처리에 관한 문의는 ${CONTACT}로 연락해 주세요. 본인 확인 후 지체 없이 처리합니다.`] },
+      { h: '6. 운영자', p: [`${OPERATOR_EN}. 주소는 요청이 있으면 지체 없이 공개합니다.`] },
     ],
   },
   guidelines: {
-    title: '커뮤니티 가이드라인', updated: '2026년 10월 (초안)',
+    title: '커뮤니티 가이드라인', updated: '2026년 11월 8일',
     sections: [
       { h: 'Tentalk에서 소중히 여기는 것', p: ['이곳은 어학을 연습하는 곳입니다. 상대도 연습 중이라는 것을 잊지 말고, 천천히 친절하게 이야기해 주세요.'] },
       { h: '금지하는 것', p: [
@@ -237,28 +246,25 @@ const ko: Record<DocId, LegalDoc> = {
       ] },
       { h: '규칙을 지키지 않으면', p: [
         '필수 10분 이내에 스스로 끊음: 신뢰 점수 −10, 빠른 통화 30분 정지.',
-        '위반이 확인됨: 신뢰 점수 −30과 이용 정지. 성적인 내용이나 권유는 즉시 정지.',
-        '허위 신고, 또는 30일 안에 확인되지 않은 신고 3번 이상: 신뢰 점수 −10.',
+        '위반이 확인됨: 신뢰 점수 −30. 성적인 내용이나 권유 등 중대한 위반은 7일간 이용 정지도 함께 적용되며, 반복하면 더 길게 정지됩니다.',
+        '허위로 판단된 신고: 신뢰 점수 −10.',
       ] },
       { h: '곤란할 때는', p: ['통화 중 깃발 버튼으로 언제든 한 번에 신고하고 통화를 끝낼 수 있습니다. 한 번의 신고로 불이익을 받지는 않습니다.'] },
     ],
   },
   tokusho: {
-    title: '특정상거래법에 따른 표기 (일본)', updated: '2026년 10월 (초안)',
+    title: '특정상거래법에 따른 표기 (일본)', updated: '2026년 11월 8일',
     sections: [
-      { h: '판매 사업자', p: [OPERATOR_EN] },
-      { h: '운영 책임자·소재지·전화번호', p: ['요청이 있으면 지체 없이 공개합니다.'] },
+      { h: '현재 판매', p: ['서비스는 무료이며 현재 판매하는 유료 상품은 없습니다. 유료 기능을 시작할 때 가격, 결제 방법, 해지·환불을 이 페이지에 게재합니다.'] },
+      { h: '운영자', p: [OPERATOR_EN] },
+      { h: '소재지·전화번호', p: ['요청이 있으면 지체 없이 공개합니다.'] },
       { h: '문의', p: [CONTACT] },
-      { h: '판매 가격', p: ['Tentalk Plus 월 [480]엔, 연 [3,800]엔 (세금 포함).'] },
-      { h: '결제 방법', p: ['App Store 또는 Google Play 결제. 각 스토어의 규정에 따릅니다.'] },
-      { h: '제공 시기', p: ['구매 완료 후 바로 이용할 수 있습니다.'] },
-      { h: '해지·환불', p: ['각 스토어의 구독 관리에서 해지할 수 있습니다. 환불은 각 스토어의 규정에 따릅니다.'] },
     ],
   },
   faq: {
     title: '자주 묻는 질문', updated: '',
     sections: [
-      { h: '10분 전에 통화가 끊기면?', p: ['60초 안에 다시 연결되면 그대로 이어집니다. 연결 끊김은 불이익이 되지 않습니다.'] },
+      { h: '10분 전에 통화가 끊기면?', p: ['연결이 잠깐 끊기면 앱이 자동으로 다시 연결을 시도합니다. 연결 끊김으로 통화가 끝나도 불이익은 없습니다.'] },
       { h: '빠른 매칭으로 대화한 상대의 프로필이 보이지 않아요', p: ['두 사람 모두 10분 이상 대화한 경우에만 공개됩니다. 공개된 상대는 “기록”에서 언제든 볼 수 있습니다.'] },
       { h: '채팅할 수 있나요?', p: ['할 수 없습니다. 상대와 연결되는 방법은 10분 통화 요청뿐입니다.'] },
       { h: '팔로우는 어떻게 하나요?', p: ['10분 대화를 끝까지 한 상대만 팔로우할 수 있어요. 빠른 통화에서 프로필이 공개되었거나 요청 통화에서 10분을 채우면 상대 프로필에 팔로우 버튼이 나타나요. 좋아요나 댓글 기능은 없어요.'] },
@@ -270,11 +276,11 @@ const ko: Record<DocId, LegalDoc> = {
 
 const es: Record<DocId, LegalDoc> = {
   terms: {
-    title: 'Términos del servicio', updated: 'Octubre de 2026 (borrador)',
+    title: 'Términos del servicio', updated: '8 de noviembre de 2026',
     sections: [
       { h: '1. Sobre el servicio', p: [`Tentalk (el “Servicio”) lo ofrece ${OPERATOR_EN} (el “Operador”) para practicar idiomas mediante llamadas de voz uno a uno.`] },
       { h: '2. Quién puede usarlo', p: ['Debes tener 18 años o más. Comprobamos tu fecha de nacimiento al registrarte y suspendemos las cuentas de menores de 18 años.'] },
-      { h: '3. Tu cuenta', p: ['Te registras con Apple, Google o un correo electrónico. La cuenta es solo para ti y no puede transferirse ni compartirse.'] },
+      { h: '3. Tu cuenta', p: ['Te registras con un correo electrónico (o con una cuenta de Google en los dispositivos compatibles). La cuenta es solo para ti y no puede transferirse ni compartirse.'] },
       { h: '4. Normas de las llamadas', p: [
         'Las llamadas son uno a uno. Los primeros 10 minutos son obligatorios; después no hay límite de tiempo.',
         'Si cuelgas antes de 10 minutos, baja tu puntuación de confianza y las llamadas rápidas se pausan durante un tiempo. No cuenta si terminas por una denuncia, si se corta la conexión o si cuelga la otra persona.',
@@ -282,34 +288,39 @@ const es: Record<DocId, LegalDoc> = {
       ] },
       { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años.'] },
       { h: '6. Denuncias y revisión', p: [
-        'Puedes denunciar a la otra persona y terminar la llamada en cualquier momento. Solo al denunciar, se envían al Operador los últimos 60 segundos de audio para revisarlos.',
-        'Intentamos revisar las denuncias en 24 horas y podemos bajar la puntuación o suspender cuentas si se confirma una infracción. Las denuncias falsas, o 3 o más sin confirmar en 30 días, pueden conllevar medidas contra quien denuncia.',
+        'Puedes denunciar a la otra persona y terminar la llamada en cualquier momento, y también denunciar desde un perfil. La denuncia envía al Operador el motivo y datos como a quién se refiere y cuándo fue la llamada. El audio de las llamadas nunca se graba ni se envía.',
+        'Revisamos las denuncias lo antes posible y podemos bajar la puntuación o suspender cuentas si se confirma una infracción. Las denuncias que se consideren falsas pueden conllevar medidas contra quien denuncia.',
       ] },
-      { h: '7. Plan de pago', p: ['Tentalk Plus se compra en App Store o Google Play y se renueva automáticamente salvo que canceles al menos 24 horas antes de que termine el periodo. Puedes cancelar en la gestión de suscripciones de tu tienda. El plan de pago no afecta al tiempo de llamada, al emparejamiento ni a la puntuación de confianza.'] },
+      { h: '7. Precio', p: ['El Servicio es gratuito. Antes de introducir funciones de pago, explicaremos en la app su contenido, precio y forma de pago, y actualizaremos estos términos.'] },
       { h: '8. Exención de responsabilidad', p: ['Salvo dolo o negligencia grave, el Operador no se responsabiliza de lo que los usuarios se dicen ni de los conflictos derivados de las llamadas.'] },
       { h: '9. Cambios', p: ['Anunciaremos con antelación en la app cualquier cambio de estos términos.'] },
-      { h: '10. Ley aplicable', p: ['Estos términos se rigen por las leyes de Japón. El [nombre del tribunal] tendrá jurisdicción exclusiva en primera instancia.'] },
+      { h: '10. Ley aplicable', p: ['Estos términos se rigen por las leyes de Japón. El tribunal de distrito correspondiente al domicilio del Operador tendrá jurisdicción exclusiva en primera instancia.'] },
     ],
   },
   privacy: {
-    title: 'Política de privacidad', updated: 'Octubre de 2026 (borrador)',
+    title: 'Política de privacidad', updated: '8 de noviembre de 2026',
     sections: [
       { h: '1. Qué recopilamos', p: [
-        'Cuenta: el identificador de la cuenta de Apple o Google con la que te registraste y tu correo electrónico.',
-        'Perfil: nombre, icono, “sobre ti”, presentación de voz, idioma nativo y los que aprendes, niveles, aficiones, horario disponible y zona horaria.',
-        'Fecha de nacimiento: solo para comprobar que tienes 18 años o más; nunca se muestra a otros usuarios.',
-        'Uso: con quién hablas, fechas, duración, puntuación de confianza, seguidos, bloqueos y avisos.',
-        'No grabamos ni guardamos el audio de las llamadas. Solo cuando denuncias, se envían para revisión los últimos 60 segundos guardados temporalmente en tu dispositivo.',
-        'Dispositivo: modelo, sistema operativo, idioma y token de notificaciones.',
+        'Cuenta: tu correo electrónico y el identificador de la cuenta (y el de tu cuenta de Google si te registraste con Google).',
+        'Perfil: nombre, foto, “sobre ti”, presentación de voz, idioma nativo y los que aprendes, niveles, aficiones, horario disponible y diferencia horaria (según el reloj de tu dispositivo). Tu perfil se muestra a otros usuarios.',
+        'Fecha de nacimiento: se comprueba en tu dispositivo al registrarte solo para confirmar que tienes 18 años o más; no se guarda en nuestros servidores.',
+        'Uso: con quién hablas, fechas, duración, puntuación de confianza, seguidos, bloqueos, solicitudes de llamada y estado en línea (última vez que usaste la app).',
+        'Denuncias y consultas: el motivo y la persona denunciada, y el contenido de las consultas con el correo de respuesta.',
+        'El audio de las llamadas pasa por los servidores de nuestro proveedor de llamadas para llegar a la otra persona, pero nunca se graba ni se guarda.',
+        'El token de notificaciones y el idioma de la app. No recopilamos ubicación, contactos ni identificadores publicitarios.',
       ] },
       { h: '2. Para qué lo usamos', p: ['Para presentarte compañeros y ofrecer las llamadas, evitar abusos y revisar denuncias, responder a tus consultas y mejorar el Servicio.'] },
-      { h: '3. Con quién lo compartimos', p: ['No compartimos tu información con terceros sin tu consentimiento salvo que la ley lo exija. Usamos proveedores de nube, autenticación y llamadas para el Servicio. Si mostramos anuncios, indicaremos aquí el proveedor y los datos compartidos.'] },
-      { h: '4. Conservación y eliminación', p: ['Al eliminar tu cuenta, borramos tu perfil, historial, seguidos y puntuación de confianza. Los registros de denuncias se guardan como máximo [periodo] para evitar abusos y después se eliminan. Puedes eliminar tu cuenta en la app desde Yo → Eliminar cuenta.'] },
-      { h: '5. Contacto', p: [`Para consultas sobre privacidad, escribe a ${CONTACT}.`] },
+      { h: '3. Con quién lo compartimos', p: [
+        'No compartimos tu información con terceros sin tu consentimiento salvo que la ley lo exija. Nunca la compartimos ni usamos para publicidad o rastreo.',
+        'Para el Servicio usamos estos proveedores: Google (Firebase: inicio de sesión, base de datos y archivos), LiveKit (transmisión de las llamadas de voz), Expo (servidores, actualizaciones de la app y notificaciones) y Apple (notificaciones en iPhone). Tratan los datos principalmente en servidores de Estados Unidos y otros países y los protegen según sus propias normas de seguridad.',
+      ] },
+      { h: '4. Conservación y eliminación', p: ['Al eliminar tu cuenta, borramos tu perfil, foto y presentación de voz, historial, seguidos y puntuación de confianza. Los registros de denuncias y suspensiones, y las consultas, se guardan el tiempo necesario para evitar abusos y responder, y se eliminan cuando dejan de ser necesarios. Puedes eliminar tu cuenta en la app desde Yo → Eliminar cuenta.'] },
+      { h: '5. Tus derechos y contacto', p: [`Para acceder, corregir, dejar de usar o eliminar tu información, o para cualquier consulta sobre privacidad, escribe a ${CONTACT}. Responderemos sin demora tras confirmar tu identidad.`] },
+      { h: '6. Operador', p: [`${OPERATOR_EN}. La dirección se facilita sin demora a quien la solicite.`] },
     ],
   },
   guidelines: {
-    title: 'Normas de la comunidad', updated: 'Octubre de 2026 (borrador)',
+    title: 'Normas de la comunidad', updated: '8 de noviembre de 2026',
     sections: [
       { h: 'Lo que importa aquí', p: ['Este es un lugar para practicar idiomas. La otra persona también está aprendiendo, así que habla despacio y con amabilidad.'] },
       { h: 'No está permitido', p: [
@@ -321,28 +332,25 @@ const es: Record<DocId, LegalDoc> = {
       ] },
       { h: 'Si no se cumplen las normas', p: [
         'Colgar antes de 10 minutos: puntuación de confianza −10 y sin llamadas rápidas durante 30 minutos.',
-        'Infracción confirmada: puntuación −30 y suspensión. El contenido sexual o la captación suponen suspensión inmediata.',
-        'Denuncias falsas, o 3 o más sin confirmar en 30 días: puntuación −10.',
+        'Infracción confirmada: puntuación −30. Las infracciones graves, como el contenido sexual o la captación, suponen además 7 días de suspensión, y más si se repiten.',
+        'Denuncias consideradas falsas: puntuación −10.',
       ] },
       { h: 'Si algo va mal', p: ['Toca la bandera durante la llamada para denunciar y terminarla con un toque. Una sola denuncia nunca te penaliza.'] },
     ],
   },
   tokusho: {
-    title: 'Aviso comercial (Japón)', updated: 'Octubre de 2026 (borrador)',
+    title: 'Aviso comercial (Japón)', updated: '8 de noviembre de 2026',
     sections: [
-      { h: 'Vendedor', p: [OPERATOR_EN] },
-      { h: 'Responsable, dirección y teléfono', p: ['Se facilitan sin demora a quien lo solicite.'] },
+      { h: 'Ventas actuales', p: ['El Servicio es gratuito y por ahora no se vende nada. Cuando empiecen las funciones de pago, esta página indicará precios, forma de pago, cancelación y reembolsos.'] },
+      { h: 'Operador', p: [OPERATOR_EN] },
+      { h: 'Dirección y teléfono', p: ['Se facilitan sin demora a quien lo solicite.'] },
       { h: 'Contacto', p: [CONTACT] },
-      { h: 'Precio', p: ['Tentalk Plus: [480 ¥] al mes, [3.800 ¥] al año (impuestos incluidos).'] },
-      { h: 'Pago', p: ['A través de App Store o Google Play, según las condiciones de cada tienda.'] },
-      { h: 'Entrega', p: ['Disponible inmediatamente después de la compra.'] },
-      { h: 'Cancelación y reembolsos', p: ['Cancela en la gestión de suscripciones de tu tienda. Los reembolsos siguen la política de cada tienda.'] },
     ],
   },
   faq: {
     title: 'Preguntas frecuentes', updated: '',
     sections: [
-      { h: '¿Y si la llamada se corta antes de 10 minutos?', p: ['Si te reconectas en 60 segundos, la llamada continúa. Un corte de conexión nunca cuenta en tu contra.'] },
+      { h: '¿Y si la llamada se corta antes de 10 minutos?', p: ['Si la conexión se interrumpe un momento, la app intenta reconectarse sola. Una llamada que termina por un corte de conexión nunca cuenta en tu contra.'] },
       { h: 'No veo el perfil de alguien con quien hablé en una llamada rápida', p: ['Los perfiles solo se abren si ambos hablan 10 minutos o más. Los perfiles abiertos siguen disponibles en el Historial.'] },
       { h: '¿Puedo chatear?', p: ['No. La única forma de contactar con alguien es pedir una llamada de 10 minutos.'] },
       { h: '¿Cómo sigo a alguien?', p: ['Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos. Tras una llamada rápida que abrió los perfiles, o una solicitada que llegó a 10 minutos, aparece el botón Seguir en su perfil. No hay «me gusta» ni comentarios.'] },

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { SmallChips } from '@/components/people';
 import { Body, Button, Card, ChoiceChips, ErrorText, Field, Screen, Title } from '@/components/ui';
 import { LICENSES, legalDoc, type DocId } from '@/data/legal';
+import { PLUS_ENABLED } from '@/domain/features';
 import { auth, authErrorKind } from '@/services/auth';
 import { cloud } from '@/services/cloud';
 import { support, type InquiryKind } from '@/services/support';
@@ -159,9 +160,11 @@ function DeleteAccount() {
       <Close />
       <Title>{t('info.deleteTitle')}</Title>
       <Body>{t('info.deleteBody')}</Body>
-      <Card style={{ backgroundColor: c.nativeSoft }}>
-        <Body small>{t('info.deleteSubscription')}</Body>
-      </Card>
+      {PLUS_ENABLED ? (
+        <Card style={{ backgroundColor: c.nativeSoft }}>
+          <Body small>{t('info.deleteSubscription')}</Body>
+        </Card>
+      ) : null}
       <Body small muted>{t('info.deleteReason')}</Body>
       <SmallChips label={t('info.deleteReason')} value={reason} onChange={setReason}
         options={['none', 'noPartners', 'notUseful', 'safety', 'other'].map((k) => ({ key: k, label: t(`info.reasons.${k}`) }))} />
