@@ -136,6 +136,18 @@ export const firestore = {
     return rows.filter((r) => r.document).map((r) => ({ ...docData(r.document!), id: r.document!.name.split('/').pop()! }));
   },
 
+  /** Documents in `collection` whose numeric `field` is below `max` (at most `limit`). */
+  async before(collection: string, field: string, max: number, limit: number): Promise<(Data & { id: string })[]> {
+    const rows = await call<{ document?: RawDoc }[]>(':runQuery', {
+      structuredQuery: {
+        from: [{ collectionId: collection }],
+        where: { fieldFilter: { field: { fieldPath: field }, op: 'LESS_THAN', value: toValue(max) } },
+        limit,
+      },
+    });
+    return rows.filter((r) => r.document).map((r) => ({ ...docData(r.document!), id: r.document!.name.split('/').pop()! }));
+  },
+
   async begin(): Promise<string> {
     return (await call<{ transaction: string }>(':beginTransaction', {})).transaction;
   },

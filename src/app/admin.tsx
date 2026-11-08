@@ -59,6 +59,9 @@ export default function Admin() {
     return () => { stale = true; };
   }, [version, t]);
 
+  // Opening this screen also deletes records past their retention period (server/retention).
+  useEffect(() => { void api('/api/admin', { purge: true }).catch(() => {}); }, []);
+
   const decide = async () => {
     if (!pending) return;
     setBusy(true);
