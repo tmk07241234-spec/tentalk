@@ -11,7 +11,7 @@ const en: Translation = {
     apple: 'Sign in with Apple',
     google: 'Continue with Google',
     email: 'Continue with email',
-    agree: 'By continuing, you agree to the Terms of Service and Privacy Policy. If you already have an account, sign in the same way.',
+    agree: 'By continuing, you agree to the Terms of Service, Community Guidelines and Privacy Policy. There is no tolerance for objectionable content or abusive behaviour, and accounts that break the rules are suspended. If you already have an account, sign in the same way.',
     terms: 'Terms of Service',
     privacy: 'Privacy Policy',
     uiLanguage: 'Display language',

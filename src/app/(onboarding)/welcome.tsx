@@ -62,6 +62,13 @@ export default function Welcome() {
       </Pressable>
       <ErrorText>{error}</ErrorText>
       <Body small muted style={{ textAlign: 'center' }}>{t('welcome.agree')}</Body>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: space.md }}>
+        {(['terms', 'guidelines', 'privacy'] as const).map((doc) => (
+          <Pressable key={doc} accessibilityRole="link" onPress={() => router.push(`/info/${doc}`)} hitSlop={8}>
+            <Text style={{ color: c.learn, fontSize: 13, fontWeight: '600', textDecorationLine: 'underline' }}>{t(`me.${doc}`)}</Text>
+          </Pressable>
+        ))}
+      </View>
     </Screen>
   );
 }

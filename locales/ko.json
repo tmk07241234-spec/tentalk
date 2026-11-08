@@ -1,0 +1,5 @@
+{
+  "NSMicrophoneUsageDescription": "연습 상대와의 음성 통화와 음성 소개 녹음에 마이크를 사용합니다.",
+  "NSPhotoLibraryUsageDescription": "다른 이용자에게 보이는 프로필 사진을 고르기 위해 사진 보관함을 사용합니다.",
+  "NSCameraUsageDescription": "Tentalk는 음성 전용 앱이며 카메라를 사용하지 않습니다."
+}

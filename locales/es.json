@@ -1,0 +1,5 @@
+{
+  "NSMicrophoneUsageDescription": "Tentalk usa el micrófono para las llamadas de voz con tu compañero de práctica y para grabar tu presentación de voz.",
+  "NSPhotoLibraryUsageDescription": "Tentalk usa tu fototeca para que elijas la foto de perfil que verán otros usuarios.",
+  "NSCameraUsageDescription": "Tentalk es solo de voz y no usa la cámara."
+}

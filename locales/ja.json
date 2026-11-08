@@ -1,0 +1,5 @@
+{
+  "NSMicrophoneUsageDescription": "練習相手との音声通話と、自己紹介の音声の録音にマイクを使います。",
+  "NSPhotoLibraryUsageDescription": "他の利用者に表示されるプロフィール写真を選ぶために、写真ライブラリを使います。",
+  "NSCameraUsageDescription": "Tentalk は音声のみのアプリで、カメラは使いません。"
+}

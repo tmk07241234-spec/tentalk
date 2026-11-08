@@ -28,7 +28,7 @@ const ja: Record<DocId, LegalDoc> = {
         '必修の10分以内に自分から通話を終了すると、信頼スコアが下がり、クイックマッチが一定時間利用できなくなります。通報による終了、通信の切断、相手による終了はこの対象になりません。',
         'クイックマッチでは、2人とも10分以上話した場合にのみ、お互いのプロフィールが公開されます。',
       ] },
-      { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。'] },
+      { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。運営者は、不適切な内容や迷惑行為を一切容認しません。'] },
       { h: '6. 通報と審査', p: [
         '利用者は通話中いつでも相手を通報して通話を終了できます。プロフィールからも通報できます。通報すると、通報の理由と、相手・通話の日時などの情報が運営者に送られます。通話の音声は録音も送信もしません。',
         '運営者はできるだけ早く通報を確認し、違反が認められた場合は信頼スコアの減点、利用停止などの措置を取ります。虚偽と判断された通報には、通報者に措置を取ることがあります。',
@@ -114,7 +114,7 @@ const en: Record<DocId, LegalDoc> = {
         'If you end a call yourself before 10 minutes, your trust score goes down and quick matches are paused for a while. Ending by report, a dropped connection, or your partner ending the call does not count.',
         'In quick matches, profiles open up only if both of you talk for 10 minutes or more.',
       ] },
-      { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18.'] },
+      { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18. The Operator has zero tolerance for objectionable content and abusive users.'] },
       { h: '6. Reports and review', p: [
         'You can report your partner and end the call at any time, and you can also report from a profile. A report sends the Operator the reason and details such as who it concerns and when the call took place. Call audio is never recorded or sent.',
         'We review reports as soon as we can and may lower trust scores or suspend accounts when a violation is confirmed. Reports judged false may lead to action against the reporter.',
@@ -200,7 +200,7 @@ const ko: Record<DocId, LegalDoc> = {
         '필수 10분 이내에 스스로 통화를 끝내면 신뢰 점수가 내려가고 일정 시간 빠른 통화를 이용할 수 없습니다. 신고로 인한 종료, 연결 끊김, 상대방의 종료는 해당하지 않습니다.',
         '빠른 통화에서는 두 사람 모두 10분 이상 대화한 경우에만 서로의 프로필이 공개됩니다.',
       ] },
-      { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다.'] },
+      { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다. 운영자는 부적절한 콘텐츠와 괴롭힘을 절대 용인하지 않습니다.'] },
       { h: '6. 신고와 검토', p: [
         '이용자는 통화 중 언제든지 상대를 신고하고 통화를 끝낼 수 있으며, 프로필에서도 신고할 수 있습니다. 신고하면 신고 사유와 상대, 통화 일시 등의 정보가 운영자에게 전송됩니다. 통화 음성은 녹음하거나 전송하지 않습니다.',
         '운영자는 가능한 한 빨리 신고를 확인하고, 위반이 확인되면 신뢰 점수 감점, 이용 정지 등의 조치를 취합니다. 허위로 판단된 신고에는 신고자에게 조치할 수 있습니다.',
@@ -286,7 +286,7 @@ const es: Record<DocId, LegalDoc> = {
         'Si cuelgas antes de 10 minutos, baja tu puntuación de confianza y las llamadas rápidas se pausan durante un tiempo. No cuenta si terminas por una denuncia, si se corta la conexión o si cuelga la otra persona.',
         'En las llamadas rápidas, los perfiles solo se abren si ambos hablan 10 minutos o más.',
       ] },
-      { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años.'] },
+      { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años. El Operador no tolera en absoluto el contenido inapropiado ni a los usuarios abusivos.'] },
       { h: '6. Denuncias y revisión', p: [
         'Puedes denunciar a la otra persona y terminar la llamada en cualquier momento, y también denunciar desde un perfil. La denuncia envía al Operador el motivo y datos como a quién se refiere y cuándo fue la llamada. El audio de las llamadas nunca se graba ni se envía.',
         'Revisamos las denuncias lo antes posible y podemos bajar la puntuación o suspender cuentas si se confirma una infracción. Las denuncias que se consideren falsas pueden conllevar medidas contra quien denuncia.',

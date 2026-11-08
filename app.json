@@ -46,21 +46,22 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Choose a profile photo from your library."
+          "photosPermission": "Tentalk uses your photo library so you can choose a profile photo that other users will see.",
+          "cameraPermission": "Tentalk is voice only and does not use the camera."
         }
       ],
       [
         "expo-audio",
         {
-          "microphonePermission": "Tentalk uses the microphone for calls and for recording your voice intro."
+          "microphonePermission": "Tentalk uses the microphone for voice calls with your practice partner and for recording your voice intro."
         }
       ],
       "@livekit/react-native-expo-plugin",
       [
         "@config-plugins/react-native-webrtc",
         {
-          "cameraPermission": "Tentalk does not use the camera during calls.",
-          "microphonePermission": "Tentalk uses the microphone for calls and for recording your voice intro."
+          "cameraPermission": "Tentalk is voice only and does not use the camera.",
+          "microphonePermission": "Tentalk uses the microphone for voice calls with your practice partner and for recording your voice intro."
         }
       ],
       "expo-notifications"
@@ -79,6 +80,11 @@
     },
     "updates": {
       "url": "https://u.expo.dev/387e867b-f84f-4cfa-990c-4366d245a535"
+    },
+    "locales": {
+      "ja": "./locales/ja.json",
+      "ko": "./locales/ko.json",
+      "es": "./locales/es.json"
     }
   }
 }

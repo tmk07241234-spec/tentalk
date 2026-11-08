@@ -11,7 +11,7 @@ const es: Translation = {
     apple: 'Iniciar sesión con Apple',
     google: 'Continuar con Google',
     email: 'Continuar con correo electrónico',
-    agree: 'Al continuar, aceptas los Términos del servicio y la Política de privacidad. Si ya tienes una cuenta, entra del mismo modo.',
+    agree: 'Al continuar, aceptas los Términos del servicio, las Normas de la comunidad y la Política de privacidad. No toleramos contenido inapropiado ni conductas abusivas, y las cuentas que incumplen las normas se suspenden. Si ya tienes una cuenta, entra del mismo modo.',
     terms: 'Términos del servicio',
     privacy: 'Política de privacidad',
     uiLanguage: 'Idioma de la app',
