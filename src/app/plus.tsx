@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Pip } from '@/components/Pip';
+import { PLUS_ENABLED } from '@/domain/features';
 import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { purchases, type Plan, type PlanId } from '@/services/purchases';
 import { useApp } from '@/state/store';
@@ -18,7 +19,12 @@ const FEATURES: { key: string; icon: React.ComponentProps<typeof Ionicons>['name
   { key: 'notes', icon: 'bookmark', ready: false },
 ];
 
-export default function PlusScreen() {
+/** Plus is not on sale yet (see domain/features), so the route leads home. */
+export default function PlusRoute() {
+  return PLUS_ENABLED ? <PlusScreen /> : <Redirect href="/" />;
+}
+
+function PlusScreen() {
   const { t } = useTranslation();
   const c = useColors();
   const plus = useApp((s) => s.plus);

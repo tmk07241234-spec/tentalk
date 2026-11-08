@@ -1,6 +1,7 @@
 import { uiLangFromDevice } from '../languages';
 import { levelsClose } from '../levels';
 import { isEligible, pickRandomPartner, relation, type Candidate, type MatchPrefs } from '../matching';
+import { PLUS_ENABLED } from '../features';
 import { callOutcome, formatClock, reportPenalty, shouldShowAd, silenceNudge } from '../callRules';
 import { isAdult, isEmail, isPassword, toDate, validateLanguages } from '../validation';
 
@@ -78,7 +79,9 @@ describe('call rules', () => {
     expect(silenceNudge(10)).toBeNull();
     expect(silenceNudge(30)).toBe('topic');
     expect(silenceNudge(75)).toBe('example');
-    expect([1, 2, 3, 4, 5, 6].map((n) => shouldShowAd({ plus: false, callCount: n }))).toEqual([false, false, false, true, false, true]);
+    // Tentalk launches without ads (domain/features); the schedule applies once Plus is on sale.
+    const schedule = PLUS_ENABLED ? [false, false, false, true, false, true] : [false, false, false, false, false, false];
+    expect([1, 2, 3, 4, 5, 6].map((n) => shouldShowAd({ plus: false, callCount: n }))).toEqual(schedule);
     expect(shouldShowAd({ plus: true, callCount: 4 })).toBe(false);
   });
 

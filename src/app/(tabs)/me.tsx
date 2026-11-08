@@ -14,6 +14,7 @@ import { Body, Button, Card, Eyebrow, Screen, Title } from '@/components/ui';
 import { BADGES, earnedBadges } from '@/domain/progress';
 import { api } from '@/services/api';
 import { auth } from '@/services/auth';
+import { PLUS_ENABLED } from '@/domain/features';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -81,7 +82,7 @@ export default function Me() {
         <Button label={t('me.editProfile')} onPress={() => router.push('/profile-edit')} />
       </Card>
 
-      <Pressable accessibilityRole="button" onPress={() => router.push('/plus')}>
+      {PLUS_ENABLED ? <Pressable accessibilityRole="button" onPress={() => router.push('/plus')}>
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.learnSoft }}>
           <Ionicons name="sparkles" size={22} color={c.learn} />
           <View style={{ flex: 1 }}>
@@ -90,7 +91,7 @@ export default function Me() {
           </View>
           <Text style={{ color: c.learn, fontWeight: '700' }}>{t('plus.see')}</Text>
         </Card>
-      </Pressable>
+      </Pressable> : null}
 
       <Card>
         <Eyebrow>{t('me.trust')}</Eyebrow>

@@ -14,6 +14,7 @@ import { Body, Button, ChoiceChips, ErrorText, Eyebrow, Field, Screen, Title } f
 import { MAX_LEARNING_LANGS, SELECTABLE_LANGS, type Lang } from '@/domain/languages';
 import type { Level } from '@/domain/levels';
 import { HOBBIES, MAX_BIO, MAX_NAME, validateProfile } from '@/domain/profile';
+import { PLUS_ENABLED } from '@/domain/features';
 import { deviceOffset, formatHM, type HoursRange } from '@/domain/schedule';
 import { useApp, type FrameId, type LearningLang, type VoiceIntro } from '@/state/store';
 import { AVATAR_COLORS, radius, space, useColors } from '@/theme/colors';
@@ -77,6 +78,7 @@ export default function ProfileEdit() {
         </View>
       </View>
 
+      {PLUS_ENABLED ? <>
       <Eyebrow>{t('frames.title')}</Eyebrow>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.md }}>
         {([null, 'gold', 'sakura', 'wave'] as (FrameId | null)[]).map((f) => {
@@ -95,6 +97,7 @@ export default function ProfileEdit() {
         })}
       </View>
       {!plus ? <Body small muted>{t('frames.locked')}</Body> : null}
+      </> : null}
 
       <Field label={t('profileEdit.name')} value={name} onChangeText={setName} maxLength={MAX_NAME} />
       <Field label={`${t('profileEdit.bio')} (${bio.length}/${MAX_BIO})`} value={bio} onChangeText={setBio} maxLength={MAX_BIO} multiline

@@ -1,3 +1,5 @@
+import { PLUS_ENABLED } from './features';
+
 /** The first 10 minutes of every call are required. After that there is no limit. */
 export const REQUIRED_SECONDS = 600;
 /** Silence thresholds for the AI helper: new topic, then example questions. */
@@ -79,7 +81,7 @@ export function silenceNudge(silentSeconds: number): SilenceNudge {
  * after every 2nd call. Never full-screen, never before a call starts.
  */
 export function shouldShowAd(input: { plus: boolean; callCount: number }): boolean {
-  return !input.plus && input.callCount > 3 && input.callCount % 2 === 0;
+  return PLUS_ENABLED && !input.plus && input.callCount > 3 && input.callCount % 2 === 0;
 }
 
 export function formatClock(totalSeconds: number): string {
