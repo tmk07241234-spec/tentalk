@@ -42,13 +42,15 @@ export async function actOnReport(adminUid: string, id: unknown, action: unknown
   if (report.status !== 'open') throw new HttpError(409, 'already-decided');
   const by = report.by as string, against = report.against as string;
   const paths = { by: `users/${by}/private/moderation`, against: `users/${against}/private/moderation` };
-  const docs = await firestore.getMany([paths.by, paths.against, `users/${by}/private/push`, `users/${against}/private/push`]);
+  const docs = await firestore.getMany([paths.by, paths.against, `users/${by}/private/push`, `users/${against}/private/push`, `users/${against}`]);
   const now = Date.now();
   const d = decide(action as ModerationAction, id, now);
   await firestore.commit([
     { set: `reports/${id}`, data: { ...report, status: d.status, action: action as string, decidedBy: adminUid, decidedAt: now } },
     { set: paths.by, data: withEvent(docs[paths.by] as ModerationRecord | null, d.reporter) as unknown as Data },
     ...(d.against ? [{ set: paths.against, data: withEvent(docs[paths.against] as ModerationRecord | null, d.against) as unknown as Data }] : []),
+    // A confirmed violation removes the reported person's free text and media from their public profile.
+    ...(d.against && docs[`users/${against}`] ? [{ set: `users/${against}`, data: { ...docs[`users/${against}`]!, bio: '', photoUri: null, voice: null } }] : []),
   ]);
   // Only "you have a message"; the details are shown in the app.
   await sendPush(pushTarget(docs[`users/${by}/private/push`]), 'moderation');

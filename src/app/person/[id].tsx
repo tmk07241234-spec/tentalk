@@ -176,11 +176,11 @@ export default function PersonScreen() {
         <Button label={t('common.cancel')} onPress={() => setSheet(null)} />
       </Sheet>
 
-      <Sheet visible={sheet === 'reported'} onClose={() => setSheet(null)}>
+      {/* Reporting also blocks: the person disappears from lists, history and matching at once. */}
+      <Sheet visible={sheet === 'reported'} onClose={() => { app.block(person.id); setSheet(null); router.back(); }}>
         <Title>{t('profileView.reportedTitle')}</Title>
         <Body muted>{t('profileView.reportedBody', { name: person.name })}</Body>
-        <Button variant="danger" label={t('profileView.blockConfirm')} onPress={() => { app.block(person.id); setSheet(null); router.back(); }} />
-        <Button label={t('common.close')} onPress={() => setSheet(null)} />
+        <Button label={t('common.close')} onPress={() => { app.block(person.id); setSheet(null); router.back(); }} />
       </Sheet>
 
       <Sheet visible={sheet === 'block'} onClose={() => setSheet(null)}>

@@ -2,6 +2,7 @@ import { LANGS, type Lang } from '@/domain/languages';
 import { isSuspended, type ModerationRecord } from '@/domain/moderation';
 import { pickQueuePartner, queueKey, seekKey, type QueueEntry } from '@/domain/queue';
 import { HttpError } from './auth';
+import { alertOperators } from './operators';
 import { firestore, type Data } from './firestore';
 
 /**
@@ -109,4 +110,6 @@ export async function saveReport(uid: string, input: { callId?: string; against?
   if (mine.some((r) => (callId ? r.callId === callId : !r.callId && r.against === against))) return;
   if (mine.filter((r) => (r.createdAt as number) > Date.now() - 24 * 3600_000).length >= MAX_REPORTS_PER_DAY) throw new HttpError(429, 'rate-limited');
   await firestore.commit([{ set: `reports/${newId()}`, data: { by: uid, against, callId, reason: reason.slice(0, 40), createdAt: Date.now(), status: 'open' } }]);
+  // Reports are reviewed within 24 hours: tell the operators right away.
+  await alertOperators().catch((e) => console.error('operators', e));
 }

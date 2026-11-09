@@ -1,5 +1,6 @@
 import { handle, isAdmin, requireAdmin } from '@/server/auth';
 import { actOnReport, listReports } from '@/server/moderation';
+import { rememberOperator } from '@/server/operators';
 import { purgeExpired } from '@/server/retention';
 import { closeInquiry, listInquiries } from '@/server/support';
 
@@ -7,7 +8,9 @@ import { closeInquiry, listInquiries } from '@/server/support';
 export async function GET(request: Request) {
   return handle(async () => {
     if (new URL(request.url).searchParams.get('check')) {
-      const { admin, needsVerification } = await isAdmin(request);
+      const { uid, admin, needsVerification } = await isAdmin(request);
+      // Operators' devices get an alert for each new report (server/operators).
+      if (admin) await rememberOperator(uid).catch((e) => console.error('operators', e));
       return { admin, needsVerification };
     }
     await requireAdmin(request);

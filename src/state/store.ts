@@ -260,7 +260,11 @@ export const useApp = create<AppState>()(
           const fresh = record.events.filter((e) => !s.moderationSeen.includes(e.id));
           if (!fresh.length && record.suspendedUntil === s.suspendedUntil) return s;
           const kindToNotice = { violation: 'penalty', suspended: 'suspended', falseReport: 'falseReport', reportConfirmed: 'reportResult', reportDismissed: 'reportDismissed' } as const;
+          // A confirmed violation removes the bio, photo and voice intro (the server already cleared
+          // them from the public profile); clearing them here keeps a later save from restoring them.
+          const removeContent = fresh.some((e) => e.kind === 'violation' || e.kind === 'suspended');
           return {
+            ...(removeContent && s.profile ? { profile: { ...s.profile, bio: '', photoUri: null, voice: null } } : {}),
             trust: clampTrust(fresh.reduce((t, e) => t + e.trustDelta, s.trust)),
             suspendedUntil: record.suspendedUntil,
             moderationSeen: [...s.moderationSeen, ...fresh.map((e) => e.id)].slice(-200),

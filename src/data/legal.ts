@@ -31,7 +31,7 @@ const ja: Record<DocId, LegalDoc> = {
       { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。運営者は、不適切な内容や迷惑行為を一切容認しません。'] },
       { h: '6. 通報と審査', p: [
         '利用者は通話中いつでも相手を通報して通話を終了できます。プロフィールからも通報できます。通報すると、通報の理由と、相手・通話の日時などの情報が運営者に送られます。通話の音声は録音も送信もしません。',
-        '運営者はできるだけ早く通報を確認し、違反が認められた場合は信頼スコアの減点、利用停止などの措置を取ります。虚偽と判断された通報には、通報者に措置を取ることがあります。',
+        '通報した相手は自動でブロックされ、通報した人の画面や一覧に表示されなくなります。運営者は通報を24時間以内に確認し、違反が認められた場合は、不適切なプロフィール内容の削除、信頼スコアの減点、違反者の利用停止などの措置を取ります。虚偽と判断された通報には、通報者に措置を取ることがあります。',
       ] },
       { h: '7. 料金', p: ['本サービスは無料で利用できます。有料の機能を始める場合は、内容・料金・支払方法を事前にアプリ内で案内し、この規約を更新します。'] },
       { h: '8. 免責', p: ['運営者は、利用者同士の会話の内容や、通話によって生じたトラブルについて、運営者に故意または重大な過失がある場合を除き責任を負いません。'] },
@@ -117,7 +117,7 @@ const en: Record<DocId, LegalDoc> = {
       { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18. The Operator has zero tolerance for objectionable content and abusive users.'] },
       { h: '6. Reports and review', p: [
         'You can report your partner and end the call at any time, and you can also report from a profile. A report sends the Operator the reason and details such as who it concerns and when the call took place. Call audio is never recorded or sent.',
-        'We review reports as soon as we can and may lower trust scores or suspend accounts when a violation is confirmed. Reports judged false may lead to action against the reporter.',
+        'The person you report is blocked automatically and disappears from your screens and lists. We review every report within 24 hours and, when a violation is confirmed, remove the objectionable profile content, lower the trust score and suspend the user who provided it. Reports judged false may lead to action against the reporter.',
       ] },
       { h: '7. Price', p: ['The Service is free. Before we introduce any paid feature, we will explain its content, price and payment in the app and update these terms.'] },
       { h: '8. Disclaimer', p: ['Except in cases of intent or gross negligence, the Operator is not responsible for what users say to each other or for disputes arising from calls.'] },
@@ -203,7 +203,7 @@ const ko: Record<DocId, LegalDoc> = {
       { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다. 운영자는 부적절한 콘텐츠와 괴롭힘을 절대 용인하지 않습니다.'] },
       { h: '6. 신고와 검토', p: [
         '이용자는 통화 중 언제든지 상대를 신고하고 통화를 끝낼 수 있으며, 프로필에서도 신고할 수 있습니다. 신고하면 신고 사유와 상대, 통화 일시 등의 정보가 운영자에게 전송됩니다. 통화 음성은 녹음하거나 전송하지 않습니다.',
-        '운영자는 가능한 한 빨리 신고를 확인하고, 위반이 확인되면 신뢰 점수 감점, 이용 정지 등의 조치를 취합니다. 허위로 판단된 신고에는 신고자에게 조치할 수 있습니다.',
+        '신고한 상대는 자동으로 차단되어 신고한 사람의 화면과 목록에서 보이지 않게 됩니다. 운영자는 신고를 24시간 안에 확인하고, 위반이 확인되면 부적절한 프로필 내용 삭제, 신뢰 점수 감점, 위반자의 이용 정지 등의 조치를 취합니다. 허위로 판단된 신고에는 신고자에게 조치할 수 있습니다.',
       ] },
       { h: '7. 요금', p: ['서비스는 무료로 이용할 수 있습니다. 유료 기능을 시작할 때는 내용, 요금, 결제 방법을 앱에서 미리 안내하고 이 약관을 변경합니다.'] },
       { h: '8. 면책', p: ['운영자에게 고의 또는 중대한 과실이 있는 경우를 제외하고, 운영자는 이용자 간 대화 내용이나 통화로 생긴 분쟁에 책임을 지지 않습니다.'] },
@@ -289,7 +289,7 @@ const es: Record<DocId, LegalDoc> = {
       { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años. El Operador no tolera en absoluto el contenido inapropiado ni a los usuarios abusivos.'] },
       { h: '6. Denuncias y revisión', p: [
         'Puedes denunciar a la otra persona y terminar la llamada en cualquier momento, y también denunciar desde un perfil. La denuncia envía al Operador el motivo y datos como a quién se refiere y cuándo fue la llamada. El audio de las llamadas nunca se graba ni se envía.',
-        'Revisamos las denuncias lo antes posible y podemos bajar la puntuación o suspender cuentas si se confirma una infracción. Las denuncias que se consideren falsas pueden conllevar medidas contra quien denuncia.',
+        'La persona denunciada queda bloqueada automáticamente y desaparece de tus pantallas y listas. Revisamos cada denuncia en 24 horas y, si se confirma una infracción, eliminamos el contenido inapropiado del perfil, bajamos la puntuación y suspendemos al usuario responsable. Las denuncias que se consideren falsas pueden conllevar medidas contra quien denuncia.',
       ] },
       { h: '7. Precio', p: ['El Servicio es gratuito. Antes de introducir funciones de pago, explicaremos en la app su contenido, precio y forma de pago, y actualizaremos estos términos.'] },
       { h: '8. Exención de responsabilidad', p: ['Salvo dolo o negligencia grave, el Operador no se responsabiliza de lo que los usuarios se dicen ni de los conflictos derivados de las llamadas.'] },
