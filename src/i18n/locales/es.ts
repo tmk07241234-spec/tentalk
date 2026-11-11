@@ -48,7 +48,7 @@ const es: Translation = {
     s3: { title: 'Llamada rápida o solicitud', body: 'En una llamada rápida primero ves el nombre, la foto, los idiomas y la presentación de la otra persona, y eliges hablar o saltar. La llamada empieza solo si los dos eligen hablar. Hablen 10 minutos y podrán seguirse. Para hablar con alguien concreto, envía una solicitud desde su perfil.' },
     connect: { title: 'Primero hablar, luego conectar', body: 'Tentalk es una app para aprender a hablar. No hay «me gusta», comentarios ni chat. Solo puedes seguir a alguien después de una llamada completa de 10 minutos, así que si alguien te interesa, empieza por pedirle una llamada.' },
     s4: { title: 'Puntuación de confianza', body: 'Sube al completar 10 minutos y baja si cuelgas antes. Solo tú ves el número; los demás solo ven “De confianza”.' },
-    s5: { title: 'Conversaciones seguras', body: 'Quien solo busca practicar idiomas lleva la insignia “Solo idiomas”. Denunciar y bloquear siempre está a un toque. Debes tener 18 años o más.' },
+    s5: { title: 'Conversaciones seguras', body: 'Ligar u otros acercamientos románticos o para citas en el primer contacto no están permitidos con nadie. Denunciar y bloquear siempre está a un toque. Debes tener 18 años o más.' },
   },
   home: {
     suspended: 'Por una infracción de las normas, no puedes hacer llamadas hasta el {{date}}.',
@@ -83,7 +83,7 @@ const es: Translation = {
     backToCall: 'Volver a la llamada', reportAndLeave: 'Denunciar y colgar', leaveAnyway: 'Colgar y aceptar la penalización',
     reportTitle: 'Denunciar a {{name}}', reportBody: 'Elige un motivo. La llamada termina enseguida y la persona queda bloqueada (no volverán a emparejarte ni la verás en las listas).',
     reportNote: 'Se envían a nuestro equipo el motivo, la persona y cuándo fue la llamada, y lo revisamos en 24 horas. El audio de las llamadas nunca se graba ni se envía. Las denuncias consideradas falsas penalizan igual que colgar antes.',
-    reasons: { romance: 'Acercamiento romántico o para citas (a alguien con “Solo idiomas”)', sexual: 'Comentarios sexuales', abuse: 'Insultos o discriminación', spam: 'Captación, publicidad o estafa', minor: 'Posible menor de edad', trolling: 'Silencio o trolleo', other: 'Otro' },
+    reasons: { romance: 'Acercamiento romántico o para citas', sexual: 'Comentarios sexuales', abuse: 'Insultos o discriminación', spam: 'Captación, publicidad o estafa', minor: 'Posible menor de edad', trolling: 'Silencio o trolleo', other: 'Otro' },
     sendReport: 'Denunciar y colgar',
     resultDone: '¡Buena llamada!', resultEarly: 'Colgaste antes de tiempo', resultReport: 'Denuncia recibida',
     resultCompleted: 'Completaste los 10 minutos obligatorios.', resultCapped: 'Completaste los 10 minutos obligatorios (alcanzaste el límite diario de +5).',

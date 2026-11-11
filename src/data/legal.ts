@@ -18,7 +18,7 @@ const CONTACT = 'tentalk.support@gmail.com';
 
 const ja: Record<DocId, LegalDoc> = {
   terms: {
-    title: '利用規約', updated: '2026年11月8日',
+    title: '利用規約', updated: '2026年11月11日',
     sections: [
       { h: '1. このサービスについて', p: [`Tentalk（以下「本サービス」）は、${OPERATOR_JA}（以下「運営者」）が提供する、1対1の音声通話で語学を練習するためのサービスです。`] },
       { h: '2. 利用できる方', p: ['本サービスは18歳以上の方のみ利用できます。登録時に生年月日を確認し、18歳未満と判明した場合はアカウントを停止します。'] },
@@ -28,7 +28,7 @@ const ja: Record<DocId, LegalDoc> = {
         '必修の10分以内に自分から通話を終了すると、信頼スコアが下がり、クイックマッチが一定時間利用できなくなります。通報による終了、通信の切断、相手による終了はこの対象になりません。',
         'クイックマッチでは、通話の前に相手の名前・写真・言語・自己紹介が表示され、2人とも「話す」を選んだ場合にだけ通話が始まります。どちらかがスキップすれば通話は始まりません。',
       ] },
-      { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。運営者は、不適切な内容や迷惑行為を一切容認しません。'] },
+      { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、初対面での恋愛・出会い目的の接触（口説く、容姿の話を続ける、会おうと誘う、しつこく連絡先を聞くなど）、未成年者の利用は禁止です。運営者は、不適切な内容や迷惑行為を一切容認しません。'] },
       { h: '6. 通報と審査', p: [
         '利用者は通話中いつでも相手を通報して通話を終了できます。プロフィールからも通報できます。通報すると、通報の理由と、相手・通話の日時などの情報が運営者に送られます。通話の音声は録音も送信もしません。',
         '通報した相手は自動でブロックされ、通報した人の画面や一覧に表示されなくなります。運営者は通報を24時間以内に確認し、違反が認められた場合は、不適切なプロフィール内容の削除、信頼スコアの減点、違反者の利用停止などの措置を取ります。虚偽と判断された通報には、通報者に措置を取ることがあります。',
@@ -40,7 +40,7 @@ const ja: Record<DocId, LegalDoc> = {
     ],
   },
   privacy: {
-    title: 'プライバシーポリシー', updated: '2026年11月8日',
+    title: 'プライバシーポリシー', updated: '2026年11月11日',
     sections: [
       { h: '1. 取得する情報', p: [
         'アカウント情報: メールアドレス、アカウントの識別子（Google で登録した場合は Google アカウントの識別子）。',
@@ -62,14 +62,14 @@ const ja: Record<DocId, LegalDoc> = {
     ],
   },
   guidelines: {
-    title: 'コミュニティガイドライン', updated: '2026年11月8日',
+    title: 'コミュニティガイドライン', updated: '2026年11月11日',
     sections: [
       { h: 'Tentalk で大切にしていること', p: ['ここは語学を練習する場所です。相手も練習中だということを忘れず、ゆっくり、やさしく話しましょう。'] },
       { h: '禁止していること', p: [
         '性的な発言、性的な内容への誘導。',
         '暴言、差別、嫌がらせ。',
         '勧誘、宣伝、詐欺、外部サービスへの誘導。',
-        '「語学のみ」の人への恋愛・出会い目的の接触。',
+        '初対面での恋愛・出会い目的の接触（口説く、容姿の話を続ける、会おうと誘う、しつこく連絡先を聞くなど）。すべての人に対して禁止です。何度も話して親しくなった人どうしの関係は、本人どうしにお任せします。',
         '18歳未満の利用、他人へのなりすまし。',
       ] },
       { h: 'ルールを守らなかった場合', p: [
@@ -81,7 +81,7 @@ const ja: Record<DocId, LegalDoc> = {
     ],
   },
   tokusho: {
-    title: '特定商取引法に基づく表記', updated: '2026年11月8日',
+    title: '特定商取引法に基づく表記', updated: '2026年11月11日',
     sections: [
       { h: '現在の販売', p: ['本サービスは無料で、現在、有料の商品やサービスの販売はありません。有料の機能を始める際に、販売価格、支払方法、解約・返金などをこのページに掲載します。'] },
       { h: '運営者', p: [OPERATOR_JA] },
@@ -104,7 +104,7 @@ const ja: Record<DocId, LegalDoc> = {
 
 const en: Record<DocId, LegalDoc> = {
   terms: {
-    title: 'Terms of Service', updated: 'November 8, 2026',
+    title: 'Terms of Service', updated: 'November 11, 2026',
     sections: [
       { h: '1. About the service', p: [`Tentalk (the “Service”) is provided by ${OPERATOR_EN} (the “Operator”) for practicing languages through one-on-one voice calls.`] },
       { h: '2. Who can use it', p: ['You must be 18 or older. We check your date of birth at sign-up and suspend accounts found to belong to anyone under 18.'] },
@@ -114,7 +114,7 @@ const en: Record<DocId, LegalDoc> = {
         'If you end a call yourself before 10 minutes, your trust score goes down and quick matches are paused for a while. Ending by report, a dropped connection, or your partner ending the call does not count.',
         'In a quick match, you see the other person’s name, photo, languages and bio before the call, and the call starts only if you both choose to talk. If either of you skips, no call starts.',
       ] },
-      { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18. The Operator has zero tolerance for objectionable content and abusive users.'] },
+      { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches at first contact (flirting, dwelling on someone’s looks, asking to meet, pressing for contact details), and use by anyone under 18. The Operator has zero tolerance for objectionable content and abusive users.'] },
       { h: '6. Reports and review', p: [
         'You can report your partner and end the call at any time, and you can also report from a profile. A report sends the Operator the reason and details such as who it concerns and when the call took place. Call audio is never recorded or sent.',
         'The person you report is blocked automatically and disappears from your screens and lists. We review every report within 24 hours and, when a violation is confirmed, remove the objectionable profile content, lower the trust score and suspend the user who provided it. Reports judged false may lead to action against the reporter.',
@@ -126,7 +126,7 @@ const en: Record<DocId, LegalDoc> = {
     ],
   },
   privacy: {
-    title: 'Privacy Policy', updated: 'November 8, 2026',
+    title: 'Privacy Policy', updated: 'November 11, 2026',
     sections: [
       { h: '1. What we collect', p: [
         'Account: your email address and account identifier (and your Google account identifier if you signed up with Google).',
@@ -148,14 +148,14 @@ const en: Record<DocId, LegalDoc> = {
     ],
   },
   guidelines: {
-    title: 'Community guidelines', updated: 'November 8, 2026',
+    title: 'Community guidelines', updated: 'November 11, 2026',
     sections: [
       { h: 'What matters here', p: ['This is a place to practice languages. Your partner is learning too, so speak slowly and kindly.'] },
       { h: 'Not allowed', p: [
         'Sexual remarks or steering toward sexual content.',
         'Abuse, discrimination, harassment.',
         'Solicitation, ads, scams, pushing people to other services.',
-        'Romantic or dating approaches to “Language only” users.',
+        'Romantic or dating approaches at first contact (flirting, dwelling on someone’s looks, asking to meet, pressing for contact details). This applies to everyone. Relationships between people who have talked many times and become friends are up to them.',
         'Use by anyone under 18, impersonating others.',
       ] },
       { h: 'If rules are broken', p: [
@@ -167,7 +167,7 @@ const en: Record<DocId, LegalDoc> = {
     ],
   },
   tokusho: {
-    title: 'Commercial disclosure (Japan)', updated: 'November 8, 2026',
+    title: 'Commercial disclosure (Japan)', updated: 'November 11, 2026',
     sections: [
       { h: 'Current sales', p: ['The Service is free and nothing is sold at the moment. When paid features start, this page will list prices, payment, cancellation and refunds.'] },
       { h: 'Operator', p: [OPERATOR_EN] },
@@ -190,7 +190,7 @@ const en: Record<DocId, LegalDoc> = {
 
 const ko: Record<DocId, LegalDoc> = {
   terms: {
-    title: '이용약관', updated: '2026년 11월 8일',
+    title: '이용약관', updated: '2026년 11월 11일',
     sections: [
       { h: '1. 서비스 소개', p: [`Tentalk(이하 “서비스”)는 ${OPERATOR_EN}(이하 “운영자”)가 제공하는, 1대1 음성 통화로 어학을 연습하는 서비스입니다.`] },
       { h: '2. 이용 자격', p: ['만 18세 이상만 이용할 수 있습니다. 가입 시 생년월일을 확인하며, 만 18세 미만으로 확인된 계정은 정지됩니다.'] },
@@ -200,7 +200,7 @@ const ko: Record<DocId, LegalDoc> = {
         '필수 10분 이내에 스스로 통화를 끝내면 신뢰 점수가 내려가고 일정 시간 빠른 통화를 이용할 수 없습니다. 신고로 인한 종료, 연결 끊김, 상대방의 종료는 해당하지 않습니다.',
         '빠른 통화에서는 통화 전에 상대의 이름, 사진, 언어, 자기소개가 표시되며, 두 사람 모두 “대화하기”를 고른 경우에만 통화가 시작됩니다. 어느 한쪽이 건너뛰면 통화는 시작되지 않습니다.',
       ] },
-      { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다. 운영자는 부적절한 콘텐츠와 괴롭힘을 절대 용인하지 않습니다.'] },
+      { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, 처음 만난 상대에 대한 연애·만남 목적의 접근(작업 걸기, 외모 이야기를 계속하기, 만나자고 하기, 연락처를 집요하게 묻기 등), 미성년자의 이용을 금지합니다. 운영자는 부적절한 콘텐츠와 괴롭힘을 절대 용인하지 않습니다.'] },
       { h: '6. 신고와 검토', p: [
         '이용자는 통화 중 언제든지 상대를 신고하고 통화를 끝낼 수 있으며, 프로필에서도 신고할 수 있습니다. 신고하면 신고 사유와 상대, 통화 일시 등의 정보가 운영자에게 전송됩니다. 통화 음성은 녹음하거나 전송하지 않습니다.',
         '신고한 상대는 자동으로 차단되어 신고한 사람의 화면과 목록에서 보이지 않게 됩니다. 운영자는 신고를 24시간 안에 확인하고, 위반이 확인되면 부적절한 프로필 내용 삭제, 신뢰 점수 감점, 위반자의 이용 정지 등의 조치를 취합니다. 허위로 판단된 신고에는 신고자에게 조치할 수 있습니다.',
@@ -212,7 +212,7 @@ const ko: Record<DocId, LegalDoc> = {
     ],
   },
   privacy: {
-    title: '개인정보처리방침', updated: '2026년 11월 8일',
+    title: '개인정보처리방침', updated: '2026년 11월 11일',
     sections: [
       { h: '1. 수집하는 정보', p: [
         '계정 정보: 이메일 주소, 계정 식별자(Google로 가입한 경우 Google 계정의 식별자).',
@@ -234,14 +234,14 @@ const ko: Record<DocId, LegalDoc> = {
     ],
   },
   guidelines: {
-    title: '커뮤니티 가이드라인', updated: '2026년 11월 8일',
+    title: '커뮤니티 가이드라인', updated: '2026년 11월 11일',
     sections: [
       { h: 'Tentalk에서 소중히 여기는 것', p: ['이곳은 어학을 연습하는 곳입니다. 상대도 연습 중이라는 것을 잊지 말고, 천천히 친절하게 이야기해 주세요.'] },
       { h: '금지하는 것', p: [
         '성적인 발언, 성적인 내용으로의 유도.',
         '폭언, 차별, 괴롭힘.',
         '권유, 광고, 사기, 외부 서비스로의 유도.',
-        '“어학 전용” 이용자에 대한 연애·만남 목적의 접근.',
+        '처음 만난 상대에 대한 연애·만남 목적의 접근(작업 걸기, 외모 이야기를 계속하기, 만나자고 하기, 연락처를 집요하게 묻기 등). 모든 사람에게 금지입니다. 여러 번 대화하며 친해진 사람들 사이의 관계는 본인들에게 맡깁니다.',
         '만 18세 미만의 이용, 다른 사람 사칭.',
       ] },
       { h: '규칙을 지키지 않으면', p: [
@@ -253,7 +253,7 @@ const ko: Record<DocId, LegalDoc> = {
     ],
   },
   tokusho: {
-    title: '특정상거래법에 따른 표기 (일본)', updated: '2026년 11월 8일',
+    title: '특정상거래법에 따른 표기 (일본)', updated: '2026년 11월 11일',
     sections: [
       { h: '현재 판매', p: ['서비스는 무료이며 현재 판매하는 유료 상품은 없습니다. 유료 기능을 시작할 때 가격, 결제 방법, 해지·환불을 이 페이지에 게재합니다.'] },
       { h: '운영자', p: [OPERATOR_EN] },
@@ -276,7 +276,7 @@ const ko: Record<DocId, LegalDoc> = {
 
 const es: Record<DocId, LegalDoc> = {
   terms: {
-    title: 'Términos del servicio', updated: '8 de noviembre de 2026',
+    title: 'Términos del servicio', updated: '11 de noviembre de 2026',
     sections: [
       { h: '1. Sobre el servicio', p: [`Tentalk (el “Servicio”) lo ofrece ${OPERATOR_EN} (el “Operador”) para practicar idiomas mediante llamadas de voz uno a uno.`] },
       { h: '2. Quién puede usarlo', p: ['Debes tener 18 años o más. Comprobamos tu fecha de nacimiento al registrarte y suspendemos las cuentas de menores de 18 años.'] },
@@ -286,7 +286,7 @@ const es: Record<DocId, LegalDoc> = {
         'Si cuelgas antes de 10 minutos, baja tu puntuación de confianza y las llamadas rápidas se pausan durante un tiempo. No cuenta si terminas por una denuncia, si se corta la conexión o si cuelga la otra persona.',
         'En una llamada rápida, antes de la llamada ves el nombre, la foto, los idiomas y la presentación de la otra persona, y la llamada empieza solo si los dos eligen hablar. Si alguno salta, no empieza ninguna llamada.',
       ] },
-      { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años. El Operador no tolera en absoluto el contenido inapropiado ni a los usuarios abusivos.'] },
+      { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas en el primer contacto (ligar, insistir en el físico, proponer quedar, presionar para obtener datos de contacto) y el uso por menores de 18 años. El Operador no tolera en absoluto el contenido inapropiado ni a los usuarios abusivos.'] },
       { h: '6. Denuncias y revisión', p: [
         'Puedes denunciar a la otra persona y terminar la llamada en cualquier momento, y también denunciar desde un perfil. La denuncia envía al Operador el motivo y datos como a quién se refiere y cuándo fue la llamada. El audio de las llamadas nunca se graba ni se envía.',
         'La persona denunciada queda bloqueada automáticamente y desaparece de tus pantallas y listas. Revisamos cada denuncia en 24 horas y, si se confirma una infracción, eliminamos el contenido inapropiado del perfil, bajamos la puntuación y suspendemos al usuario responsable. Las denuncias que se consideren falsas pueden conllevar medidas contra quien denuncia.',
@@ -298,7 +298,7 @@ const es: Record<DocId, LegalDoc> = {
     ],
   },
   privacy: {
-    title: 'Política de privacidad', updated: '8 de noviembre de 2026',
+    title: 'Política de privacidad', updated: '11 de noviembre de 2026',
     sections: [
       { h: '1. Qué recopilamos', p: [
         'Cuenta: tu correo electrónico y el identificador de la cuenta (y el de tu cuenta de Google si te registraste con Google).',
@@ -320,14 +320,14 @@ const es: Record<DocId, LegalDoc> = {
     ],
   },
   guidelines: {
-    title: 'Normas de la comunidad', updated: '8 de noviembre de 2026',
+    title: 'Normas de la comunidad', updated: '11 de noviembre de 2026',
     sections: [
       { h: 'Lo que importa aquí', p: ['Este es un lugar para practicar idiomas. La otra persona también está aprendiendo, así que habla despacio y con amabilidad.'] },
       { h: 'No está permitido', p: [
         'Comentarios sexuales o llevar la conversación hacia contenido sexual.',
         'Insultos, discriminación o acoso.',
         'Captación, publicidad, estafas o llevar a otras personas a otros servicios.',
-        'Acercamientos románticos o para citas a usuarios con “Solo idiomas”.',
+        'Acercamientos románticos o para citas en el primer contacto (ligar, insistir en el físico, proponer quedar, presionar para obtener datos de contacto). Vale para todo el mundo. Las relaciones entre personas que han hablado muchas veces y se han hecho amigas son cosa suya.',
         'El uso por menores de 18 años o hacerse pasar por otra persona.',
       ] },
       { h: 'Si no se cumplen las normas', p: [
@@ -339,7 +339,7 @@ const es: Record<DocId, LegalDoc> = {
     ],
   },
   tokusho: {
-    title: 'Aviso comercial (Japón)', updated: '8 de noviembre de 2026',
+    title: 'Aviso comercial (Japón)', updated: '11 de noviembre de 2026',
     sections: [
       { h: 'Ventas actuales', p: ['El Servicio es gratuito y por ahora no se vende nada. Cuando empiecen las funciones de pago, esta página indicará precios, forma de pago, cancelación y reembolsos.'] },
       { h: 'Operador', p: [OPERATOR_EN] },

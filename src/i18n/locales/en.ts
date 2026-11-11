@@ -48,7 +48,7 @@ const en: Translation = {
     s3: { title: 'Quick match or request', body: 'In a quick match you first see the person’s name, photo, languages and bio, and choose to talk or skip. The call starts only when you both choose to talk. Talk for 10 minutes and you can follow each other. To talk with someone specific, send a request from their profile.' },
     connect: { title: 'Talk first, then connect', body: 'Tentalk is a learning app for building your speaking skills. There are no likes, comments, or chat. You can follow someone only after a full 10-minute call, so if someone catches your eye, start by requesting a call.' },
     s4: { title: 'Trust score', body: 'It goes up when you finish 10 minutes and down if you hang up early. Only you see the number; others just see “Trusted”.' },
-    s5: { title: 'Safe conversations', body: 'People who only want language practice get a “Language only” badge. Reporting and blocking are always one tap away. You must be 18 or older.' },
+    s5: { title: 'Safe conversations', body: 'Flirting or other romantic or dating approaches at first contact are not allowed toward anyone. Reporting and blocking are always one tap away. You must be 18 or older.' },
   },
   home: {
     suspended: 'Because of a guideline violation, you can’t make calls until {{date}}.',
@@ -83,7 +83,7 @@ const en: Translation = {
     backToCall: 'Back to call', reportAndLeave: 'Report and end', leaveAnyway: 'End and take the penalty',
     reportTitle: 'Report {{name}}', reportBody: 'Choose a reason. The call ends right away and they are blocked automatically (you won’t be matched again or see them in lists).',
     reportNote: 'Your reason, who it concerns and when the call took place are sent to our team, who review it within 24 hours. Call audio is never recorded or sent. Reports judged false cost the same as hanging up early.',
-    reasons: { romance: 'Romantic or dating approach (to a “Language only” user)', sexual: 'Sexual remarks', abuse: 'Abuse or discrimination', spam: 'Solicitation, ads, or scams', minor: 'May be under 18', trolling: 'Silent or trolling', other: 'Other' },
+    reasons: { romance: 'Romantic or dating approach', sexual: 'Sexual remarks', abuse: 'Abuse or discrimination', spam: 'Solicitation, ads, or scams', minor: 'May be under 18', trolling: 'Silent or trolling', other: 'Other' },
     sendReport: 'Report and end',
     resultDone: 'Nice call!', resultEarly: 'You ended the call early', resultReport: 'Report received',
     resultCompleted: 'You finished the required 10 minutes.', resultCapped: 'You finished the required 10 minutes (today’s +5 limit reached).',
