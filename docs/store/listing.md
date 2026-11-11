@@ -1,5 +1,8 @@
 # App Store listing (Tentalk 1.0)
 
+Avoid age wording such as "18+" in the store texts (App Review flagged it under 1.1);
+the age rating itself says 18+.
+
 Positioning: a **speaking-practice app** with structured 10-minute calls, not a chat or
 social app. App Store guideline 1.2 says apps used mainly for "random or anonymous chat"
 or "Chatroulette-style experiences" do not belong on the store, so every text leads with
@@ -34,7 +37,7 @@ Tentalk は「話す力」を伸ばすための語学アプリです。学んで
 ・困ったときの「お助けフレーズ」と、沈黙が続いたときの声かけ
 
 ■ 安心して練習できるように
-・利用は18歳以上
+・通話の前に相手の名前・写真・自己紹介が表示され、話すかどうかを自分で選べます
 ・語学目的だけの人には「語学のみ」バッジ
 ・通話中も、プロフィールからも、いつでも通報・ブロック
 ・運営が通報を確認し、ガイドライン違反には利用停止などで対応
@@ -69,7 +72,7 @@ CONVERSATION THAT KEEPS GOING
 - Help phrases for when you get stuck, and a gentle prompt when it goes quiet
 
 BUILT FOR SAFE PRACTICE
-- 18+ only
+- Before every call you see the other person’s name, photo and bio, and choose whether to talk
 - A "language only" badge for people who are here just to learn
 - Report and block at any time, during calls and from profiles
 - Our team reviews reports and suspends accounts that break the guidelines
@@ -104,7 +107,7 @@ Tentalk는 '말하기'에 집중한 어학 앱입니다. 배우고 있는 언어
 ・막힐 때 쓰는 '도움 문장'과, 침묵이 이어질 때의 말 걸기
 
 ■ 안심하고 연습할 수 있도록
-・만 18세 이상만 이용 가능
+・통화 전에 상대의 이름, 사진, 자기소개를 보고 대화할지 직접 고를 수 있어요
 ・어학 목적인 사람에게는 '어학 전용' 배지
 ・통화 중에도, 프로필에서도 언제든 신고·차단
 ・운영팀이 신고를 확인하고, 가이드라인 위반에는 이용 정지 등으로 대응
@@ -139,7 +142,7 @@ UNA CONVERSACIÓN QUE NO SE DETIENE
 - Frases de ayuda para cuando te trabas y un aviso amable cuando hay silencio
 
 PENSADA PARA PRACTICAR CON TRANQUILIDAD
-- Solo para mayores de 18 años
+- Antes de cada llamada ves el nombre, la foto y la presentación de la otra persona, y eliges si hablar
 - Una insignia de "solo idiomas" para quienes vienen únicamente a aprender
 - Reporta y bloquea en cualquier momento, durante las llamadas y desde los perfiles
 - Nuestro equipo revisa los reportes y suspende las cuentas que no respetan las normas

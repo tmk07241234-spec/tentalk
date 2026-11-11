@@ -33,23 +33,23 @@ export default function History() {
       ) : null}
       {list.map((h) => {
         const p = people.find((x) => x.id === h.partnerId);
-        const open = h.kind === 'direct' || h.unlocked;
-        const name = open && p ? p.name : t('history.unknown');
+        // Everyone you talked with is shown by name: quick matches show the person before the call starts.
+        const name = p ? p.name : t('history.unknown');
         return (
-          <Pressable key={h.id} accessibilityRole="button" disabled={!open || !p}
+          <Pressable key={h.id} accessibilityRole="button" disabled={!p}
             onPress={() => p && router.push({ pathname: '/person/[id]', params: { id: p.id } })}>
             <Card style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-              <Avatar name={open && p ? p.name : '?'} color={open && p ? p.color : '#8A8FA3'} />
+              <Avatar name={p ? p.name : '?'} color={p ? p.color : '#8A8FA3'} />
               <View style={{ flex: 1, gap: 3 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                   <Text style={{ color: c.ink, fontWeight: '700' }}>{name}</Text>
                   <Pill label={h.kind === 'random' ? t('history.random') : t('history.direct')} tone={h.kind === 'random' ? 'buddy' : 'learn'} />
-                  {open && p && following.includes(p.id) ? <Pill label={t('profileView.following')} tone="ok" /> : null}
+                  {p && following.includes(p.id) ? <Pill label={t('profileView.following')} tone="ok" /> : null}
                 </View>
                 <Body small muted>{ago(h.endedAt, now)} · {formatClock(h.seconds)}</Body>
-                <Body small muted>{h.kind === 'random' ? (h.unlocked ? t('history.open') : t('history.hidden')) : ''}</Body>
+                <Body small muted>{h.unlocked || (h.kind === 'direct' && h.completed) ? t('history.open') : t('history.hidden')}</Body>
               </View>
-              {open && p ? <Text style={{ color: c.learn, fontWeight: '700' }}>{t('history.view')}</Text> : null}
+              {p ? <Text style={{ color: c.learn, fontWeight: '700' }}>{t('history.view')}</Text> : null}
             </Card>
           </Pressable>
         );

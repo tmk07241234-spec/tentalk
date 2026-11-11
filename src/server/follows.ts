@@ -1,4 +1,6 @@
 import { REQUIRED_SECONDS } from '@/domain/callRules';
+import { bothAgreed } from '@/domain/consent';
+import type { CallRecord } from './calls';
 import { HttpError } from './auth';
 import { pushTarget, sendPush } from './push';
 import { firestore } from './firestore';
@@ -18,7 +20,7 @@ export async function setFollow(uid: string, to: unknown, on: unknown): Promise<
   // Following is earned by talking: the server's own call records (not the app's history,
   // which the app could change) must show a call with this person that began at least
   // 10 minutes ago.
-  const talked = calls.some((c) => (c.members as string[]).includes(to) && (c.createdAt as number) <= Date.now() - REQUIRED_SECONDS * 1000);
+  const talked = calls.some((c) => (c.members as string[]).includes(to) && bothAgreed(c as unknown as CallRecord) && (c.createdAt as number) <= Date.now() - REQUIRED_SECONDS * 1000);
   if (on === true && !talked) throw new HttpError(403, 'not-allowed');
   const ids = Array.isArray(doc?.ids) ? (doc.ids as string[]) : [];
   const next = on === true ? [...new Set([...ids, uid])] : ids.filter((x) => x !== uid);

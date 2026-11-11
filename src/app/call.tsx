@@ -24,7 +24,9 @@ import { ONLINE_REQUEST_SECONDS } from '@/domain/schedule';
 import { api } from '@/services/api';
 import { connections } from '@/services/connections';
 import { joinCallRoom, type CallMessage, type CallRoom } from '@/services/callRoom';
-import { callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
+import { CONSENT_SECONDS } from '@/domain/consent';
+import { LevelBars } from '@/components/level';
+import { callConsent, callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
 import { loadPerson, usePerson } from '@/services/people';
 import { setInCall } from '@/services/presence';
 import { cancelRequest, requests, sendRequest, watchRequest, type RequestAnswer } from '@/services/requests';
@@ -33,7 +35,9 @@ import { CALL_BG, space, useColors } from '@/theme/colors';
 
 /** A new question card stays this long before either person can draw the next one. */
 const QUESTION_COOLDOWN_SECONDS = 20;
-type Phase = 'searching' | 'joining' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
+type Phase = 'searching' | 'preview' | 'joining' | 'none' | 'waiting' | 'noAnswer' | 'connected' | 'result';
+/** How often the preview checks whether the other person chose to talk. */
+const CONSENT_POLL_MS = 1500;
 /** If the matched partner has not joined the audio room by then, search again. */
 const PARTNER_JOIN_TIMEOUT_MS = 30_000;
 
@@ -90,6 +94,15 @@ export default function Call() {
   const [serverMode, setServerMode] = useState<Mode | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
   const [failure, setFailure] = useState<'mic' | 'network' | 'suspended' | null>(null);
+  // Quick match: the matched call shown for a decision before it starts (guideline 1.2).
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const [myChoice, setMyChoice] = useState<boolean | null>(null);
+  const [previewLeft, setPreviewLeft] = useState(CONSENT_SECONDS);
+  const [skippedNotice, setSkippedNotice] = useState(false);
+  // People skipped (by either side) in this search are not offered again.
+  const avoid = useRef<string[]>([]);
+  // My choice, read by the preview's checks (state alone would be stale inside them).
+  const choice = useRef<boolean | null>(null);
 
   const me = { native: profile.native, learn: active?.lang ?? 'en' };
   // A chosen person may relate to any of my learning languages; random calls use the Home mode.
@@ -152,7 +165,7 @@ export default function Call() {
   }, [phase]);
 
   const searchAgain = () => {
-    setCallId(null); setFailure(null); setAudioBlocked(false);
+    setCallId(null); setFailure(null); setAudioBlocked(false); setPreviewId(null); setMyChoice(null);
     if (live) setPartner(null);
     setPhase('searching');
   };
@@ -169,13 +182,15 @@ export default function Call() {
     if (live && kind === 'random') {
       searchRandomCall({
         mode, native: me.native, learn: me.learn, level: active?.level ?? 1, languageOnly: app.settings.languageOnly,
-        wantLanguageOnly: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel,
+        wantLanguageOnly: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel, avoid: avoid.current,
       }, ctrl.signal)
         .then((id) => {
           if (ctrl.signal.aborted) return;
           if (!id) return setPhase('none');
-          setCallId(id);
-          setPhase('joining');
+          // Show who it is first; the call starts only if both choose to talk.
+          setPartner(null); setMyChoice(null); choice.current = null; setPreviewLeft(CONSENT_SECONDS);
+          setPreviewId(id);
+          setPhase('preview');
         })
         .catch((e: Error) => { if (!ctrl.signal.aborted) { setFailure(e.message === 'suspended' ? 'suspended' : 'network'); setPhase('none'); } });
       return () => ctrl.abort();
@@ -184,13 +199,61 @@ export default function Call() {
       .findPartner(me, { mode, myLevel: active?.level ?? 3, languageOnlyPartners: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel, blocked: new Set(app.blocked) }, ctrl.signal)
       .then((p) => {
         if (!p) return setPhase('none');
-        setPartner(p);
-        startCall();
+        // Simulated quick match: the same "talk or skip" step as a real one.
+        setPartner(p); setMyChoice(null); choice.current = null; setPreviewLeft(CONSENT_SECONDS);
+        setPhase('preview');
       })
       .catch(() => {});
     return () => ctrl.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
+
+  // Quick match preview: load who it is, then wait for both choices. Re-sends my choice
+  // on every check, so a choice lost in a collision is simply applied on the next one.
+  useEffect(() => {
+    if (phase !== 'preview' || !previewId) return;
+    let stale = false;
+    let partnerId: string | null = null;
+    const tick = setInterval(() => setPreviewLeft((n) => Math.max(0, n - 1)), 1000);
+    const check = async () => {
+      const r = await callConsent(previewId, choice.current ?? undefined);
+      if (stale) return;
+      if (!partnerId) {
+        partnerId = r.partnerId;
+        setServerMode(r.mode);
+        const person = await loadPerson(r.partnerId);
+        if (stale) return;
+        setPartner(person ?? unknownPartner(r.partnerId));
+      }
+      if (r.status === 'go') { setCallId(previewId); setPhase('joining'); return; }
+      if (r.status === 'skipped') {
+        avoid.current = [...avoid.current, r.partnerId].slice(-30);
+        if (choice.current !== false) setSkippedNotice(true);
+        searchAgain();
+        return;
+      }
+      timer = setTimeout(() => void check().catch(retry), CONSENT_POLL_MS);
+    };
+    const retry = () => { if (!stale) timer = setTimeout(() => void check().catch(retry), CONSENT_POLL_MS); };
+    let timer = setTimeout(() => void check().catch(retry), 0);
+    return () => { stale = true; clearInterval(tick); clearTimeout(timer); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, previewId]);
+  const choose = (talk: boolean) => {
+    setMyChoice(talk);
+    choice.current = talk;
+    if (!previewId) {
+      // Simulated quick match (sample people): they always agree.
+      if (talk) startCall();
+      else searchAgain();
+      return;
+    }
+    void callConsent(previewId, talk).catch(() => {});
+    if (!talk) {
+      if (partner) avoid.current = [...avoid.current, partner.id].slice(-30);
+      searchAgain();
+    }
+  };
 
   // Call clock. Silence: nobody speaking in a live call; a dev toggle stands in for simulated calls.
   useEffect(() => {
@@ -314,6 +377,36 @@ export default function Call() {
   }
   const required = elapsed < REQUIRED_SECONDS;
 
+  if (phase === 'preview') {
+    const p = partner;
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
+        <Title>{t('call.previewTitle')}</Title>
+        <Card style={{ alignItems: 'center', gap: space.sm }}>
+          {p ? (
+            <>
+              <Avatar name={p.name} color={p.color} photoUri={p.photoUri} size={88} />
+              <Text style={{ color: c.ink, fontSize: 22, fontWeight: '700' }}>{p.name}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Text style={{ color: c.muted }}>{t('person.native', { lang: t(`lang.${p.native}`) })} · {t(`lang.${p.learn}`)}</Text>
+                <LevelBars level={p.level} />
+              </View>
+              {p.languageOnly ? <Text style={{ color: c.muted, fontSize: 12 }}>{t('person.languageOnly')}</Text> : null}
+              {p.bio ? <Body style={{ textAlign: 'center' }}>{p.bio}</Body> : null}
+              <Text style={{ color: c.muted, fontSize: 12 }}>{t('call.previewCalls', { n: p.calls })}</Text>
+            </>
+          ) : <Body muted>{t('call.joining')}</Body>}
+        </Card>
+        {myChoice === true
+          ? <Body muted style={{ textAlign: 'center' }}>{t('call.previewWaiting', { name: p?.name ?? '' })}</Body>
+          : <Body muted style={{ textAlign: 'center' }}>{t('call.previewNote', { s: previewLeft })}</Body>}
+        <Button variant="primary" label={t('call.previewTalk')} disabled={!p || myChoice === true} onPress={() => { setSkippedNotice(false); choose(true); }} />
+        <Button label={t('call.previewSkip')} onPress={() => choose(false)} />
+        <Button variant="ghost" label={t('common.cancel')} onPress={() => { choose(false); router.back(); }} />
+      </SafeAreaView>
+    );
+  }
+
   if (phase === 'searching' || phase === 'joining' || phase === 'none') {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
@@ -321,6 +414,7 @@ export default function Call() {
           <>
             <View style={{ alignItems: 'center' }}><Pip pose="listen" tone={buddy ? 'buddy' : 'learn'} size={130} motion="bounce" /></View>
             <Title>{phase === 'joining' ? t('call.joining') : t('call.searching')}</Title>
+            {phase === 'searching' && skippedNotice ? <Body muted>{t('call.previewSkipped')}</Body> : null}
             <Body>{t('pip.searching')}</Body>
             <Body muted>{buddy ? t('call.condBuddy', { lang: t(`lang.${me.learn}`), native: t(`lang.${me.native}`) }) : t('call.condExchange', { learn: t(`lang.${me.learn}`), native: t(`lang.${me.native}`) })}</Body>
           </>

@@ -1,9 +1,10 @@
 import { SAMPLE_PARTNERS, type Partner } from '@/data/samplePartners';
 import { isEligible, pickRandomPartner, type Learner, type MatchPrefs, type Mode } from '@/domain/matching';
+import type { ConsentStatus } from '@/domain/consent';
 import type { QueueEntry } from '@/domain/queue';
 import { api } from './api';
 
-export type MatchRequest = Pick<QueueEntry, 'mode' | 'native' | 'learn' | 'level' | 'languageOnly' | 'wantLanguageOnly' | 'matchLevel'>;
+export type MatchRequest = Pick<QueueEntry, 'mode' | 'native' | 'learn' | 'level' | 'languageOnly' | 'wantLanguageOnly' | 'matchLevel'> & { avoid: string[] };
 
 /**
  * Matchmaking boundary. The real version joins a server-side queue per
@@ -63,6 +64,14 @@ export async function searchRandomCall(req: MatchRequest, signal: AbortSignal): 
     if (signal.aborted || Date.now() >= until) await api('/api/match', undefined, 'DELETE').catch(() => {});
   }
   return null;
+}
+
+/**
+ * A quick match before the call: send my choice (true talk, false skip) or nothing to
+ * just read the state. 'go' means both chose to talk (see domain/consent).
+ */
+export function callConsent(callId: string, accept?: boolean): Promise<{ partnerId: string; mode: Mode; status: ConsentStatus }> {
+  return api('/api/call-consent', { callId, accept });
 }
 
 export function callInfo(callId: string): Promise<CallInfo> {

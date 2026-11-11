@@ -26,7 +26,7 @@ const ja: Record<DocId, LegalDoc> = {
       { h: '4. 通話のルール', p: [
         '通話は1対1です。最初の10分は必修で、その後は時間の制限はありません。',
         '必修の10分以内に自分から通話を終了すると、信頼スコアが下がり、クイックマッチが一定時間利用できなくなります。通報による終了、通信の切断、相手による終了はこの対象になりません。',
-        'クイックマッチでは、2人とも10分以上話した場合にのみ、お互いのプロフィールが公開されます。',
+        'クイックマッチでは、通話の前に相手の名前・写真・言語・自己紹介が表示され、2人とも「話す」を選んだ場合にだけ通話が始まります。どちらかがスキップすれば通話は始まりません。',
       ] },
       { h: '5. 禁止行為', p: ['コミュニティガイドラインに定める行為を禁止します。特に、性的な発言、暴言や差別、勧誘・宣伝・詐欺、「語学のみ」の利用者への恋愛・出会い目的の接触、未成年者の利用は禁止です。運営者は、不適切な内容や迷惑行為を一切容認しません。'] },
       { h: '6. 通報と審査', p: [
@@ -93,9 +93,9 @@ const ja: Record<DocId, LegalDoc> = {
     title: 'よくある質問', updated: '',
     sections: [
       { h: '10分以内に通話が切れてしまったら？', p: ['通信が一時的に途切れた場合は、自動で再接続を試みます。通信の切断によって通話が終わっても、ペナルティにはなりません。'] },
-      { h: 'クイックマッチで話した相手のプロフィールが見られません', p: ['2人とも10分以上話した場合だけ公開されます。公開された相手は「履歴」からいつでも見られます。'] },
+      { h: 'クイックマッチで知らない人といきなりつながりますか？', p: ['いいえ。相手が見つかると、まず名前・写真・言語・自己紹介が表示され、「話す」か「スキップ」を選べます。2人とも「話す」を選んだときだけ通話が始まります。話した相手は「履歴」からいつでも見られます。'] },
       { h: 'チャットはできますか？', p: ['できません。相手とつながる方法は10分通話のリクエストだけです。'] },
-      { h: 'フォローはどうすればできますか？', p: ['10分話しきった相手だけフォローできます。クイックマッチではプロフィールが公開されたとき、リクエスト通話では10分話しきったあとに、相手のプロフィールにフォローのボタンが出ます。いいねやコメントなどの機能はありません。'] },
+      { h: 'フォローはどうすればできますか？', p: ['10分話しきった相手だけフォローできます。10分話しきったあとに、相手のプロフィールにフォローのボタンが出ます。いいねやコメントなどの機能はありません。'] },
       { h: '「練習仲間」と「言語交換」の違いは？', p: ['練習仲間は同じ言語を学ぶ、母語が違う人と、その言語だけで話します。言語交換はネイティブと、2つの言語を半分ずつ話します。'] },
       { h: '信頼スコアは他の人に見えますか？', p: ['数字はあなたにしか見えません。他の人には「信頼済み」か「新規」とだけ表示されます。'] },
     ],
@@ -112,7 +112,7 @@ const en: Record<DocId, LegalDoc> = {
       { h: '4. Call rules', p: [
         'Calls are one on one. The first 10 minutes are required; after that there is no time limit.',
         'If you end a call yourself before 10 minutes, your trust score goes down and quick matches are paused for a while. Ending by report, a dropped connection, or your partner ending the call does not count.',
-        'In quick matches, profiles open up only if both of you talk for 10 minutes or more.',
+        'In a quick match, you see the other person’s name, photo, languages and bio before the call, and the call starts only if you both choose to talk. If either of you skips, no call starts.',
       ] },
       { h: '5. Prohibited conduct', p: ['The conduct listed in the Community Guidelines is prohibited, in particular sexual remarks, abuse or discrimination, solicitation, ads or scams, romantic or dating approaches to “Language only” users, and use by anyone under 18. The Operator has zero tolerance for objectionable content and abusive users.'] },
       { h: '6. Reports and review', p: [
@@ -179,9 +179,9 @@ const en: Record<DocId, LegalDoc> = {
     title: 'FAQ', updated: '',
     sections: [
       { h: 'What if the call drops before 10 minutes?', p: ['If the connection is interrupted briefly, the app tries to reconnect automatically. A call that ends because of a dropped connection never counts against you.'] },
-      { h: 'I can’t see a quick-match partner’s profile', p: ['Profiles open only if both of you talk for 10 minutes or more. Opened profiles stay available in History.'] },
+      { h: 'Does a quick match connect me to a stranger straight away?', p: ['No. When someone is found, you first see their name, photo, languages and bio, and choose to talk or skip. The call starts only when you both choose to talk. People you talked with stay in History.'] },
       { h: 'Can I chat?', p: ['No. The only way to reach someone is a request for a 10-minute call.'] },
-      { h: 'How do I follow someone?', p: ['You can follow only people you finished a 10-minute call with. After a quick match that opened both profiles, or a requested call that reached 10 minutes, a Follow button appears on their profile. There are no likes or comments.'] },
+      { h: 'How do I follow someone?', p: ['You can follow only people you finished a 10-minute call with. After a call that reached 10 minutes, a Follow button appears on their profile. There are no likes or comments.'] },
       { h: 'Practice buddy vs. language exchange?', p: ['Practice buddies learn the same language, have different native languages, and talk only in that language. A language exchange is with a native speaker, half in each language.'] },
       { h: 'Can others see my trust score?', p: ['Only you see the number. Others see only “Trusted” or “New”.'] },
     ],
@@ -198,7 +198,7 @@ const ko: Record<DocId, LegalDoc> = {
       { h: '4. 통화 규칙', p: [
         '통화는 1대1입니다. 처음 10분은 필수이며, 그 후에는 시간 제한이 없습니다.',
         '필수 10분 이내에 스스로 통화를 끝내면 신뢰 점수가 내려가고 일정 시간 빠른 통화를 이용할 수 없습니다. 신고로 인한 종료, 연결 끊김, 상대방의 종료는 해당하지 않습니다.',
-        '빠른 통화에서는 두 사람 모두 10분 이상 대화한 경우에만 서로의 프로필이 공개됩니다.',
+        '빠른 통화에서는 통화 전에 상대의 이름, 사진, 언어, 자기소개가 표시되며, 두 사람 모두 “대화하기”를 고른 경우에만 통화가 시작됩니다. 어느 한쪽이 건너뛰면 통화는 시작되지 않습니다.',
       ] },
       { h: '5. 금지 행위', p: ['커뮤니티 가이드라인에서 정한 행위를 금지합니다. 특히 성적인 발언, 폭언이나 차별, 권유·광고·사기, “어학 전용” 이용자에 대한 연애·만남 목적의 접근, 미성년자의 이용을 금지합니다. 운영자는 부적절한 콘텐츠와 괴롭힘을 절대 용인하지 않습니다.'] },
       { h: '6. 신고와 검토', p: [
@@ -265,9 +265,9 @@ const ko: Record<DocId, LegalDoc> = {
     title: '자주 묻는 질문', updated: '',
     sections: [
       { h: '10분 전에 통화가 끊기면?', p: ['연결이 잠깐 끊기면 앱이 자동으로 다시 연결을 시도합니다. 연결 끊김으로 통화가 끝나도 불이익은 없습니다.'] },
-      { h: '빠른 매칭으로 대화한 상대의 프로필이 보이지 않아요', p: ['두 사람 모두 10분 이상 대화한 경우에만 공개됩니다. 공개된 상대는 “기록”에서 언제든 볼 수 있습니다.'] },
+      { h: '빠른 매칭은 모르는 사람과 바로 연결되나요?', p: ['아니요. 상대가 정해지면 먼저 이름, 사진, 언어, 자기소개가 보이고, “대화하기”나 “건너뛰기”를 고를 수 있어요. 둘 다 “대화하기”를 고를 때만 통화가 시작돼요. 대화한 상대는 “기록”에서 언제든 볼 수 있어요.'] },
       { h: '채팅할 수 있나요?', p: ['할 수 없습니다. 상대와 연결되는 방법은 10분 통화 요청뿐입니다.'] },
-      { h: '팔로우는 어떻게 하나요?', p: ['10분 대화를 끝까지 한 상대만 팔로우할 수 있어요. 빠른 통화에서 프로필이 공개되었거나 요청 통화에서 10분을 채우면 상대 프로필에 팔로우 버튼이 나타나요. 좋아요나 댓글 기능은 없어요.'] },
+      { h: '팔로우는 어떻게 하나요?', p: ['10분 대화를 끝까지 한 상대만 팔로우할 수 있어요. 10분을 채운 뒤 상대 프로필에 팔로우 버튼이 나타나요. 좋아요나 댓글 기능은 없어요.'] },
       { h: '“연습 친구”와 “언어 교환”의 차이는?', p: ['연습 친구는 같은 언어를 배우고 모국어가 다른 사람과 그 언어로만 대화합니다. 언어 교환은 원어민과 두 언어를 반씩 사용합니다.'] },
       { h: '신뢰 점수가 다른 사람에게 보이나요?', p: ['숫자는 나만 볼 수 있습니다. 다른 사람에게는 “신뢰됨” 또는 “신규”로만 보입니다.'] },
     ],
@@ -284,7 +284,7 @@ const es: Record<DocId, LegalDoc> = {
       { h: '4. Normas de las llamadas', p: [
         'Las llamadas son uno a uno. Los primeros 10 minutos son obligatorios; después no hay límite de tiempo.',
         'Si cuelgas antes de 10 minutos, baja tu puntuación de confianza y las llamadas rápidas se pausan durante un tiempo. No cuenta si terminas por una denuncia, si se corta la conexión o si cuelga la otra persona.',
-        'En las llamadas rápidas, los perfiles solo se abren si ambos hablan 10 minutos o más.',
+        'En una llamada rápida, antes de la llamada ves el nombre, la foto, los idiomas y la presentación de la otra persona, y la llamada empieza solo si los dos eligen hablar. Si alguno salta, no empieza ninguna llamada.',
       ] },
       { h: '5. Conductas prohibidas', p: ['Están prohibidas las conductas de las Normas de la comunidad, en especial los comentarios sexuales, los insultos o la discriminación, la captación, la publicidad o las estafas, los acercamientos románticos o para citas a usuarios con “Solo idiomas” y el uso por menores de 18 años. El Operador no tolera en absoluto el contenido inapropiado ni a los usuarios abusivos.'] },
       { h: '6. Denuncias y revisión', p: [
@@ -351,9 +351,9 @@ const es: Record<DocId, LegalDoc> = {
     title: 'Preguntas frecuentes', updated: '',
     sections: [
       { h: '¿Y si la llamada se corta antes de 10 minutos?', p: ['Si la conexión se interrumpe un momento, la app intenta reconectarse sola. Una llamada que termina por un corte de conexión nunca cuenta en tu contra.'] },
-      { h: 'No veo el perfil de alguien con quien hablé en una llamada rápida', p: ['Los perfiles solo se abren si ambos hablan 10 minutos o más. Los perfiles abiertos siguen disponibles en el Historial.'] },
+      { h: '¿La llamada rápida me conecta de golpe con un desconocido?', p: ['No. Cuando se encuentra a alguien, primero ves su nombre, foto, idiomas y presentación, y eliges hablar o saltar. La llamada empieza solo cuando los dos eligen hablar. Las personas con las que hablaste siguen en el Historial.'] },
       { h: '¿Puedo chatear?', p: ['No. La única forma de contactar con alguien es pedir una llamada de 10 minutos.'] },
-      { h: '¿Cómo sigo a alguien?', p: ['Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos. Tras una llamada rápida que abrió los perfiles, o una solicitada que llegó a 10 minutos, aparece el botón Seguir en su perfil. No hay «me gusta» ni comentarios.'] },
+      { h: '¿Cómo sigo a alguien?', p: ['Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos. Tras una llamada que llegó a 10 minutos, aparece el botón Seguir en su perfil. No hay «me gusta» ni comentarios.'] },
       { h: '¿Compañero de práctica o intercambio?', p: ['Los compañeros de práctica aprenden el mismo idioma, tienen idiomas nativos distintos y hablan solo en ese idioma. El intercambio es con un nativo, mitad en cada idioma.'] },
       { h: '¿Los demás ven mi puntuación de confianza?', p: ['Solo tú ves el número. Los demás solo ven “De confianza” o “Nuevo”.'] },
     ],

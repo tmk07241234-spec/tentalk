@@ -1,3 +1,4 @@
+import { MAX_AVOID, consentStatus, type Consent, type ConsentStatus } from '@/domain/consent';
 import { LANGS, type Lang } from '@/domain/languages';
 import { isSuspended, type ModerationRecord } from '@/domain/moderation';
 import { pickQueuePartner, queueKey, seekKey, type QueueEntry } from '@/domain/queue';
@@ -17,9 +18,14 @@ export interface CallRecord {
   kind: 'random' | 'direct';
   mode: 'buddy' | 'exchange';
   createdAt: number;
+  /** Quick matches: each member's choice to talk (true) or skip (false); see domain/consent. */
+  consent?: Consent;
 }
 
-export type MatchRequest = Pick<QueueEntry, 'mode' | 'native' | 'learn' | 'level' | 'languageOnly' | 'wantLanguageOnly' | 'matchLevel'>;
+export type MatchRequest = Pick<QueueEntry, 'mode' | 'native' | 'learn' | 'level' | 'languageOnly' | 'wantLanguageOnly' | 'matchLevel'> & {
+  /** People skipped earlier in this search, not offered again. */
+  avoid: string[];
+};
 
 const isLang = (v: unknown): v is Lang => typeof v === 'string' && (LANGS as readonly string[]).includes(v);
 
@@ -33,6 +39,7 @@ export function parseMatchRequest(body: unknown): MatchRequest {
   return {
     mode: b.mode, native: b.native, learn: b.learn, level: level as QueueEntry['level'],
     languageOnly: b.languageOnly === true, wantLanguageOnly: b.wantLanguageOnly === true, matchLevel: b.matchLevel === true,
+    avoid: Array.isArray(b.avoid) ? b.avoid.filter((x): x is string => typeof x === 'string' && /^[A-Za-z0-9]{10,40}$/.test(x)).slice(0, MAX_AVOID) : [],
   };
 }
 
@@ -48,7 +55,8 @@ export async function searchStep(uid: string, req: MatchRequest): Promise<{ call
   if (isSuspended(docs[`users/${uid}/private/moderation`] as ModerationRecord | null)) throw new HttpError(403, 'suspended');
   const state = docs[`users/${uid}/private/state`];
   const blocked = Array.isArray(state?.blocked) ? (state.blocked as string[]) : [];
-  const me: QueueEntry = { uid, ...req, blocked, updatedAt: Date.now(), callId: null };
+  const { avoid, ...prefs } = req;
+  const me: QueueEntry = { uid, ...prefs, blocked: [...new Set([...blocked, ...avoid])], updatedAt: Date.now(), callId: null };
 
   // EAS Hosting allows only a few outside requests per API call, so a step makes one
   // attempt; when two people collide, the losing side tries again on its next step.
@@ -84,6 +92,30 @@ export async function cancelSearch(uid: string): Promise<{ callId: string | null
   const mine = await firestore.get(`queue/${uid}`);
   await firestore.commit([{ delete: `queue/${uid}` }]);
   return { callId: (mine?.callId as string | undefined) ?? null };
+}
+
+/**
+ * A quick-match member's choice before the call: accept true (talk) or false (skip), or
+ * undefined to just read the state. Returns who the partner is and whether the call goes
+ * ahead. The app repeats its choice while waiting, so a lost write is simply sent again.
+ */
+export async function consentStep(uid: string, callId: string, accept: unknown): Promise<{ partnerId: string; mode: CallRecord['mode']; status: ConsentStatus }> {
+  const call = await callFor(uid, callId);
+  const partnerId = call.members.find((m) => m !== uid)!;
+  if (call.kind !== 'random') return { partnerId, mode: call.mode, status: 'go' };
+  let consent = call.consent ?? {};
+  if ((accept === true || accept === false) && consent[uid] !== accept && consent[uid] !== false) {
+    const tx = await firestore.begin();
+    try {
+      const fresh = ((await firestore.get(`calls/${callId}`, tx)) ?? call) as unknown as CallRecord;
+      consent = { ...(fresh.consent ?? {}), [uid]: accept };
+      await firestore.commit([{ set: `calls/${callId}`, data: { ...fresh, consent } as unknown as Data }], tx);
+    } catch (e) {
+      // Both chose at the same moment: this side's choice is sent again on the next step.
+      if (!String(e).includes(': 409')) throw e;
+    }
+  }
+  return { partnerId, mode: call.mode, status: consentStatus(call.members, consent, call.createdAt, Date.now()) };
 }
 
 export async function callFor(uid: string, callId: string): Promise<CallRecord> {
