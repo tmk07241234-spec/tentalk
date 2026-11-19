@@ -98,6 +98,8 @@ const ja: Record<DocId, LegalDoc> = {
       { h: 'フォローはどうすればできますか？', p: ['10分話しきった相手だけフォローできます。10分話しきったあとに、相手のプロフィールにフォローのボタンが出ます。いいねやコメントなどの機能はありません。'] },
       { h: '「練習仲間」と「言語交換」の違いは？', p: ['練習仲間は同じ言語を学ぶ、母語が違う人と、その言語だけで話します。言語交換はネイティブと、2つの言語を半分ずつ話します。'] },
       { h: '信頼スコアは他の人に見えますか？', p: ['数字はあなたにしか見えません。他の人には「信頼済み」か「新規」とだけ表示されます。'] },
+      { h: 'プロフィールの「完走率」や「練習日数」とは？', p: ['完走率は、相手と2人で話した通話のうち、10分を最後まで話しきった割合です。この30日で練習した日数と、10分通話の回数もあわせて表示されます。通話サービスの記録から自動で数えるので、自分で変えることはできません。通話が5回になるまでは「はじめたばかり」と表示されます。'] },
+      { h: 'クイックマッチが使えなくなりました', p: ['10分以内に自分から通話を終えると、しばらくクイックマッチを使えません。24時間以内にくり返すと、30分、2時間、1日と長くなります。通信が切れた場合や、通報して終えた場合は対象になりません。プロフィールからのリクエストは使えます。'] },
     ],
   },
 };
@@ -184,6 +186,8 @@ const en: Record<DocId, LegalDoc> = {
       { h: 'How do I follow someone?', p: ['You can follow only people you finished a 10-minute call with. After a call that reached 10 minutes, a Follow button appears on their profile. There are no likes or comments.'] },
       { h: 'Practice buddy vs. language exchange?', p: ['Practice buddies learn the same language, have different native languages, and talk only in that language. A language exchange is with a native speaker, half in each language.'] },
       { h: 'Can others see my trust score?', p: ['Only you see the number. Others see only “Trusted” or “New”.'] },
+      { h: 'What are the completion rate and practice days on profiles?', p: ['The completion rate is the share of calls with a partner that reached the full 10 minutes. Practice days in the last 30 and the number of completed calls are shown too. They are counted automatically from the call service’s records and cannot be edited. Until someone has 5 calls, “Just started” is shown instead.'] },
+      { h: 'Quick matches are paused for me', p: ['If you end a call yourself before 10 minutes, quick matches pause for a while. Repeating it within 24 hours makes the pause longer: 30 minutes, 2 hours, then 1 day. Dropped connections and calls ended by a report do not count. Requests from profiles still work.'] },
     ],
   },
 };
@@ -270,6 +274,8 @@ const ko: Record<DocId, LegalDoc> = {
       { h: '팔로우는 어떻게 하나요?', p: ['10분 대화를 끝까지 한 상대만 팔로우할 수 있어요. 10분을 채운 뒤 상대 프로필에 팔로우 버튼이 나타나요. 좋아요나 댓글 기능은 없어요.'] },
       { h: '“연습 친구”와 “언어 교환”의 차이는?', p: ['연습 친구는 같은 언어를 배우고 모국어가 다른 사람과 그 언어로만 대화합니다. 언어 교환은 원어민과 두 언어를 반씩 사용합니다.'] },
       { h: '신뢰 점수가 다른 사람에게 보이나요?', p: ['숫자는 나만 볼 수 있습니다. 다른 사람에게는 “신뢰됨” 또는 “신규”로만 보입니다.'] },
+      { h: '프로필의 “완주율”과 “연습 일수”는 무엇인가요?', p: ['완주율은 상대와 둘이 대화한 통화 중 10분을 끝까지 채운 비율이에요. 최근 30일의 연습 일수와 10분 통화 횟수도 함께 표시돼요. 통화 서비스의 기록으로 자동으로 세기 때문에 직접 바꿀 수 없어요. 통화가 5번이 될 때까지는 “이제 막 시작했어요”로 표시돼요.'] },
+      { h: '빠른 통화를 이용할 수 없게 되었어요', p: ['10분 안에 스스로 통화를 끝내면 한동안 빠른 통화를 이용할 수 없어요. 24시간 안에 반복하면 30분, 2시간, 1일로 길어져요. 연결이 끊긴 경우나 신고로 끝낸 경우는 해당하지 않아요. 프로필에서 보내는 요청은 이용할 수 있어요.'] },
     ],
   },
 };
@@ -356,6 +362,8 @@ const es: Record<DocId, LegalDoc> = {
       { h: '¿Cómo sigo a alguien?', p: ['Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos. Tras una llamada que llegó a 10 minutos, aparece el botón Seguir en su perfil. No hay «me gusta» ni comentarios.'] },
       { h: '¿Compañero de práctica o intercambio?', p: ['Los compañeros de práctica aprenden el mismo idioma, tienen idiomas nativos distintos y hablan solo en ese idioma. El intercambio es con un nativo, mitad en cada idioma.'] },
       { h: '¿Los demás ven mi puntuación de confianza?', p: ['Solo tú ves el número. Los demás solo ven “De confianza” o “Nuevo”.'] },
+      { h: '¿Qué son el porcentaje de llamadas completadas y los días de práctica?', p: ['Es la parte de las llamadas con otra persona que llegaron a los 10 minutos completos. También se muestran los días de práctica de los últimos 30 y las llamadas completadas. Se cuentan automáticamente con los registros del servicio de llamadas y no se pueden editar. Hasta tener 5 llamadas se muestra “Acaba de empezar”.'] },
+      { h: 'Mis llamadas rápidas están en pausa', p: ['Si terminas tú una llamada antes de 10 minutos, las llamadas rápidas se pausan un tiempo. Si se repite en 24 horas, la pausa se alarga: 30 minutos, 2 horas y luego 1 día. Los cortes de conexión y las llamadas terminadas con una denuncia no cuentan. Las solicitudes desde perfiles siguen funcionando.'] },
     ],
   },
 };

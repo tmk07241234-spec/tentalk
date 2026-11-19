@@ -37,8 +37,8 @@ Tentalk は「話す力」を伸ばすための語学アプリです。学んで
 ・困ったときの「お助けフレーズ」と、沈黙が続いたときの声かけ
 
 ■ 安心して練習できるように
-・通話の前に相手の名前・写真・自己紹介が表示され、話すかどうかを自分で選べます
-・語学目的だけの人には「語学のみ」バッジ
+・通話の前に、相手の練習の記録（完走率・練習日数）と自己紹介の声を聞いて、話すかどうかを自分で選べます
+・初対面での恋愛・出会い目的の接触は、すべての人に対して禁止
 ・通話中も、プロフィールからも、いつでも通報・ブロック
 ・運営が通報を確認し、ガイドライン違反には利用停止などで対応
 ・メッセージやタイムラインはありません。フォローできるのは、10分話しきった相手だけ
@@ -72,8 +72,8 @@ CONVERSATION THAT KEEPS GOING
 - Help phrases for when you get stuck, and a gentle prompt when it goes quiet
 
 BUILT FOR SAFE PRACTICE
-- Before every call you see the other person’s name, photo and bio, and choose whether to talk
-- A "language only" badge for people who are here just to learn
+- Before every call you see the other person’s practice record (completion rate, practice days) and hear their voice intro, then choose whether to talk
+- Flirting or dating approaches at first contact are not allowed toward anyone
 - Report and block at any time, during calls and from profiles
 - Our team reviews reports and suspends accounts that break the guidelines
 - No messaging and no timeline. You can follow only people you finished a 10-minute call with
@@ -107,8 +107,8 @@ Tentalk는 '말하기'에 집중한 어학 앱입니다. 배우고 있는 언어
 ・막힐 때 쓰는 '도움 문장'과, 침묵이 이어질 때의 말 걸기
 
 ■ 안심하고 연습할 수 있도록
-・통화 전에 상대의 이름, 사진, 자기소개를 보고 대화할지 직접 고를 수 있어요
-・어학 목적인 사람에게는 '어학 전용' 배지
+・통화 전에 상대의 연습 기록(완주율, 연습 일수)을 보고 음성 소개를 들은 뒤, 대화할지 직접 고를 수 있어요
+・처음 만난 상대에게 연애·만남 목적으로 접근하는 것은 누구에게나 금지
 ・통화 중에도, 프로필에서도 언제든 신고·차단
 ・운영팀이 신고를 확인하고, 가이드라인 위반에는 이용 정지 등으로 대응
 ・메시지와 타임라인은 없어요. 팔로우는 10분 통화를 끝까지 마친 상대만 할 수 있어요
@@ -142,8 +142,8 @@ UNA CONVERSACIÓN QUE NO SE DETIENE
 - Frases de ayuda para cuando te trabas y un aviso amable cuando hay silencio
 
 PENSADA PARA PRACTICAR CON TRANQUILIDAD
-- Antes de cada llamada ves el nombre, la foto y la presentación de la otra persona, y eliges si hablar
-- Una insignia de "solo idiomas" para quienes vienen únicamente a aprender
+- Antes de cada llamada ves el historial de práctica de la otra persona (llamadas completadas, días de práctica) y escuchas su presentación de voz, y eliges si hablar
+- No se permite ligar ni buscar citas en el primer contacto con nadie
 - Reporta y bloquea en cualquier momento, durante las llamadas y desde los perfiles
 - Nuestro equipo revisa los reportes y suspende las cuentas que no respetan las normas
 - Sin mensajes ni muro. Solo puedes seguir a personas con las que completaste una llamada de 10 minutos
