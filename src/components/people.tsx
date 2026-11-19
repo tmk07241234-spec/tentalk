@@ -41,7 +41,7 @@ export function PersonRow({ person, mutual }: { person: Partner; mutual?: boolea
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={person.name} onPress={() => router.push({ pathname: '/person/[id]', params: { id: person.id } })}
       style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.surface, borderRadius: radius.lg, padding: space.md, opacity: pressed ? 0.85 : online ? 1 : 0.8 })}>
-      <Avatar name={person.name} color={person.color} photoUri={person.photoUri} online={online} />
+      <Avatar name={person.name} color={person.color} avatar={person.avatar} photoUri={person.photoUri} online={online} />
       <View style={{ flex: 1, gap: 3, minWidth: 0 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <Text style={{ color: c.ink, fontWeight: '700', fontSize: 15 }}>{person.name}</Text>

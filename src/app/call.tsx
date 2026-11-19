@@ -372,7 +372,7 @@ export default function Call() {
             ? <Pip pose="listen" tone={buddy ? 'buddy' : 'learn'} size={130} motion="bounce" />
             : <Pip pose="sleepy" tone={buddy ? 'buddy' : 'learn'} size={130} />}
         </View>
-        {chosen ? <View style={{ alignItems: 'center' }}><Avatar name={chosen.name} color={chosen.color} size={56} /></View> : null}
+        {chosen ? <View style={{ alignItems: 'center' }}><Avatar name={chosen.name} color={chosen.color} avatar={chosen.avatar} size={56} /></View> : null}
         <Title>{phase === 'waiting' ? t('request.waiting', { name }) : answer === 'declined' ? t('request.declined', { name }) : t('request.expired')}</Title>
         <Body muted>{phase === 'waiting' ? t('request.waitingBody', { seconds: waitLeft }) : t('request.tryLater')}</Body>
         <Button label={phase === 'waiting' ? t('request.cancel') : t('call.home')} onPress={() => router.back()} />
@@ -391,7 +391,7 @@ export default function Call() {
           {p ? (
             <>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-                <Avatar name={p.name} color={p.color} photoUri={p.photoUri} size={44} />
+                <Avatar name={p.name} color={p.color} avatar={p.avatar} photoUri={p.photoUri} size={44} />
                 <Text style={{ color: c.ink, fontSize: 22, fontWeight: '700' }}>{p.name}</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -479,7 +479,7 @@ export default function Call() {
             <Card style={{ backgroundColor: c.surface2 }}>
               <Body small muted>{t('call.unlocked')}</Body>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-                <Avatar name={partner.name} color={partner.color} />
+                <Avatar name={partner.name} color={partner.color} avatar={partner.avatar} />
                 <Text style={{ color: c.ink, fontWeight: '700', flex: 1 }}>{partner.name}</Text>
                 <Button small variant={following ? 'secondary' : 'primary'} label={following ? t('call.following') : t('call.follow')} onPress={() => connections.follow(partner.id)} />
               </View>
@@ -535,7 +535,7 @@ export default function Call() {
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-          <Avatar name={partner.name} color={partner.color} />
+          <Avatar name={partner.name} color={partner.color} avatar={partner.avatar} />
           <View style={{ flex: 1 }}>
             <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16 }}>{partner.name}</Text>
             <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>

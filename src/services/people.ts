@@ -1,3 +1,4 @@
+import { isCharacter } from '@/components/Character';
 import { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs, limit, query, where } from 'firebase/firestore';
 import { create } from 'zustand';
@@ -27,7 +28,7 @@ export function partnerFromProfile(id: string, p: PublicProfile, viewer?: { nati
     ?? p.learning.find((l) => l.lang === viewer.learn)))
     ?? p.learning.find((l) => l.lang === p.activeLearn) ?? p.learning[0];
   return {
-    id, name: p.name, country: '', color: p.color, photoUri: p.photoUri ?? null, voice: p.voice ?? null, calls: p.calls ?? 0, bio: p.bio ?? '',
+    id, name: p.name, country: '', color: p.color, photoUri: p.photoUri ?? null, avatar: isCharacter(p.avatar) ? p.avatar : null, voice: p.voice ?? null, calls: p.calls ?? 0, bio: p.bio ?? '',
     hours: p.hours ?? null, utcOffset: p.utcOffset ?? 0, native: p.native, learn: learning?.lang ?? p.native,
     level: learning?.level ?? 1, status: presenceStatus(p.lastSeen, p.inCall), languageOnly: p.languageOnly ?? false, hobbies: p.hobbies ?? [],
   };

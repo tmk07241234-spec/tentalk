@@ -70,7 +70,7 @@ export default function Notifications() {
         const text = t(`notifications.${n.type}`, { name, date: n.expiresAt ? new Date(n.expiresAt).toLocaleDateString(i18n.language) : '' });
         return (
           <Card key={n.id} style={{ flexDirection: 'row', gap: space.md, alignItems: 'flex-start', borderLeftWidth: highlight.has(n.id) || !n.read ? 3 : 0, borderLeftColor: c.learn }}>
-            {p ? <Avatar name={p.name} color={p.color} size={40} /> : (
+            {p ? <Avatar name={p.name} color={p.color} avatar={p.avatar} size={40} /> : (
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.learnSoft, alignItems: 'center', justifyContent: 'center' }}>
                 <Ionicons name={ICON[n.type]} size={20} color={c.learn} />
               </View>

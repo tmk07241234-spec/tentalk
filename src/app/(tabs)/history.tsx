@@ -39,7 +39,7 @@ export default function History() {
           <Pressable key={h.id} accessibilityRole="button" disabled={!p}
             onPress={() => p && router.push({ pathname: '/person/[id]', params: { id: p.id } })}>
             <Card style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-              <Avatar name={p ? p.name : '?'} color={p ? p.color : '#8A8FA3'} />
+              <Avatar name={p ? p.name : '?'} color={p ? p.color : '#8A8FA3'} avatar={p?.avatar} />
               <View style={{ flex: 1, gap: 3 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                   <Text style={{ color: c.ink, fontWeight: '700' }}>{name}</Text>

@@ -1,25 +1,26 @@
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar } from '@/components/Avatar';
+import { AvatarPicker } from '@/components/AvatarPicker';
+import type { CharacterId } from '@/components/Character';
 import { Body, Button, ErrorText, Field, Screen, StepLabel, Title } from '@/components/ui';
 import { contentProblem } from '@/domain/contentFilter';
 import { deviceOffset } from '@/domain/schedule';
 import { SETUP_STEPS, useOnboarding } from '@/state/onboarding';
 import { useApp } from '@/state/store';
-import { AVATAR_COLORS, space, useColors } from '@/theme/colors';
+import { AVATAR_COLORS } from '@/theme/colors';
 
 export default function ProfileStep() {
   const { t } = useTranslation();
-  const c = useColors();
   const draft = useOnboarding();
   const completeSetup = useApp((s) => s.completeSetup);
   const [name, setName] = useState(draft.suggestedName);
   const [color, setColor] = useState(AVATAR_COLORS[1]);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  // An illustrated character by default, so nobody starts with just an initial.
+  const [avatar, setAvatar] = useState<CharacterId | null>('cat');
   const [error, setError] = useState('');
 
   const pickPhoto = async () => {
@@ -35,7 +36,7 @@ export default function ProfileStep() {
     completeSetup({
       account: { method: draft.method, uid: draft.uid, email: draft.email },
       profile: {
-        name: name.trim(), color, photoUri, native: draft.native,
+        name: name.trim(), color, photoUri, avatar: photoUri ? null : avatar, native: draft.native,
         learning: [{ lang: draft.learn, level: draft.level }], activeLearn: draft.learn,
         bio: '', hobbies: [], hours: null, utcOffset: deviceOffset(),
       },
@@ -50,22 +51,8 @@ export default function ProfileStep() {
       <Title>{t('profileSetup.title')}</Title>
       <Body muted>{t('profileSetup.desc')}</Body>
       <Body small muted>{t('profileSetup.icon')}</Body>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.lg }}>
-        <Avatar name={name || '?'} color={color} photoUri={photoUri} size={72} />
-        <View style={{ flex: 1, gap: space.sm }}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
-            {AVATAR_COLORS.map((col) => (
-              <Pressable key={col} accessibilityRole="radio" accessibilityLabel={col} accessibilityState={{ checked: !photoUri && col === color }}
-                onPress={() => { setColor(col); setPhotoUri(null); }}
-                style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: col, borderWidth: 2, borderColor: !photoUri && col === color ? c.ink : 'transparent' }} />
-            ))}
-          </View>
-          <View style={{ flexDirection: 'row', gap: space.sm }}>
-            <Button small label={t('profileSetup.photo')} onPress={pickPhoto} />
-            {photoUri ? <Button small variant="ghost" label={t('profileSetup.removePhoto')} onPress={() => setPhotoUri(null)} /> : null}
-          </View>
-        </View>
-      </View>
+      <AvatarPicker name={name} color={color} avatar={avatar} photoUri={photoUri} onPickPhoto={pickPhoto}
+        onChange={(v) => { if (v.color) setColor(v.color); if ('avatar' in v) setAvatar(v.avatar ?? null); if ('photoUri' in v) setPhotoUri(v.photoUri ?? null); }} />
       <Field label={t('profileSetup.name')} value={name} onChangeText={(v) => { setName(v); setError(''); }} maxLength={20} autoComplete="nickname" />
       <ErrorText>{error}</ErrorText>
     </Screen>

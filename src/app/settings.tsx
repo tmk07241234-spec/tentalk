@@ -58,7 +58,7 @@ export default function SettingsScreen() {
             {connected.length === 0 ? <Body small muted>{t('appSettings.noConnections')}</Body> : null}
             {connected.map((p) => (
               <View key={p.id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-                <Avatar name={p.name} color={p.color} size={32} />
+                <Avatar name={p.name} color={p.color} avatar={p.avatar} size={32} />
                 <View style={{ flex: 1 }}>
                   <SwitchRow label={p.name} value={allowed.has(p.id)} onChange={(v) => toggleAllowed(p.id, v)} />
                 </View>
@@ -101,7 +101,7 @@ export default function SettingsScreen() {
           const p = blockedPeople.find((x) => x.id === id);
           return (
             <View key={id} style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-              <Avatar name={p?.name ?? '?'} color={p?.color ?? '#8A8FA3'} size={36} />
+              <Avatar name={p?.name ?? '?'} color={p?.color ?? '#8A8FA3'} avatar={p?.avatar} size={36} />
               <Text style={{ color: c.ink, flex: 1 }}>{p?.name ?? id}</Text>
               <Button small label={t('settings.unblock')} onPress={() => unblock(id)} />
             </View>

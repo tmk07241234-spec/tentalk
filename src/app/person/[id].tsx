@@ -112,7 +112,7 @@ export default function PersonScreen() {
       </Pressable>
 
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-        <Avatar name={person.name} color={person.color} photoUri={person.photoUri} size={76} online={online} />
+        <Avatar name={person.name} color={person.color} avatar={person.avatar} photoUri={person.photoUri} size={76} online={online} />
         <View style={{ flex: 1, gap: 4 }}>
           <Title>{person.name}</Title>
           <Body small muted>

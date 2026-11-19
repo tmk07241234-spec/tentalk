@@ -6,6 +6,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
+import { AvatarPicker } from '@/components/AvatarPicker';
+import type { CharacterId } from '@/components/Character';
 import { LevelBars, LevelPicker } from '@/components/level';
 import { SmallChips } from '@/components/people';
 import { VoiceRecorder } from '@/components/voice';
@@ -29,6 +31,7 @@ export default function ProfileEdit() {
   const [bio, setBio] = useState(profile?.bio ?? '');
   const [color, setColor] = useState(profile?.color ?? AVATAR_COLORS[1]);
   const [photoUri, setPhotoUri] = useState<string | null>(profile?.photoUri ?? null);
+  const [avatar, setAvatar] = useState<CharacterId | null>(profile?.avatar ?? null);
   const [native, setNative] = useState<Lang>(profile?.native ?? 'ja');
   const [learning, setLearning] = useState<LearningLang[]>(profile?.learning ?? []);
   const [hobbies, setHobbies] = useState<string[]>(profile?.hobbies ?? []);
@@ -51,7 +54,7 @@ export default function ProfileEdit() {
   const save = () => {
     const err = validateProfile({ name, bio, native, learning, hobbies, hours });
     if (err) return setError(t(`profileEdit.errors.${err}`));
-    updateProfile({ name: name.trim(), bio: bio.trim(), color, photoUri, native, learning, hobbies, hours, voice, frame: plus ? frame : null, utcOffset: deviceOffset() });
+    updateProfile({ name: name.trim(), bio: bio.trim(), color, photoUri, avatar: photoUri ? null : avatar, native, learning, hobbies, hours, voice, frame: plus ? frame : null, utcOffset: deviceOffset() });
     if (!learning.some((l) => l.lang === profile.activeLearn)) setActiveLearn(learning[0].lang);
     router.back();
   };
@@ -61,22 +64,8 @@ export default function ProfileEdit() {
       <Title>{t('profileEdit.title')}</Title>
 
       <Eyebrow>{t('profileEdit.icon')}</Eyebrow>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.lg }}>
-        <Avatar name={name || '?'} color={color} photoUri={photoUri} size={72} frame={plus ? frame : null} />
-        <View style={{ flex: 1, gap: space.sm }}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
-            {AVATAR_COLORS.map((col) => (
-              <Pressable key={col} accessibilityRole="radio" accessibilityLabel={col} accessibilityState={{ checked: !photoUri && col === color }}
-                onPress={() => { setColor(col); setPhotoUri(null); }}
-                style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: col, borderWidth: 2, borderColor: !photoUri && col === color ? c.ink : 'transparent' }} />
-            ))}
-          </View>
-          <View style={{ flexDirection: 'row', gap: space.sm }}>
-            <Button small label={t('profileSetup.photo')} onPress={pickPhoto} />
-            {photoUri ? <Button small variant="ghost" label={t('profileSetup.removePhoto')} onPress={() => setPhotoUri(null)} /> : null}
-          </View>
-        </View>
-      </View>
+      <AvatarPicker name={name} color={color} avatar={avatar} photoUri={photoUri} frame={plus ? frame : null} onPickPhoto={pickPhoto}
+        onChange={(v) => { if (v.color) setColor(v.color); if ('avatar' in v) setAvatar(v.avatar ?? null); if ('photoUri' in v) setPhotoUri(v.photoUri ?? null); }} />
 
       {PLUS_ENABLED ? <>
       <Eyebrow>{t('frames.title')}</Eyebrow>

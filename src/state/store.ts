@@ -1,3 +1,4 @@
+import type { CharacterId } from '@/components/Character';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -34,6 +35,8 @@ export interface Profile {
   utcOffset: number;
   /** Tentalk Plus icon frame; null = none. */
   frame?: FrameId | null;
+  /** Illustrated avatar shown when there is no photo (1.2); null = the initial. */
+  avatar?: CharacterId | null;
   /** Self-introduction recording; null until recorded. */
   voice?: VoiceIntro | null;
 }

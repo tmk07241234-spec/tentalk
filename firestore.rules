@@ -14,7 +14,7 @@ service cloud.firestore {
       allow list: if signedIn() && request.query.limit <= 60;
       allow create, update: if isOwner(uid)
         && request.resource.data.keys().hasOnly(['name', 'color', 'photoUri', 'native', 'learning', 'activeLearn',
-             'bio', 'hobbies', 'hours', 'utcOffset', 'frame', 'voice', 'languageOnly', 'learnLangs', 'calls',
+             'bio', 'hobbies', 'hours', 'utcOffset', 'frame', 'voice', 'avatar', 'languageOnly', 'learnLangs', 'calls',
              'lastSeen', 'inCall'])
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0

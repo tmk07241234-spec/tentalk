@@ -64,7 +64,7 @@ export default function Me() {
       </View>
       <Card>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-          <Avatar name={profile.name} color={profile.color} photoUri={profile.photoUri} size={64} frame={plus ? profile.frame : null} />
+          <Avatar name={profile.name} color={profile.color} avatar={profile.avatar} photoUri={profile.photoUri} size={64} frame={plus ? profile.frame : null} />
           <View style={{ flex: 1, gap: 4 }}>
             <Text style={{ color: c.ink, fontWeight: '700', fontSize: 17 }}>{profile.name}</Text>
             <Body small muted>{t('person.native', { lang: t(`lang.${profile.native}`) })}</Body>
