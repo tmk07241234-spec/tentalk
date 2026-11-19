@@ -33,6 +33,9 @@ describe('practice record and trust', () => {
     expect(earlyLeaver(['a', 'b'], p, 120, ['a'])).toBeNull();
     expect(earlyLeaver(['a', 'b'], { ...p, a: { ...p.a, clientLeft: false } }, 120, [])).toBeNull();
     expect(earlyLeaver(['a', 'b'], p, 600, [])).toBeNull();
+    // Both left in the same second (the partner's app follows at once): the first to arrive ended it.
+    const same = { a: { joinedAt: T, leftAt: T + 90_000, clientLeft: true, leftOrder: 1 }, b: { joinedAt: T, leftAt: T + 90_000, clientLeft: true, leftOrder: 0 } };
+    expect(earlyLeaver(['a', 'b'], same, 90, [])).toBe('b');
   });
 
   it('shows a rate only after five calls, and practice days in the last 30', () => {

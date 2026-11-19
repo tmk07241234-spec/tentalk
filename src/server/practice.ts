@@ -47,7 +47,13 @@ export async function onCallEvent(ev: WebhookEvent): Promise<{ ok: true }> {
   if (uid && call.members.includes(uid)) {
     const p = { ...(presence[uid] ?? {}) };
     if (kind === 'participant_joined') { p.joinedAt = p.joinedAt ?? at; delete p.leftAt; }
-    if (kind === 'participant_left') { p.leftAt = at; p.clientLeft = isClientLeave(ev.participant?.disconnectReason); }
+    if (kind === 'participant_left') {
+      // Events arrive in order but carry whole seconds, and the partner's app leaves right
+      // after: the order of arrival tells who ended the call.
+      p.leftAt = at;
+      p.clientLeft = isClientLeave(ev.participant?.disconnectReason);
+      p.leftOrder = call.members.filter((m) => m !== uid && presence[m]?.leftAt).length;
+    }
     presence[uid] = p;
   }
   const allLeft = call.members.every((m) => !presence[m]?.joinedAt || presence[m].leftAt);

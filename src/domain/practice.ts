@@ -51,7 +51,13 @@ const clamp = (n: number) => Math.max(0, Math.min(100, n));
 export const dayOf = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 
 /** Each member's time in the call room, from the call service's events (ms). */
-export interface Presence { joinedAt?: number; leftAt?: number; clientLeft?: boolean }
+export interface Presence {
+  joinedAt?: number;
+  leftAt?: number;
+  clientLeft?: boolean;
+  /** 0 for the first person to leave, 1 for the second: event times are only to the second. */
+  leftOrder?: number;
+}
 
 /** Seconds both people were in the room together; 0 if either never joined. */
 export function talkedSeconds(a: Presence | undefined, b: Presence | undefined, end: number): number {
@@ -71,7 +77,8 @@ export const isCompleted = (seconds: number) => seconds >= REQUIRED_SECONDS - TO
  */
 export function earlyLeaver(members: readonly string[], presence: Record<string, Presence>, seconds: number, reporters: readonly string[]): string | null {
   if (isCompleted(seconds)) return null;
-  const left = members.filter((m) => presence[m]?.leftAt).sort((x, y) => presence[x].leftAt! - presence[y].leftAt!);
+  const left = members.filter((m) => presence[m]?.leftAt)
+    .sort((x, y) => (presence[x].leftAt! - presence[y].leftAt!) || ((presence[x].leftOrder ?? 0) - (presence[y].leftOrder ?? 0)));
   const first = left[0];
   if (!first || !presence[first].clientLeft || reporters.includes(first)) return null;
   return first;
