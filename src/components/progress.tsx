@@ -18,12 +18,13 @@ export function WeekDots({ days }: { days: { key: string; done: boolean; isToday
       {days.map((d, i) => (
         <View key={d.key} style={{ alignItems: 'center', gap: 4 }}>
           <View style={{
-            width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
-            backgroundColor: d.done ? c.ok : 'transparent', borderWidth: 2, borderColor: d.done ? c.ok : d.isToday ? c.learn : c.line,
+            width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center',
+            backgroundColor: d.done ? c.ok : d.isToday ? c.coralSoft : 'transparent', borderWidth: 2,
+            borderColor: d.done ? c.ok : d.isToday ? c.coral : c.line, borderStyle: d.done || d.isToday ? 'solid' : 'dashed',
           }}>
             {d.done ? <Ionicons name="checkmark" size={16} color="#FFFFFF" /> : null}
           </View>
-          <Text style={{ fontSize: 11, color: d.isToday ? c.learn : c.muted, fontWeight: d.isToday ? '700' : '400' }}>{labels[i]}</Text>
+          <Text style={{ fontSize: 11, color: d.isToday ? c.coral : c.muted, fontWeight: d.isToday ? '700' : '400' }}>{labels[i]}</Text>
         </View>
       ))}
     </View>
@@ -35,7 +36,7 @@ export function GoalBar({ value }: { value: number }) {
   return (
     <View style={{ flexDirection: 'row', gap: 4 }}>
       {Array.from({ length: WEEKLY_GOAL }, (_, i) => (
-        <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: i < value ? c.ok : c.line }} />
+        <View key={i} style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: i < value ? c.coral : c.line }} />
       ))}
     </View>
   );

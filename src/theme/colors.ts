@@ -1,13 +1,17 @@
 import { useColorScheme } from 'react-native';
 
-/** Blue = the language being learned, red = native language, green = practice buddy. */
+/**
+ * Blue = the language being learned, red = native language, green = practice buddy.
+ * Warm paper tones (1.2) with a yellow call button and a coral accent for progress,
+ * so screens feel lived-in rather than grey.
+ */
 const light = {
-  bg: '#F3F4F8',
+  bg: '#F6F2EA',
   surface: '#FFFFFF',
-  surface2: '#EAECF3',
-  ink: '#161A2B',
-  muted: '#5D6378',
-  line: '#D9DCE7',
+  surface2: '#EFE9DE',
+  ink: '#24221F',
+  muted: '#756E64',
+  line: '#E2D9CA',
   learn: '#2D55E0',
   learnSoft: '#E3E9FD',
   native: '#D6402A',
@@ -19,17 +23,24 @@ const light = {
   warn: '#B7791F',
   bad: '#C2352B',
   onAccent: '#FFFFFF',
+  /** Main call button on the green quick-match card. */
+  sun: '#F4C76B',
+  sunInk: '#2B2117',
+  sunSoft: '#FDF1D8',
+  sunText: '#9A6210',
+  coral: '#D9694D',
+  coralSoft: '#FBEAE4',
 };
 
 export type Colors = typeof light;
 
 const dark: Colors = {
-  bg: '#0E1018',
-  surface: '#171A26',
-  surface2: '#222636',
-  ink: '#E9EBF3',
-  muted: '#9AA0B6',
-  line: '#2E3346',
+  bg: '#14120F',
+  surface: '#1F1C18',
+  surface2: '#2B2721',
+  ink: '#F1ECE3',
+  muted: '#A99F92',
+  line: '#3A342C',
   learn: '#7C97FF',
   learnSoft: '#1E2850',
   native: '#FF7B63',
@@ -41,6 +52,12 @@ const dark: Colors = {
   warn: '#E3A84A',
   bad: '#FF6F63',
   onAccent: '#0E1018',
+  sun: '#F4C76B',
+  sunInk: '#2B2117',
+  sunSoft: '#3A2D14',
+  sunText: '#F4C76B',
+  coral: '#F08A6E',
+  coralSoft: '#40231B',
 };
 
 /** Call screens use fixed dark backgrounds in both themes. */
