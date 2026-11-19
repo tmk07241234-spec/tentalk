@@ -25,7 +25,8 @@ describe('cloud shape', () => {
     const c = toCloud(state)!;
     expect(c.profile.photoUri).toBeNull();
     expect(c.profile.voice).toBeNull();
-    expect(c.profile.languageOnly).toBe(false);
+    // The language-only badge was removed in 1.1; everyone is marked so older app versions keep matching them.
+    expect(c.profile.languageOnly).toBe(true);
     expect(c.state).not.toHaveProperty('notifications');
     expect(c.state).not.toHaveProperty('plus');
   });

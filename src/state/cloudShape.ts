@@ -41,7 +41,8 @@ export function toCloud(s: AppState): CloudAccount | null {
       ...profile,
       photoUri: photoUri && isUploaded(photoUri) ? photoUri : null,
       voice: voice && isUploaded(voice.uri) ? voice : null,
-      languageOnly: s.settings.languageOnly,
+      // The badge is gone (1.1): the rules protect everyone. Older app versions still read it.
+      languageOnly: true,
       learnLangs: profile.learning.map((l) => l.lang),
       calls: s.callLog.filter((c) => c.completed).length,
     },

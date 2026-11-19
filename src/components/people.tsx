@@ -45,7 +45,6 @@ export function PersonRow({ person, mutual }: { person: Partner; mutual?: boolea
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <Text style={{ color: c.ink, fontWeight: '700', fontSize: 15 }}>{person.name}</Text>
           {rel ? <Pill label={rel === 'buddy' ? t('home.buddy') : t('home.exchange')} tone={rel === 'buddy' ? 'buddy' : 'learn'} /> : null}
-          {person.languageOnly ? <Pill label={t('person.languageOnly')} /> : null}
           {mutual ? <Pill label={t('connections.mutualTag')} tone="ok" /> : following ? <Pill label={t('profileView.following')} tone="ok" /> : null}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>

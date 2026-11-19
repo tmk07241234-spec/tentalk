@@ -26,6 +26,7 @@ import { connections } from '@/services/connections';
 import { joinCallRoom, type CallMessage, type CallRoom } from '@/services/callRoom';
 import { CONSENT_SECONDS } from '@/domain/consent';
 import { LevelBars } from '@/components/level';
+import { VoicePlayer } from '@/components/voice';
 import { callConsent, callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
 import { loadPerson, usePerson } from '@/services/people';
 import { setInCall } from '@/services/presence';
@@ -181,8 +182,8 @@ export default function Call() {
     const ctrl = new AbortController();
     if (live && kind === 'random') {
       searchRandomCall({
-        mode, native: me.native, learn: me.learn, level: active?.level ?? 1, languageOnly: app.settings.languageOnly,
-        wantLanguageOnly: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel, avoid: avoid.current,
+        mode, native: me.native, learn: me.learn, level: active?.level ?? 1, languageOnly: true,
+        wantLanguageOnly: false, matchLevel: app.settings.matchLevel, avoid: avoid.current,
       }, ctrl.signal)
         .then((id) => {
           if (ctrl.signal.aborted) return;
@@ -196,7 +197,7 @@ export default function Call() {
       return () => ctrl.abort();
     }
     matchmaking
-      .findPartner(me, { mode, myLevel: active?.level ?? 3, languageOnlyPartners: app.settings.languageOnlyPartners, matchLevel: app.settings.matchLevel, blocked: new Set(app.blocked) }, ctrl.signal)
+      .findPartner(me, { mode, myLevel: active?.level ?? 3, languageOnlyPartners: false, matchLevel: app.settings.matchLevel, blocked: new Set(app.blocked) }, ctrl.signal)
       .then((p) => {
         if (!p) return setPhase('none');
         // Simulated quick match: the same "talk or skip" step as a real one.
@@ -385,13 +386,16 @@ export default function Call() {
         <Card style={{ alignItems: 'center', gap: space.sm }}>
           {p ? (
             <>
-              <Avatar name={p.name} color={p.color} photoUri={p.photoUri} size={88} />
-              <Text style={{ color: c.ink, fontSize: 22, fontWeight: '700' }}>{p.name}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+                <Avatar name={p.name} color={p.color} photoUri={p.photoUri} size={44} />
+                <Text style={{ color: c.ink, fontSize: 22, fontWeight: '700' }}>{p.name}</Text>
+              </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Text style={{ color: c.muted }}>{t('person.native', { lang: t(`lang.${p.native}`) })} · {t(`lang.${p.learn}`)}</Text>
                 <LevelBars level={p.level} />
               </View>
-              {p.languageOnly ? <Text style={{ color: c.muted, fontSize: 12 }}>{t('person.languageOnly')}</Text> : null}
+              {/* Voice first: the card is about how someone speaks, not how they look. */}
+              {p.voice ? <View style={{ alignSelf: 'stretch' }}><VoicePlayer voice={p.voice} /></View> : null}
               {p.bio ? <Body style={{ textAlign: 'center' }}>{p.bio}</Body> : null}
               <Text style={{ color: c.muted, fontSize: 12 }}>{t('call.previewCalls', { n: p.calls })}</Text>
             </>
@@ -530,7 +534,7 @@ export default function Call() {
           <View style={{ flex: 1 }}>
             <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16 }}>{partner.name}</Text>
             <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>
-              {t('person.native', { lang: t(`lang.${partner.native}`) })}{partner.languageOnly ? ` · ${t('person.languageOnly')}` : ''}
+              {t('person.native', { lang: t(`lang.${partner.native}`) })}
             </Text>
           </View>
         </View>

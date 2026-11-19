@@ -1,6 +1,7 @@
 import type { Person } from '@/domain/discovery';
 import type { Candidate } from '@/domain/matching';
 import type { HoursRange } from '@/domain/schedule';
+import type { VoiceIntro } from '@/state/store';
 
 /** Stand-in people until the server exists. Hours are in the person's own local time. */
 export interface Partner extends Candidate, Person {
@@ -9,6 +10,8 @@ export interface Partner extends Candidate, Person {
   country: string;
   color: string;
   photoUri?: string | null;
+  /** Self-introduction recording, shown before calls and on the profile. */
+  voice?: VoiceIntro | null;
   calls: number;
   bio: string;
   /** Available hours in the person's local time; null when not set. */
