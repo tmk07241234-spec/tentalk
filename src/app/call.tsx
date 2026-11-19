@@ -11,7 +11,7 @@ import { Badge, Confetti, SpeechBubble } from '@/components/progress';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Title } from '@/components/ui';
 import { EXAMPLE_QUESTIONS, HELP_PHRASES, QUESTIONS, questionIn, questionsFor } from '@/data/conversation';
-import type { Partner } from '@/data/samplePartners';
+import { sampleStats, type Partner } from '@/data/samplePartners';
 import {
   REQUIRED_SECONDS, callOutcome, formatClock, shouldShowAd, silenceNudge, type CallOutcome, type EndReason,
 } from '@/domain/callRules';
@@ -399,7 +399,7 @@ export default function Call() {
                 <LevelBars level={p.level} />
               </View>
               {/* Practice record first, then the voice: how someone practises and speaks, not how they look. */}
-              <PracticeRecord stats={partnerStats} fallbackCalls={p.calls} />
+              <PracticeRecord stats={live ? partnerStats : sampleStats(p)} fallbackCalls={p.calls} />
               {p.voice ? <View style={{ alignSelf: 'stretch' }}><VoicePlayer voice={p.voice} /></View> : null}
               {p.bio ? <Body style={{ textAlign: 'center' }}>{p.bio}</Body> : null}
 

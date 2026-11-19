@@ -19,6 +19,7 @@ import { clockAt, requestExpiresAt } from '@/domain/schedule';
 import { connections } from '@/services/connections';
 import { api } from '@/services/api';
 import { usePerson } from '@/services/people';
+import { sampleStats } from '@/data/samplePartners';
 import { findSamplePartner } from '@/services/matchmaking';
 import { requests, sendRequest, type SendError } from '@/services/requests';
 import { useApp, type OutgoingRequest } from '@/state/store';
@@ -124,7 +125,7 @@ export default function PersonScreen() {
         </View>
       </View>
 
-      <PracticeRecord stats={personStats} fallbackCalls={person.calls} />
+      <PracticeRecord stats={personStats ?? (findSamplePartner(person.id) ? sampleStats(person) : null)} fallbackCalls={person.calls} />
       {person.voice ? <VoicePlayer voice={person.voice} /> : null}
       <Body>{person.bio}</Body>
 

@@ -2,6 +2,7 @@ import type { Person } from '@/domain/discovery';
 import type { Candidate } from '@/domain/matching';
 import type { HoursRange } from '@/domain/schedule';
 import type { VoiceIntro } from '@/state/store';
+import { emptyStats, type PracticeStats } from '@/domain/practice';
 
 /** Stand-in people until the server exists. Hours are in the person's own local time. */
 export interface Partner extends Candidate, Person {
@@ -64,3 +65,10 @@ export const SAMPLE_PARTNERS: Partner[] = [
   p({ id: 'kenji', name: 'Kenji', country: 'JP', color: '#4A6FA5', native: 'ja', learn: 'es', level: 3, status: 'online', languageOnly: true, calls: 26,
     bio: 'サッカーが好きでスペイン語を勉強しています。', hobbies: ['sports', 'travel'], hours: { start: '20:00', end: '22:00' }, utcOffset: 540 }),
 ];
+
+/** A believable practice record for a sample person (used only where no real account exists). */
+export function sampleStats(p: Pick<Partner, 'calls'>): PracticeStats {
+  const finished = Math.round(p.calls * 1.06) + 1;
+  const days = Array.from({ length: Math.min(28, 6 + (p.calls % 19)) }, (_, i) => new Date(Date.now() - i * 864e5).toISOString().slice(0, 10)).reverse();
+  return { ...emptyStats(), finished, completed: p.calls, days };
+}
