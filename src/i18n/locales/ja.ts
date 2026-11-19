@@ -171,7 +171,7 @@ const ja = {
     notifications: '通知', notifyAccepted: '送ったリクエストが承認されたとき', notifyFollowed: 'フォローされたとき', notifyTheme: '今週のテーマとお知らせ',
     notificationsNote: '届いたリクエストの通知は、上の「受け付ける相手」で決まります。',
   },
-  avatarPicker: { initial: '頭文字', note: 'キャラクターか写真を選べます。写真は任意です。', cat: 'ねこ', dog: 'いぬ', rabbit: 'うさぎ', bear: 'くま', panda: 'パンダ', fox: 'きつね', owl: 'ふくろう', penguin: 'ペンギン' },
+  avatarPicker: { initial: '頭文字', illustration: 'イラスト', background: '背景の色', hair: '髪型', hairColor: '髪の色', skin: '肌の色', outfit: '服の色', note: 'イラストは髪型や色を組み合わせて作れます。写真は任意です。' },
   practice: { rate: '完走率 {{n}}%', new: 'はじめたばかり', days: 'この30日で{{n}}日練習', calls: '10分通話 {{n}}回' },
   admin: {
     countsTitle: '今日の数字（UTC）', users: '登録者 {{n}}人', activeToday: '今日使った人 {{n}}人', callsToday: '今日の通話 {{n}}件', completedToday: 'うち10分完走 {{n}}件', 

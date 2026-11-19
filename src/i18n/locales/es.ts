@@ -173,7 +173,7 @@ const es: Translation = {
     notifications: 'Notificaciones', notifyAccepted: 'Cuando aceptan una solicitud mía', notifyFollowed: 'Cuando alguien me sigue', notifyTheme: 'Tema semanal y novedades',
     notificationsNote: 'Los avisos de solicitudes recibidas siguen lo elegido en «Quién puede pedirte una llamada».',
   },
-  avatarPicker: { initial: 'Inicial', note: 'Elige un personaje o una foto. La foto es opcional.', cat: 'Gato', dog: 'Perro', rabbit: 'Conejo', bear: 'Oso', panda: 'Panda', fox: 'Zorro', owl: 'Búho', penguin: 'Pingüino' },
+  avatarPicker: { initial: 'Inicial', illustration: 'Ilustración', background: 'Fondo', hair: 'Peinado', hairColor: 'Color de pelo', skin: 'Tono de piel', outfit: 'Ropa', note: 'Crea tu ilustración con el peinado, la piel y la ropa. La foto es opcional.' },
   practice: { rate: '{{n}}% de llamadas completadas', new: 'Acaba de empezar', days: 'Practicó {{n}} días de los últimos 30', calls: '{{n}} llamadas completadas' },
   admin: {
     countsTitle: 'Hoy (UTC)', users: '{{n}} registrados', activeToday: '{{n}} activos hoy', callsToday: '{{n}} llamadas hoy', completedToday: '{{n}} llegaron a 10 minutos', 

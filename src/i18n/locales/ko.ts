@@ -173,7 +173,7 @@ const ko: Translation = {
     notifications: '알림', notifyAccepted: '보낸 요청이 승인됐을 때', notifyFollowed: '누군가 나를 팔로우했을 때', notifyTheme: '이번 주 테마와 소식',
     notificationsNote: '받은 요청 알림은 위의 “통화 요청을 받을 상대”에 따라 정해져요.',
   },
-  avatarPicker: { initial: '이니셜', note: '캐릭터나 사진을 고를 수 있어요. 사진은 선택이에요.', cat: '고양이', dog: '강아지', rabbit: '토끼', bear: '곰', panda: '판다', fox: '여우', owl: '부엉이', penguin: '펭귄' },
+  avatarPicker: { initial: '이니셜', illustration: '일러스트', background: '배경 색', hair: '헤어스타일', hairColor: '머리 색', skin: '피부 톤', outfit: '옷 색', note: '헤어스타일과 색을 골라 일러스트를 만들 수 있어요. 사진은 선택이에요.' },
   practice: { rate: '완주율 {{n}}%', new: '이제 막 시작했어요', days: '최근 30일 중 {{n}}일 연습', calls: '10분 통화 {{n}}회' },
   admin: {
     countsTitle: '오늘의 숫자 (UTC)', users: '가입자 {{n}}명', activeToday: '오늘 이용 {{n}}명', callsToday: '오늘 통화 {{n}}건', completedToday: '10분 완주 {{n}}건', 

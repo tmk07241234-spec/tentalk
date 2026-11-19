@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 
 import { AvatarPicker } from '@/components/AvatarPicker';
-import type { CharacterId } from '@/components/Character';
+import { randomLook, type CharacterId } from '@/components/Character';
 import { Body, Button, ErrorText, Field, Screen, StepLabel, Title } from '@/components/ui';
 import { contentProblem } from '@/domain/contentFilter';
 import { deviceOffset } from '@/domain/schedule';
@@ -19,8 +19,8 @@ export default function ProfileStep() {
   const [name, setName] = useState(draft.suggestedName);
   const [color, setColor] = useState(AVATAR_COLORS[1]);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  // An illustrated character by default, so nobody starts with just an initial.
-  const [avatar, setAvatar] = useState<CharacterId | null>('cat');
+  // A varied illustrated portrait by default, so nobody starts with just an initial.
+  const [avatar, setAvatar] = useState<CharacterId | null>(randomLook);
   const [error, setError] = useState('');
 
   const pickPhoto = async () => {

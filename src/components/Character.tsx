@@ -1,141 +1,89 @@
 import Svg, { Circle, Ellipse, G, Path } from 'react-native-svg';
 
 /**
- * Illustrated avatars people can choose instead of a photo (1.2): friendly animal faces
- * in the same soft style as Pip, drawn on the person's own colour. They keep profiles
- * warm without putting faces first.
+ * Illustrated portraits people can choose instead of a photo (1.2). Editorial style:
+ * hair, skin, hair colour and clothes on a calm tint of the person's colour, with no
+ * facial features, so they read as a person without putting looks first.
+ *
+ * Stored in the profile's `avatar` field as "hair-hairColour-skin-outfit",
+ * for example "bob-0-2-3".
  */
-export const CHARACTERS = ['cat', 'dog', 'rabbit', 'bear', 'panda', 'fox', 'owl', 'penguin'] as const;
-export type CharacterId = (typeof CHARACTERS)[number];
+export const HAIRS = ['short', 'side', 'buzz', 'beard', 'curly', 'bob', 'long', 'wavy', 'bun', 'pony', 'scarf'] as const;
+export type Hair = (typeof HAIRS)[number];
+export const HAIR_COLORS = ['#1C1A1D', '#3B2A22', '#6B4A33', '#A3825F', '#8F8D90'];
+export const SKINS = ['#F2D5C0', '#E9C3A6', '#D4A57F', '#B9825F', '#8E5B3E', '#6A4230'];
+export const OUTFITS = ['#3F5A6E', '#2E3036', '#4E6B5C', '#7A5A4A', '#5B4B6E', '#8A4F4F', '#C7A36B', '#D8D1C4'];
 
-export const isCharacter = (v: unknown): v is CharacterId => typeof v === 'string' && (CHARACTERS as readonly string[]).includes(v);
+export interface Look { hair: Hair; hairColor: number; skin: number; outfit: number }
+/** The stored form of a look. */
+export type CharacterId = string;
 
-const INK = '#161A2B';
-const FACE = '#FFFFFF';
-const BLUSH = '#F7A1B5';
-
-function Eyes({ y = 52, gap = 14, r = 4.2 }: { y?: number; gap?: number; r?: number }) {
-  return (
-    <G>
-      <Circle cx={50 - gap} cy={y} r={r} fill={INK} />
-      <Circle cx={50 + gap} cy={y} r={r} fill={INK} />
-      <Circle cx={50 - gap + 1.4} cy={y - 1.4} r={1.3} fill={FACE} />
-      <Circle cx={50 + gap + 1.4} cy={y - 1.4} r={1.3} fill={FACE} />
-    </G>
-  );
+export function parseLook(v: unknown): Look | null {
+  if (typeof v !== 'string') return null;
+  const [hair, ...rest] = v.split('-');
+  const [hairColor, skin, outfit] = rest.map(Number);
+  if (rest.length !== 3 || !(HAIRS as readonly string[]).includes(hair)) return null;
+  const ok = (n: number, max: number) => Number.isInteger(n) && n >= 0 && n < max;
+  if (!ok(hairColor, HAIR_COLORS.length) || !ok(skin, SKINS.length) || !ok(outfit, OUTFITS.length)) return null;
+  return { hair: hair as Hair, hairColor, skin, outfit };
 }
 
-function Cheeks({ y = 62, gap = 22 }: { y?: number; gap?: number }) {
-  return (
-    <G opacity={0.85}>
-      <Ellipse cx={50 - gap} cy={y} rx={5} ry={3} fill={BLUSH} />
-      <Ellipse cx={50 + gap} cy={y} rx={5} ry={3} fill={BLUSH} />
-    </G>
-  );
+export const isCharacter = (v: unknown): v is CharacterId => parseLook(v) !== null;
+export const lookId = (l: Look): CharacterId => `${l.hair}-${l.hairColor}-${l.skin}-${l.outfit}`;
+
+/** A varied starting look, so new people do not all look the same. */
+export function randomLook(rand: () => number = Math.random): CharacterId {
+  const pick = (n: number) => Math.floor(rand() * n);
+  return lookId({ hair: HAIRS[pick(HAIRS.length)], hairColor: pick(3), skin: pick(SKINS.length), outfit: pick(OUTFITS.length) });
 }
 
-const Smile = ({ y = 64 }: { y?: number }) => <Path d={`M44 ${y} Q50 ${y + 6} 56 ${y}`} stroke={INK} strokeWidth={2.6} strokeLinecap="round" fill="none" />;
+/** Mixes a colour toward a warm paper tone, for a quiet background. */
+export function tint(hex: string, amount = 0.22, base = '#E9E4DA'): string {
+  const n = (h: string, i: number) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
+  const ch = (i: number) => Math.round(n(base, i) + (n(hex, i) - n(base, i)) * amount).toString(16).padStart(2, '0');
+  return /^#[0-9a-fA-F]{6}$/.test(hex) ? `#${ch(0)}${ch(1)}${ch(2)}` : base;
+}
 
-function Face({ id, color }: { id: CharacterId; color: string }) {
-  switch (id) {
-    case 'cat':
-      return (
-        <G>
-          <Path d="M22 40 L26 14 L44 30 Z" fill={FACE} /><Path d="M78 40 L74 14 L56 30 Z" fill={FACE} />
-          <Path d="M27 34 L29 21 L38 29 Z" fill={BLUSH} /><Path d="M73 34 L71 21 L62 29 Z" fill={BLUSH} />
-          <Ellipse cx={50} cy={56} rx={32} ry={28} fill={FACE} />
-          <Eyes /><Cheeks />
-          <Path d="M47 60 L53 60 L50 63 Z" fill={INK} />
-          <Path d="M50 63 Q46 68 42 65 M50 63 Q54 68 58 65" stroke={INK} strokeWidth={2.2} strokeLinecap="round" fill="none" />
-          <Path d="M16 56 L28 58 M16 64 L28 62 M84 56 L72 58 M84 64 L72 62" stroke={INK} strokeWidth={1.6} strokeLinecap="round" opacity={0.5} />
-        </G>
-      );
-    case 'dog':
-      return (
-        <G>
-          <Ellipse cx={50} cy={55} rx={30} ry={29} fill={FACE} />
-          <Ellipse cx={22} cy={50} rx={10} ry={20} fill={INK} opacity={0.75} transform="rotate(15 22 50)" />
-          <Ellipse cx={78} cy={50} rx={10} ry={20} fill={INK} opacity={0.75} transform="rotate(-15 78 50)" />
-          <Eyes y={50} /><Cheeks y={64} gap={20} />
-          <Ellipse cx={50} cy={62} rx={6} ry={4.5} fill={INK} />
-          <Path d="M50 66 Q50 72 44 71 M50 66 Q50 72 56 71" stroke={INK} strokeWidth={2.2} strokeLinecap="round" fill="none" />
-        </G>
-      );
-    case 'rabbit':
-      return (
-        <G>
-          <Ellipse cx={38} cy={22} rx={8} ry={20} fill={FACE} /><Ellipse cx={62} cy={22} rx={8} ry={20} fill={FACE} />
-          <Ellipse cx={38} cy={24} rx={4} ry={14} fill={BLUSH} /><Ellipse cx={62} cy={24} rx={4} ry={14} fill={BLUSH} />
-          <Ellipse cx={50} cy={60} rx={30} ry={26} fill={FACE} />
-          <Eyes y={57} /><Cheeks y={67} />
-          <Ellipse cx={50} cy={65} rx={3.5} ry={2.5} fill={BLUSH} />
-          <Path d="M50 67 Q46 72 43 69 M50 67 Q54 72 57 69" stroke={INK} strokeWidth={2.2} strokeLinecap="round" fill="none" />
-        </G>
-      );
-    case 'bear':
-      return (
-        <G>
-          <Circle cx={25} cy={30} r={11} fill={FACE} /><Circle cx={75} cy={30} r={11} fill={FACE} />
-          <Circle cx={25} cy={30} r={5.5} fill={color} opacity={0.55} /><Circle cx={75} cy={30} r={5.5} fill={color} opacity={0.55} />
-          <Ellipse cx={50} cy={56} rx={32} ry={29} fill={FACE} />
-          <Eyes y={50} /><Cheeks y={62} />
-          <Ellipse cx={50} cy={64} rx={11} ry={8} fill={color} opacity={0.25} />
-          <Ellipse cx={50} cy={60.5} rx={4.5} ry={3.2} fill={INK} />
-          <Smile y={65} />
-        </G>
-      );
-    case 'panda':
-      return (
-        <G>
-          <Circle cx={25} cy={30} r={11} fill={INK} /><Circle cx={75} cy={30} r={11} fill={INK} />
-          <Ellipse cx={50} cy={56} rx={32} ry={29} fill={FACE} />
-          <Ellipse cx={36} cy={52} rx={8} ry={10} fill={INK} transform="rotate(-25 36 52)" />
-          <Ellipse cx={64} cy={52} rx={8} ry={10} fill={INK} transform="rotate(25 64 52)" />
-          <Circle cx={37} cy={51} r={3} fill={FACE} /><Circle cx={63} cy={51} r={3} fill={FACE} />
-          <Cheeks y={66} gap={24} />
-          <Ellipse cx={50} cy={62} rx={4.5} ry={3.2} fill={INK} />
-          <Smile y={66} />
-        </G>
-      );
-    case 'fox':
-      return (
-        <G>
-          <Path d="M20 44 L24 12 L46 32 Z" fill={FACE} /><Path d="M80 44 L76 12 L54 32 Z" fill={FACE} />
-          <Path d="M26 36 L27 20 L38 31 Z" fill={INK} opacity={0.75} /><Path d="M74 36 L73 20 L62 31 Z" fill={INK} opacity={0.75} />
-          <Path d="M16 48 Q50 30 84 48 Q80 78 50 88 Q20 78 16 48 Z" fill={FACE} />
-          <Eyes y={54} gap={15} /><Cheeks y={64} gap={23} />
-          <Ellipse cx={50} cy={70} rx={4.5} ry={3.2} fill={INK} />
-          <Path d="M50 73 Q47 77 44 75 M50 73 Q53 77 56 75" stroke={INK} strokeWidth={2.2} strokeLinecap="round" fill="none" />
-        </G>
-      );
-    case 'owl':
-      return (
-        <G>
-          <Path d="M22 36 L28 18 L40 30 Z" fill={FACE} /><Path d="M78 36 L72 18 L60 30 Z" fill={FACE} />
-          <Ellipse cx={50} cy={58} rx={32} ry={30} fill={FACE} />
-          <Circle cx={37} cy={52} r={11} fill={color} opacity={0.22} /><Circle cx={63} cy={52} r={11} fill={color} opacity={0.22} />
-          <Eyes y={52} gap={13} r={5.2} />
-          <Path d="M45 62 L55 62 L50 70 Z" fill="#F2B544" />
-          <Cheeks y={66} gap={24} />
-        </G>
-      );
-    case 'penguin':
-      return (
-        <G>
-          <Ellipse cx={50} cy={56} rx={34} ry={32} fill={INK} opacity={0.85} />
-          <Path d="M50 34 Q30 30 26 52 Q24 76 50 84 Q76 76 74 52 Q70 30 50 34 Z" fill={FACE} />
-          <Eyes y={54} gap={12} /><Cheeks y={64} gap={19} />
-          <Path d="M44 62 L56 62 L50 69 Z" fill="#F2B544" />
-        </G>
-      );
+const HEAD = <Ellipse cx={50} cy={45} rx={14} ry={17} />;
+
+/** Hair drawn behind the head, then over it. */
+function hairParts(hair: Hair): { back?: string; front: string } {
+  switch (hair) {
+    case 'short': return { front: 'M35 44 C33 26 44 21 52 22 C63 22 68 30 65 44 C64 35 58 31 50 32 C42 32 37 36 35 44Z' };
+    case 'side': return { front: 'M35 46 C32 27 45 21 54 23 C64 25 68 33 65 46 C63 37 61 33 57 31 C51 36 43 36 36 40Z' };
+    case 'buzz': return { front: 'M36.3 41 C37 29 44 27 50 27 C56 27 63 29 63.7 41 C60 34 56 33 50 33 C44 33 40 34 36.3 41Z' };
+    case 'beard': return { front: 'M36 40 C36 29 43 25 50 25 C58 25 64 29 64 40 C60 34 56 33 50 33 C44 33 40 34 36 40Z M36 47 C37 62 44 64 50 64 C56 64 63 62 64 47 C61 56 57 58 50 58 C43 58 39 56 36 47Z' };
+    case 'curly': return { front: 'M32 34 a6 6 0 1 1 12 -6 a7 7 0 0 1 14 -2 a7 7 0 0 1 9 9 a5.5 5.5 0 0 1 -2 9 C62 36 56 33 50 33 C44 33 39 37 36 45 a4.5 4.5 0 0 1 -4 -11Z' };
+    case 'bob': return { front: 'M33 54 C29 27 43 21 51 22 C63 22 71 29 67 54 L63 54 C65 40 60 32 50 32 C41 32 36 40 37 54Z' };
+    case 'long': return { back: 'M31 74 C27 42 34 23 50 23 C66 23 73 42 69 74Z', front: 'M36 42 C38 29 46 26 52 27 C59 27 63 32 64 41 C57 34 44 33 36 42Z' };
+    case 'wavy': return { back: 'M30 73 C25 63 33 57 30 46 C28 30 38 22 50 22 C62 22 72 30 70 46 C67 57 75 63 70 73Z', front: 'M36 43 C36 29 45 25 51 26 C60 27 64 33 64 42 C60 36 55 31 49 33 C44 35 40 38 36 43Z' };
+    case 'bun': return { back: 'M43 20 a7 7 0 1 1 14 0 a7 7 0 1 1 -14 0Z', front: 'M36 42 C35 28 44 24 50 24 C58 24 65 28 64 42 C60 34 56 32 50 32 C44 32 39 35 36 42Z' };
+    case 'pony': return { back: 'M61 33 C75 37 76 58 66 68 C68 55 66 44 59 40Z', front: 'M36 42 C35 28 44 24 50 24 C58 24 65 28 64 42 C60 34 56 32 50 32 C44 32 39 35 36 42Z' };
+    case 'scarf': return { back: 'M29 72 C25 40 33 23 50 23 C67 23 75 40 71 72 L62 72 C66 56 64 35 50 35 C36 35 34 56 38 72Z', front: 'M35 42 C36 29 44 25 50 25 C56 25 64 29 65 42 C60 35 56 34 50 34 C44 34 40 35 35 42Z' };
   }
 }
 
 export function Character({ id, color, size }: { id: CharacterId; color: string; size: number }) {
+  const look = parseLook(id) ?? { hair: 'short' as Hair, hairColor: 0, skin: 1, outfit: 0 };
+  const skin = SKINS[look.skin];
+  const outfit = OUTFITS[look.outfit];
+  // A headscarf takes a deeper shade of the clothes instead of a hair colour.
+  const hairFill = look.hair === 'scarf' ? tint(outfit, 0.75, '#1C1A1D') : HAIR_COLORS[look.hairColor];
+  const parts = hairParts(look.hair);
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Circle cx={50} cy={50} r={50} fill={color} />
-      <G transform="translate(0 4)"><Face id={id} color={color} /></G>
+      <Circle cx={50} cy={50} r={50} fill={tint(color)} />
+      {parts.back ? <Path d={parts.back} fill={hairFill} /> : null}
+      <Path d="M16 102 C18 80 32 70 50 70 C68 70 82 80 84 102Z" fill={outfit} />
+      <G fill={skin}>
+        <Path d="M44 56 L44 69 L56 69 L56 56Z" />
+        <Ellipse cx={36} cy={47} rx={2.6} ry={3.6} />
+        <Ellipse cx={64} cy={47} rx={2.6} ry={3.6} />
+        {HEAD}
+      </G>
+      <Path d="M44 62 C47 65 53 65 56 62 L56 69 L44 69Z" fill="#000000" opacity={0.12} />
+      <Path d="M40 71 C44 75 56 75 60 71" stroke="#000000" strokeOpacity={0.14} strokeWidth={1.2} fill="none" />
+      <Path d={parts.front} fill={hairFill} />
     </Svg>
   );
 }
