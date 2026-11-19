@@ -7,9 +7,9 @@ import { Body, Button } from './ui';
 import { AVATAR_COLORS, space, useColors } from '@/theme/colors';
 
 /**
- * Choosing an icon: an illustrated portrait put together from hair, skin and clothes,
- * the initial, or a photo. The portrait comes first so a photo is a choice, not the
- * default (Tentalk is voice first). The colour row sets the background.
+ * Choosing an icon: any photo from the library comes first. People who would rather not
+ * show a photo can put together an illustrated portrait (hair, skin, clothes) or keep
+ * the initial; the colour row sets their background.
  */
 export function AvatarPicker({ name, color, avatar, photoUri, frame, onChange, onPickPhoto }: {
   name: string; color: string; avatar: CharacterId | null; photoUri: string | null; frame?: 'gold' | 'sakura' | 'wave' | null;
@@ -19,7 +19,6 @@ export function AvatarPicker({ name, color, avatar, photoUri, frame, onChange, o
   const { t } = useTranslation();
   const c = useColors();
   const look = parseLook(avatar);
-  const showLook = !photoUri && look !== null;
   const set = (patch: Partial<Look>) => onChange({ avatar: lookId({ ...(look ?? parseLook(randomLook())!), ...patch }), photoUri: null });
   const ring = (on: boolean) => ({ borderWidth: 2.5, borderColor: on ? c.ink : 'transparent', borderRadius: 999, padding: 2 });
   const swatches = (label: string, colors: string[], value: number, key: 'hairColor' | 'skin' | 'outfit') => (
@@ -36,52 +35,58 @@ export function AvatarPicker({ name, color, avatar, photoUri, frame, onChange, o
     </View>
   );
 
+  const label = (text: string) => <Text style={{ color: c.muted, fontSize: 12, fontWeight: '700' }}>{text}</Text>;
   return (
     <View style={{ gap: space.md }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.lg }}>
         <Avatar name={name || '?'} color={color} avatar={photoUri ? null : avatar} photoUri={photoUri} size={72} frame={frame} />
-        <View style={{ flex: 1, gap: 6 }}>
-          <Text style={{ color: c.muted, fontSize: 12, fontWeight: '700' }}>{t('avatarPicker.background')}</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
-            {AVATAR_COLORS.map((col) => (
-              <Pressable key={col} accessibilityRole="radio" accessibilityLabel={col} accessibilityState={{ checked: col === color }}
-                onPress={() => onChange({ color: col })} style={ring(col === color)}>
-                <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: col }} />
-              </Pressable>
-            ))}
+        <View style={{ flex: 1, gap: space.sm, alignItems: 'flex-start' }}>
+          <View style={{ flexDirection: 'row', gap: space.sm, flexWrap: 'wrap' }}>
+            <Button small variant="primary" label={photoUri ? t('avatarPicker.changePhoto') : t('avatarPicker.choosePhoto')} onPress={onPickPhoto} />
+            {photoUri ? <Button small variant="ghost" label={t('profileSetup.removePhoto')} onPress={() => onChange({ photoUri: null })} /> : null}
           </View>
+          <Body small muted>{t('avatarPicker.note')}</Body>
         </View>
       </View>
 
-      <View style={{ flexDirection: 'row', gap: space.sm, flexWrap: 'wrap' }}>
-        <Button small variant={showLook ? 'primary' : 'secondary'} label={t('avatarPicker.illustration')} onPress={() => onChange({ avatar: look ? avatar : randomLook(), photoUri: null })} />
-        <Button small variant={!photoUri && !look ? 'primary' : 'secondary'} label={t('avatarPicker.initial')} onPress={() => onChange({ avatar: null, photoUri: null })} />
-        <Button small variant={photoUri ? 'primary' : 'secondary'} label={t('profileSetup.photo')} onPress={onPickPhoto} />
-      </View>
-
-      {showLook && look ? (
+      {!photoUri ? (
         <View style={{ gap: space.md }}>
+          {label(t('avatarPicker.noPhoto'))}
+          <View style={{ flexDirection: 'row', gap: space.sm, flexWrap: 'wrap' }}>
+            <Button small variant={look ? 'primary' : 'secondary'} label={t('avatarPicker.illustration')} onPress={() => onChange({ avatar: look ? avatar : randomLook(), photoUri: null })} />
+            <Button small variant={!look ? 'primary' : 'secondary'} label={t('avatarPicker.initial')} onPress={() => onChange({ avatar: null, photoUri: null })} />
+          </View>
           <View style={{ gap: 6 }}>
-            <Text style={{ color: c.muted, fontSize: 12, fontWeight: '700' }}>{t('avatarPicker.hair')}</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.sm }}>
-              {HAIRS.map((h, i) => (
-                <Pressable key={h} accessibilityRole="radio" accessibilityLabel={`${t('avatarPicker.hair')} ${i + 1}`} accessibilityState={{ checked: look.hair === h }}
-                  onPress={() => set({ hair: h })} style={ring(look.hair === h)}>
-                  <Character id={lookId({ ...look, hair: h })} color={color} size={48} />
+            {label(t('avatarPicker.background'))}
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm }}>
+              {AVATAR_COLORS.map((col) => (
+                <Pressable key={col} accessibilityRole="radio" accessibilityLabel={col} accessibilityState={{ checked: col === color }}
+                  onPress={() => onChange({ color: col })} style={ring(col === color)}>
+                  <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: col }} />
                 </Pressable>
               ))}
-            </ScrollView>
+            </View>
           </View>
-          {look.hair !== 'scarf' ? swatches(t('avatarPicker.hairColor'), HAIR_COLORS, look.hairColor, 'hairColor') : null}
-          {swatches(t('avatarPicker.skin'), SKINS, look.skin, 'skin')}
-          {swatches(t('avatarPicker.outfit'), OUTFITS, look.outfit, 'outfit')}
+          {look ? (
+            <>
+              <View style={{ gap: 6 }}>
+                {label(t('avatarPicker.hair'))}
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.sm }}>
+                  {HAIRS.map((h, i) => (
+                    <Pressable key={h} accessibilityRole="radio" accessibilityLabel={`${t('avatarPicker.hair')} ${i + 1}`} accessibilityState={{ checked: look.hair === h }}
+                      onPress={() => set({ hair: h })} style={ring(look.hair === h)}>
+                      <Character id={lookId({ ...look, hair: h })} color={color} size={48} />
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              </View>
+              {look.hair !== 'scarf' ? swatches(t('avatarPicker.hairColor'), HAIR_COLORS, look.hairColor, 'hairColor') : null}
+              {swatches(t('avatarPicker.skin'), SKINS, look.skin, 'skin')}
+              {swatches(t('avatarPicker.outfit'), OUTFITS, look.outfit, 'outfit')}
+            </>
+          ) : null}
         </View>
       ) : null}
-
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, flexWrap: 'wrap' }}>
-        {photoUri ? <Button small variant="ghost" label={t('profileSetup.removePhoto')} onPress={() => onChange({ photoUri: null })} /> : null}
-        <Body small muted style={{ flex: 1 }}>{t('avatarPicker.note')}</Body>
-      </View>
     </View>
   );
 }

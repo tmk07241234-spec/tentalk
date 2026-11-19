@@ -19,7 +19,8 @@ export default function ProfileStep() {
   const [name, setName] = useState(draft.suggestedName);
   const [color, setColor] = useState(AVATAR_COLORS[1]);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  // A varied illustrated portrait by default, so nobody starts with just an initial.
+  // The photo comes first in the picker; without one, a varied illustrated portrait
+  // instead of a bare initial.
   const [avatar, setAvatar] = useState<CharacterId | null>(randomLook);
   const [error, setError] = useState('');
 

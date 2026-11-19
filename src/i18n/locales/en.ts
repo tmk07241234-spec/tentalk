@@ -173,7 +173,7 @@ const en: Translation = {
     notifications: 'Notifications', notifyAccepted: 'When a request I sent is accepted', notifyFollowed: 'When someone follows me', notifyTheme: 'Weekly theme and news',
     notificationsNote: 'Incoming request notifications follow “Who can send you call requests” above.',
   },
-  avatarPicker: { initial: 'Initial', illustration: 'Illustration', background: 'Background', hair: 'Hair', hairColor: 'Hair colour', skin: 'Skin tone', outfit: 'Clothes', note: 'Build your illustration from hair, skin and clothes. A photo is optional.' },
+  avatarPicker: { initial: 'Initial', choosePhoto: 'Choose a photo', changePhoto: 'Change photo', noPhoto: 'Without a photo', note: 'Pick any photo from your library. Without one, you get an illustration or your initial.', illustration: 'Illustration', background: 'Background', hair: 'Hair', hairColor: 'Hair colour', skin: 'Skin tone', outfit: 'Clothes', },
   practice: { rate: '{{n}}% calls completed', new: 'Just started', days: 'Practised {{n}} days in the last 30', calls: '{{n}} completed calls' },
   admin: {
     countsTitle: 'Today (UTC)', users: '{{n}} registered', activeToday: '{{n}} active today', callsToday: '{{n}} calls today', completedToday: '{{n}} reached 10 minutes', 
