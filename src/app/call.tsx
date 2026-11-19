@@ -27,6 +27,8 @@ import { joinCallRoom, type CallMessage, type CallRoom } from '@/services/callRo
 import { CONSENT_SECONDS } from '@/domain/consent';
 import { LevelBars } from '@/components/level';
 import { VoicePlayer } from '@/components/voice';
+import { PracticeRecord } from '@/components/people';
+import { useStats } from '@/services/stats';
 import { callConsent, callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
 import { loadPerson, usePerson } from '@/services/people';
 import { setInCall } from '@/services/presence';
@@ -94,7 +96,7 @@ export default function Call() {
   // The mode the server decided for a live call (direct calls: from both people's languages).
   const [serverMode, setServerMode] = useState<Mode | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
-  const [failure, setFailure] = useState<'mic' | 'network' | 'suspended' | null>(null);
+  const [failure, setFailure] = useState<'mic' | 'network' | 'suspended' | 'paused' | null>(null);
   // Quick match: the matched call shown for a decision before it starts (guideline 1.2).
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [myChoice, setMyChoice] = useState<boolean | null>(null);
@@ -193,7 +195,7 @@ export default function Call() {
           setPreviewId(id);
           setPhase('preview');
         })
-        .catch((e: Error) => { if (!ctrl.signal.aborted) { setFailure(e.message === 'suspended' ? 'suspended' : 'network'); setPhase('none'); } });
+        .catch((e: Error) => { if (!ctrl.signal.aborted) { setFailure(e.message === 'suspended' || e.message === 'paused' ? e.message : 'network'); setPhase('none'); } });
       return () => ctrl.abort();
     }
     matchmaking
@@ -240,6 +242,7 @@ export default function Call() {
     return () => { stale = true; clearInterval(tick); clearTimeout(timer); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, previewId]);
+  const partnerStats = useStats(phase === 'preview' && live ? partner?.id : null);
   const choose = (talk: boolean) => {
     setMyChoice(talk);
     choice.current = talk;
@@ -380,6 +383,7 @@ export default function Call() {
 
   if (phase === 'preview') {
     const p = partner;
+    // (partnerStats is loaded above for the partner shown here)
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
         <Title>{t('call.previewTitle')}</Title>
@@ -394,10 +398,11 @@ export default function Call() {
                 <Text style={{ color: c.muted }}>{t('person.native', { lang: t(`lang.${p.native}`) })} · {t(`lang.${p.learn}`)}</Text>
                 <LevelBars level={p.level} />
               </View>
-              {/* Voice first: the card is about how someone speaks, not how they look. */}
+              {/* Practice record first, then the voice: how someone practises and speaks, not how they look. */}
+              <PracticeRecord stats={partnerStats} fallbackCalls={p.calls} />
               {p.voice ? <View style={{ alignSelf: 'stretch' }}><VoicePlayer voice={p.voice} /></View> : null}
               {p.bio ? <Body style={{ textAlign: 'center' }}>{p.bio}</Body> : null}
-              <Text style={{ color: c.muted, fontSize: 12 }}>{t('call.previewCalls', { n: p.calls })}</Text>
+
             </>
           ) : <Body muted>{t('call.joining')}</Body>}
         </Card>

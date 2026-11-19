@@ -15,6 +15,7 @@ import { BADGES, earnedBadges } from '@/domain/progress';
 import { api } from '@/services/api';
 import { auth } from '@/services/auth';
 import { PLUS_ENABLED } from '@/domain/features';
+import { useStats } from '@/services/stats';
 import { useApp } from '@/state/store';
 import { space, useColors } from '@/theme/colors';
 
@@ -22,6 +23,8 @@ export default function Me() {
   const { t } = useTranslation();
   const c = useColors();
   const { profile, trust, account, signOut, callLog, seedDemoProgress, plus } = useApp();
+  // The trust score is kept by the server since 1.1 (stats/{uid}); the local one is a fallback.
+  const myStats = useStats(account?.uid);
   // Operators get a link to the report screen; the server decides who they are.
   const [operator, setOperator] = useState<{ admin: boolean; needsVerification: boolean } | null>(null);
   const [verifyNote, setVerifyNote] = useState('');
@@ -95,7 +98,7 @@ export default function Me() {
 
       <Card>
         <Eyebrow>{t('me.trust')}</Eyebrow>
-        <Text style={{ color: c.ink, fontSize: 32, fontWeight: '700' }}>{trust}</Text>
+        <Text style={{ color: c.ink, fontSize: 32, fontWeight: '700' }}>{myStats?.trust ?? trust}</Text>
         <Body small muted>{t('me.trustNote')}</Body>
       </Card>
 

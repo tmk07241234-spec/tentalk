@@ -22,6 +22,10 @@ export interface QueueEntry {
   blocked: string[];
   /** Last refresh, ms since epoch. */
   updatedAt: number;
+  /** When this search started (ms); the longest-waiting entry is matched first. */
+  since?: number;
+  /** Not matched before this time (ms): low trust or many skips wait a little longer (domain/practice). */
+  holdUntil?: number;
   /** Set when someone matched this entry; the owner picks the call up on their next refresh. */
   callId?: string | null;
 }
@@ -48,10 +52,11 @@ function accepts(a: QueueEntry, b: QueueEntry): boolean {
 
 /** The longest-waiting entry that `me` and its owner would both accept, or null. */
 export function pickQueuePartner(me: QueueEntry, entries: readonly QueueEntry[], now: number): QueueEntry | null {
+  if ((me.holdUntil ?? 0) > now) return null;
   const pool = entries.filter((e) =>
-    e.uid !== me.uid && !e.callId && now - e.updatedAt < QUEUE_STALE_MS
+    e.uid !== me.uid && !e.callId && now - e.updatedAt < QUEUE_STALE_MS && (e.holdUntil ?? 0) <= now
     && e.mode === me.mode && relation(me, e) === me.mode
     && accepts(me, e) && accepts(e, me));
-  pool.sort((a, b) => a.updatedAt - b.updatedAt);
+  pool.sort((a, b) => (a.since ?? a.updatedAt) - (b.since ?? b.updatedAt));
   return pool[0] ?? null;
 }

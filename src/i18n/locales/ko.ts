@@ -63,7 +63,7 @@ const ko: Translation = {
   },
   person: { native: '{{lang}} 원어민', languageOnly: '어학 전용', online: '온라인', trusted: '신뢰됨', new: '신규' },
   call: {
-    failure: { mic: '마이크를 쓸 수 없어요', network: '연결하지 못했어요', suspended: '통화를 이용할 수 없어요' }, failureBody: { mic: '브라우저나 기기 설정에서 Tentalk의 마이크를 허용한 뒤 다시 시도해 주세요.', network: '네트워크 상태를 확인하고 다시 시도해 주세요.', suspended: '가이드라인 위반으로 {{date}}까지 통화를 이용할 수 없어요.' },
+    failure: { mic: '마이크를 쓸 수 없어요', network: '연결하지 못했어요', suspended: '통화를 이용할 수 없어요', paused: '빠른 통화를 잠시 쉬고 있어요' }, failureBody: { mic: '브라우저나 기기 설정에서 Tentalk의 마이크를 허용한 뒤 다시 시도해 주세요.', network: '네트워크 상태를 확인하고 다시 시도해 주세요.', suspended: '가이드라인 위반으로 {{date}}까지 통화를 이용할 수 없어요.', paused: '10분 안에 스스로 통화를 끝내는 일이 이어져서 한동안 빠른 통화를 이용할 수 없어요. 다시 열리는 시간은 홈에서 확인할 수 있어요. 프로필에서 보내는 요청은 이용할 수 있어요.' },
     exchangeLangs: '{{learn}}와 {{native}}, 어느 쪽으로 말해도 괜찮아요. 질문은 내가 배우는 언어로 보여요', partnerDrew: '{{name}}님이 꺼낸 질문', nextQuestionIn: '다음 질문 ({{s}}초 후)',
     joining: '상대를 찾았어요. 연결 중…', audioBlocked: '상대 목소리를 들으려면 버튼을 눌러 주세요', audioOn: '소리 켜기',
     searching: '상대를 찾고 있어요', condBuddy: '조건: {{lang}} 학습 중 · 모국어가 {{native}}가 아닌 사람', condExchange: '조건: {{native}}를 배우는 {{learn}} 원어민',
@@ -173,7 +173,9 @@ const ko: Translation = {
     notifications: '알림', notifyAccepted: '보낸 요청이 승인됐을 때', notifyFollowed: '누군가 나를 팔로우했을 때', notifyTheme: '이번 주 테마와 소식',
     notificationsNote: '받은 요청 알림은 위의 “통화 요청을 받을 상대”에 따라 정해져요.',
   },
+  practice: { rate: '완주율 {{n}}%', new: '이제 막 시작했어요', days: '최근 30일 중 {{n}}일 연습', calls: '10분 통화 {{n}}회' },
   admin: {
+    countsTitle: '오늘의 숫자 (UTC)', users: '가입자 {{n}}명', activeToday: '오늘 이용 {{n}}명', callsToday: '오늘 통화 {{n}}건', completedToday: '10분 완주 {{n}}건', 
     inquiries: '문의', noInquiries: '처리하지 않은 문의가 없어요.', reply: '메일로 답장', replySubject: 'Tentalk 문의에 대해', markDone: '처리 완료로 표시',
     title: '신고 확인', note: '운영자만 볼 수 있는 화면이에요. 결정은 바로 당사자 앱에 반영돼요.', empty: '처리하지 않은 신고가 없어요.',
     forbidden: '이 화면을 볼 권한이 없어요.', loadFailed: '불러오지 못했어요.', actFailed: '처리하지 못했어요. 다시 시도해 주세요.',

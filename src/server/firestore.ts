@@ -117,8 +117,8 @@ export const firestore = {
   },
 
   /** Several documents in one request (EAS Hosting allows only a few requests per API call). */
-  async getMany(paths: string[]): Promise<Record<string, Data | null>> {
-    const rows = await call<({ found?: RawDoc; missing?: string })[]>(':batchGet', { documents: paths.map((p) => `${root()}/${p}`) });
+  async getMany(paths: string[], transaction?: string): Promise<Record<string, Data | null>> {
+    const rows = await call<({ found?: RawDoc; missing?: string })[]>(':batchGet', { documents: paths.map((p) => `${root()}/${p}`), ...(transaction ? { transaction } : {}) });
     const out: Record<string, Data | null> = Object.fromEntries(paths.map((p) => [p, null]));
     for (const r of rows) if (r.found) out[r.found.name.slice(root().length + 1)] = docData(r.found);
     return out;
@@ -146,6 +146,21 @@ export const firestore = {
       },
     });
     return rows.filter((r) => r.document).map((r) => ({ ...docData(r.document!), id: r.document!.name.split('/').pop()! }));
+  },
+
+  /** How many documents `collection` has, optionally only those whose numeric `field` is at least `min`. */
+  async count(collection: string, filter?: { field: string; min: number }): Promise<number> {
+    const rows = await call<{ result?: { aggregateFields?: Record<string, Value> } }[]>(':runAggregationQuery', {
+      structuredAggregationQuery: {
+        structuredQuery: {
+          from: [{ collectionId: collection }],
+          ...(filter ? { where: { fieldFilter: { field: { fieldPath: filter.field }, op: 'GREATER_THAN_OR_EQUAL', value: toValue(filter.min) } } } : {}),
+        },
+        aggregations: [{ alias: 'n', count: {} }],
+      },
+    });
+    const v = rows[0]?.result?.aggregateFields?.n;
+    return v ? Number(fromValue(v)) : 0;
   },
 
   async begin(): Promise<string> {

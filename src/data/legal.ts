@@ -73,7 +73,7 @@ const ja: Record<DocId, LegalDoc> = {
         '18歳未満の利用、他人へのなりすまし。',
       ] },
       { h: 'ルールを守らなかった場合', p: [
-        '必修の10分以内に自分から切る: 信頼スコア −10、クイックマッチを30分停止。',
+        '必修の10分以内に自分から切る: 信頼スコア −10、クイックマッチを30分停止。24時間以内にくり返すと、2時間、1日と停止が長くなります。10分話しきるたびに信頼スコアは回復します（1日5点まで）。',
         '違反が確認された: 信頼スコア −30。性的な内容や勧誘など重い違反は、あわせて7日間の利用停止。繰り返す場合は、さらに長い利用停止。',
         '虚偽と判断された通報: 信頼スコア −10。',
       ] },
@@ -159,7 +159,7 @@ const en: Record<DocId, LegalDoc> = {
         'Use by anyone under 18, impersonating others.',
       ] },
       { h: 'If rules are broken', p: [
-        'Ending a call yourself before 10 minutes: trust score −10 and no quick matches for 30 minutes.',
+        'Ending a call yourself before 10 minutes: trust score −10 and no quick matches for 30 minutes. Repeating it within 24 hours makes the pause longer: 2 hours, then 1 day. Each completed 10-minute call brings trust back (up to 5 points a day).',
         'Confirmed violation: trust score −30. Serious violations such as sexual content or solicitation also mean a 7-day suspension, and longer if repeated.',
         'Reports judged false: trust score −10.',
       ] },
@@ -245,7 +245,7 @@ const ko: Record<DocId, LegalDoc> = {
         '만 18세 미만의 이용, 다른 사람 사칭.',
       ] },
       { h: '규칙을 지키지 않으면', p: [
-        '필수 10분 이내에 스스로 끊음: 신뢰 점수 −10, 빠른 통화 30분 정지.',
+        '필수 10분 이내에 스스로 끊음: 신뢰 점수 −10, 빠른 통화 30분 정지. 24시간 안에 반복하면 2시간, 1일로 정지가 길어집니다. 10분을 끝까지 대화할 때마다 신뢰 점수가 회복됩니다(하루 5점까지).',
         '위반이 확인됨: 신뢰 점수 −30. 성적인 내용이나 권유 등 중대한 위반은 7일간 이용 정지도 함께 적용되며, 반복하면 더 길게 정지됩니다.',
         '허위로 판단된 신고: 신뢰 점수 −10.',
       ] },
@@ -331,7 +331,7 @@ const es: Record<DocId, LegalDoc> = {
         'El uso por menores de 18 años o hacerse pasar por otra persona.',
       ] },
       { h: 'Si no se cumplen las normas', p: [
-        'Colgar antes de 10 minutos: puntuación de confianza −10 y sin llamadas rápidas durante 30 minutos.',
+        'Colgar antes de 10 minutos: puntuación de confianza −10 y sin llamadas rápidas durante 30 minutos. Si se repite en 24 horas, la pausa se alarga: 2 horas y luego 1 día. Cada llamada de 10 minutos completada recupera confianza (hasta 5 puntos al día).',
         'Infracción confirmada: puntuación −30. Las infracciones graves, como el contenido sexual o la captación, suponen además 7 días de suspensión, y más si se repiten.',
         'Denuncias consideradas falsas: puntuación −10.',
       ] },

@@ -63,7 +63,7 @@ const es: Translation = {
   },
   person: { native: 'Nativo de {{lang}}', languageOnly: 'Solo idiomas', online: 'En línea', trusted: 'De confianza', new: 'Nuevo' },
   call: {
-    failure: { mic: 'El micrófono está bloqueado', network: 'No se pudo conectar', suspended: 'Las llamadas no están disponibles' }, failureBody: { mic: 'Permite que Tentalk use el micrófono en el navegador o en los ajustes del dispositivo e inténtalo de nuevo.', network: 'Revisa tu conexión e inténtalo de nuevo.', suspended: 'Por una infracción de las normas, no puedes hacer llamadas hasta el {{date}}.' },
+    failure: { mic: 'El micrófono está bloqueado', network: 'No se pudo conectar', suspended: 'Las llamadas no están disponibles', paused: 'Las llamadas rápidas están en pausa' }, failureBody: { mic: 'Permite que Tentalk use el micrófono en el navegador o en los ajustes del dispositivo e inténtalo de nuevo.', network: 'Revisa tu conexión e inténtalo de nuevo.', suspended: 'Por una infracción de las normas, no puedes hacer llamadas hasta el {{date}}.', paused: 'Terminaste varias llamadas tú antes de 10 minutos, así que las llamadas rápidas están en pausa un tiempo. En Inicio ves cuándo vuelven. Las solicitudes desde perfiles siguen funcionando.' },
     exchangeLangs: 'Habla en {{learn}} o en {{native}}, como prefieras. Las preguntas se muestran en el idioma que aprendes', partnerDrew: 'La sacó {{name}}', nextQuestionIn: 'Siguiente pregunta ({{s}} s)',
     joining: 'Encontramos a alguien. Conectando…', audioBlocked: 'Toca el botón para oír a tu compañero', audioOn: 'Activar sonido',
     searching: 'Buscando compañero', condBuddy: 'Buscando: personas que aprenden {{lang}} y cuyo idioma nativo no es el {{native}}', condExchange: 'Buscando: nativos de {{learn}} que aprenden {{native}}',
@@ -173,7 +173,9 @@ const es: Translation = {
     notifications: 'Notificaciones', notifyAccepted: 'Cuando aceptan una solicitud mía', notifyFollowed: 'Cuando alguien me sigue', notifyTheme: 'Tema semanal y novedades',
     notificationsNote: 'Los avisos de solicitudes recibidas siguen lo elegido en «Quién puede pedirte una llamada».',
   },
+  practice: { rate: '{{n}}% de llamadas completadas', new: 'Acaba de empezar', days: 'Practicó {{n}} días de los últimos 30', calls: '{{n}} llamadas completadas' },
   admin: {
+    countsTitle: 'Hoy (UTC)', users: '{{n}} registrados', activeToday: '{{n}} activos hoy', callsToday: '{{n}} llamadas hoy', completedToday: '{{n}} llegaron a 10 minutos', 
     inquiries: 'Consultas', noInquiries: 'No hay consultas pendientes.', reply: 'Responder por correo', replySubject: 'Sobre tu mensaje a Tentalk', markDone: 'Marcar como resuelta',
     title: 'Denuncias', note: 'Solo para el equipo. Las decisiones llegan al instante a las apps de ambas personas.', empty: 'No hay denuncias pendientes.',
     forbidden: 'No tienes acceso a esta pantalla.', loadFailed: 'No se pudo cargar.', actFailed: 'No se pudo aplicar. Inténtalo de nuevo.',

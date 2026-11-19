@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
 import { VoicePlayer } from '@/components/voice';
+import { useStats } from '@/services/stats';
 import { LevelTag } from '@/components/level';
-import { hoursForMe, Pill, useNow } from '@/components/people';
+import { hoursForMe, Pill, PracticeRecord, useNow } from '@/components/people';
 import { Sheet } from '@/components/Sheet';
 import { Body, Button, Card, Eyebrow, Screen, Title } from '@/components/ui';
 import { canFollow } from '@/domain/connections';
@@ -37,6 +38,7 @@ export default function PersonScreen() {
   const [reason, setReason] = useState<ReportReason | null>(null);
   const [refusal, setRefusal] = useState<SendError | null>(null);
   const { person, missing } = usePerson(id);
+  const personStats = useStats(id);
   const profile = app.profile;
   const now = useNow();
 
@@ -117,11 +119,12 @@ export default function PersonScreen() {
           </Body>
           <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
             {rel ? <Pill label={rel === 'buddy' ? t('home.buddy') : t('home.exchange')} tone={rel === 'buddy' ? 'buddy' : 'learn'} /> : null}
-            <Pill label={person.calls < 5 ? t('person.new') : `✓ ${t('person.trusted')}`} tone={person.calls < 5 ? 'muted' : 'ok'} />
+            {(() => { const done = personStats?.completed ?? person.calls; return <Pill label={done < 5 ? t('person.new') : `✓ ${t('person.trusted')}`} tone={done < 5 ? 'muted' : 'ok'} />; })()}
           </View>
         </View>
       </View>
 
+      <PracticeRecord stats={personStats} fallbackCalls={person.calls} />
       {person.voice ? <VoicePlayer voice={person.voice} /> : null}
       <Body>{person.bio}</Body>
 

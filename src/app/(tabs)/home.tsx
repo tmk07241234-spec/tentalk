@@ -8,12 +8,12 @@ import { Pip, type PipPose } from '@/components/Pip';
 import { PersonRow, useNow } from '@/components/people';
 import { GoalBar, SpeechBubble, WeekDots } from '@/components/progress';
 import { Body, Card, Eyebrow, RefreshButton, Screen, Segmented, Title } from '@/components/ui';
-import { RANDOM_COOLDOWN_MINUTES } from '@/domain/callRules';
 import type { Mode } from '@/domain/matching';
 import { isProfileComplete } from '@/domain/profile';
 import { WEEKLY_GOAL, currentStreak, homeMood, weekDays, weekSummary, type MascotMood } from '@/domain/progress';
 import { matchmaking } from '@/services/matchmaking';
 import { usePeoplePool } from '@/services/people';
+import { useStats } from '@/services/stats';
 import { isEligible } from '@/domain/matching';
 import { useActiveLearning, useApp } from '@/state/store';
 import { CALL_BG, radius, space, useColors } from '@/theme/colors';
@@ -27,6 +27,7 @@ export default function Home() {
   const { t, i18n } = useTranslation();
   const c = useColors();
   const { profile, mode, setMode, setActiveLearn, blocked, callLog, following, randomPausedUntil, suspendedUntil } = useApp();
+  const myStats = useStats(useApp((st) => st.account?.uid));
   const now = useNow(15_000);
   const active = useActiveLearning();
   const uid = useApp((s) => s.account?.uid);
@@ -41,9 +42,10 @@ export default function Home() {
   const streak = currentStreak(callLog, today);
   const week = weekSummary(callLog, today);
   const suspended = suspendedUntil > now;
-  const paused = randomPausedUntil > now || suspended;
-  // `now` refreshes every 15 s, so clamp to the real pause length.
-  const pausedMinutes = Math.min(RANDOM_COOLDOWN_MINUTES, Math.max(1, Math.ceil((randomPausedUntil - now) / 60_000)));
+  // Quick-match pauses come from the server since 1.1 (longer for repeated early leaves); the local one is a fallback.
+  const pauseEnd = Math.max(randomPausedUntil, myStats?.pausedUntil ?? 0);
+  const paused = pauseEnd > now || suspended;
+  const pausedMinutes = Math.max(1, Math.ceil((pauseEnd - now) / 60_000));
   const learner = { native: profile.native, learn: active.lang };
   const prefs = { mode, myLevel: active.level, languageOnlyPartners: false, matchLevel: false, blocked: new Set(blocked) };
   // Real people who are online now; the sample people for accounts without sign-in.

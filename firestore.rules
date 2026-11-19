@@ -40,6 +40,12 @@ service cloud.firestore {
       allow read: if signedIn() && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
     }
 
+    // Practice record and trust: anyone signed in can read them (the record is shown on
+    // profiles); only the server writes them, from the call service's own events.
+    match /stats/{uid} {
+      allow read: if signedIn();
+    }
+
     // queue, calls and reports are server-only: no rule here, so the app cannot read them.
   }
 }

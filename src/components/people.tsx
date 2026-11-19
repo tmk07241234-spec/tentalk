@@ -9,6 +9,7 @@ import type { Partner } from '@/data/samplePartners';
 import { commonHobbies } from '@/domain/discovery';
 import { relation } from '@/domain/matching';
 import { deviceOffset, shiftRange } from '@/domain/schedule';
+import { practiceRecord, type PracticeStats } from '@/domain/practice';
 import { useApp } from '@/state/store';
 import { radius, space, useColors } from '@/theme/colors';
 
@@ -115,6 +116,28 @@ export function SmallChips<K extends string>({ options, value, onChange, label }
           </Pressable>
         );
       })}
+    </View>
+  );
+}
+
+/**
+ * What others see about someone's practice: completion rate (after a few calls),
+ * practice days in the last 30, and completed 10-minute calls. Fair to newcomers:
+ * a rate, not a total, and a recent window.
+ */
+export function PracticeRecord({ stats, fallbackCalls }: { stats: PracticeStats | null; fallbackCalls?: number }) {
+  const { t } = useTranslation();
+  const c = useColors();
+  const now = useNow();
+  const r = stats ? practiceRecord(stats, now) : null;
+  const items = r
+    ? [r.rate === null ? t('practice.new') : t('practice.rate', { n: r.rate }), t('practice.days', { n: r.days30 }), t('practice.calls', { n: r.completed })]
+    : [t('practice.calls', { n: fallbackCalls ?? 0 })];
+  return (
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
+      {items.map((label) => (
+        <Text key={label} style={{ color: c.ink, fontSize: 12, fontWeight: '600', backgroundColor: c.surface2, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4, overflow: 'hidden' }}>{label}</Text>
+      ))}
     </View>
   );
 }

@@ -59,6 +59,10 @@ export default function Admin() {
     return () => { stale = true; };
   }, [version, t]);
 
+  // Today's numbers: registered people, people active today, calls (server/practice).
+  const [counts, setCounts] = useState<{ users: number; activeToday: number; callsToday: number; completedToday: number } | null>(null);
+  useEffect(() => { void api<NonNullable<typeof counts>>('/api/admin?counts=1', undefined, 'GET').then(setCounts).catch(() => {}); }, [version]);
+
   // Opening this screen also deletes records past their retention period (server/retention).
   useEffect(() => { void api('/api/admin', { purge: true }).catch(() => {}); }, []);
 
@@ -82,6 +86,13 @@ export default function Admin() {
     <Screen footer={<Button label={t('common.close')} onPress={() => router.back()} />}>
       <Title>{t('admin.title')}</Title>
       <Body small muted>{t('admin.note')}</Body>
+      {counts ? (
+        <Card style={{ gap: 4 }}>
+          <Text style={{ color: c.ink, fontWeight: '700' }}>{t('admin.countsTitle')}</Text>
+          <Body small>{t('admin.users', { n: counts.users })} · {t('admin.activeToday', { n: counts.activeToday })}</Body>
+          <Body small>{t('admin.callsToday', { n: counts.callsToday })} · {t('admin.completedToday', { n: counts.completedToday })}</Body>
+        </Card>
+      ) : null}
       {error ? <Body style={{ color: c.bad }}>{error}</Body> : null}
       {reports?.length === 0 ? <Body muted>{t('admin.empty')}</Body> : null}
       {reports?.map((r) => (

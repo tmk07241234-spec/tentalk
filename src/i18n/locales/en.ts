@@ -63,7 +63,7 @@ const en: Translation = {
   },
   person: { native: 'Native {{lang}}', languageOnly: 'Language only', online: 'Online', trusted: 'Trusted', new: 'New' },
   call: {
-    failure: { mic: 'The microphone is blocked', network: 'Couldn’t connect', suspended: 'Calls are unavailable' }, failureBody: { mic: 'Allow Tentalk to use the microphone in your browser or device settings, then try again.', network: 'Check your connection and try again.', suspended: 'Because of a guideline violation, you can’t make calls until {{date}}.' },
+    failure: { mic: 'The microphone is blocked', network: 'Couldn’t connect', suspended: 'Calls are unavailable', paused: 'Quick matches are paused' }, failureBody: { mic: 'Allow Tentalk to use the microphone in your browser or device settings, then try again.', network: 'Check your connection and try again.', suspended: 'Because of a guideline violation, you can’t make calls until {{date}}.', paused: 'You ended several calls yourself before 10 minutes, so quick matches are paused for a while. Home shows when they open again. Requests from profiles still work.' },
     exchangeLangs: 'Speak {{learn}} or {{native}}, whichever you like. Questions show in the language you are learning', partnerDrew: 'Drawn by {{name}}', nextQuestionIn: 'Next question ({{s}}s)',
     joining: 'Found someone. Connecting…', audioBlocked: 'Tap the button to hear your partner', audioOn: 'Turn on sound',
     searching: 'Finding a partner', condBuddy: 'Looking for: {{lang}} learners whose native language isn’t {{native}}', condExchange: 'Looking for: native {{learn}} speakers learning {{native}}',
@@ -173,7 +173,9 @@ const en: Translation = {
     notifications: 'Notifications', notifyAccepted: 'When a request I sent is accepted', notifyFollowed: 'When someone follows me', notifyTheme: 'Weekly theme and news',
     notificationsNote: 'Incoming request notifications follow “Who can send you call requests” above.',
   },
+  practice: { rate: '{{n}}% calls completed', new: 'Just started', days: 'Practised {{n}} days in the last 30', calls: '{{n}} completed calls' },
   admin: {
+    countsTitle: 'Today (UTC)', users: '{{n}} registered', activeToday: '{{n}} active today', callsToday: '{{n}} calls today', completedToday: '{{n}} reached 10 minutes', 
     inquiries: 'Inquiries', noInquiries: 'No open inquiries.', reply: 'Reply by email', replySubject: 'About your message to Tentalk', markDone: 'Mark as done',
     title: 'Reports', note: 'Operators only. Decisions reach both people’s apps right away.', empty: 'No open reports.',
     forbidden: 'You don’t have access to this screen.', loadFailed: 'Couldn’t load.', actFailed: 'Couldn’t apply that. Try again.',

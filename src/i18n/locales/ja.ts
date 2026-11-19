@@ -61,7 +61,7 @@ const ja = {
   },
   person: { native: '{{lang}}ネイティブ', languageOnly: '語学のみ', online: 'オンライン', trusted: '信頼済み', new: '新規' },
   call: {
-    failure: { mic: 'マイクが使えません', network: 'つながりませんでした', suspended: '通話を利用できません' }, failureBody: { mic: 'ブラウザか端末の設定で、Tentalk のマイクを許可してから、もう一度お試しください。', network: '通信の状態を確かめて、もう一度お試しください。', suspended: 'ガイドラインへの違反により、{{date}}まで通話を利用できません。' },
+    failure: { mic: 'マイクが使えません', network: 'つながりませんでした', suspended: '通話を利用できません', paused: 'クイックマッチはお休み中です' }, failureBody: { mic: 'ブラウザか端末の設定で、Tentalk のマイクを許可してから、もう一度お試しください。', network: '通信の状態を確かめて、もう一度お試しください。', suspended: 'ガイドラインへの違反により、{{date}}まで通話を利用できません。', paused: '10分以内に自分で通話を終えることが続いたため、しばらくクイックマッチを使えません。ホームで再開の時刻を確認できます。プロフィールからのリクエストは使えます。' },
     exchangeLangs: '{{learn}}と{{native}}、どちらで話してもOK。お題は自分の学習言語で表示されます', partnerDrew: '{{name}}さんが出したお題', nextQuestionIn: '次のお題（{{s}}秒後）',
     joining: '相手が見つかりました。つないでいます…', audioBlocked: '相手の声を出すには、ボタンを押してください', audioOn: '音声をオン',
     searching: '相手を探しています', condBuddy: '条件: {{lang}}を学習中・母語が{{native}}以外', condExchange: '条件: {{learn}}ネイティブで{{native}}を学習中',
@@ -171,7 +171,9 @@ const ja = {
     notifications: '通知', notifyAccepted: '送ったリクエストが承認されたとき', notifyFollowed: 'フォローされたとき', notifyTheme: '今週のテーマとお知らせ',
     notificationsNote: '届いたリクエストの通知は、上の「受け付ける相手」で決まります。',
   },
+  practice: { rate: '完走率 {{n}}%', new: 'はじめたばかり', days: 'この30日で{{n}}日練習', calls: '10分通話 {{n}}回' },
   admin: {
+    countsTitle: '今日の数字（UTC）', users: '登録者 {{n}}人', activeToday: '今日使った人 {{n}}人', callsToday: '今日の通話 {{n}}件', completedToday: 'うち10分完走 {{n}}件', 
     inquiries: 'お問い合わせ', noInquiries: '未対応のお問い合わせはありません。', reply: 'メールで返信', replySubject: 'Tentalk へのお問い合わせについて', markDone: '対応済みにする',
     title: '通報の確認', note: '運営者だけが見られる画面です。決定はすぐに当事者のアプリへ反映されます。', empty: '未対応の通報はありません。',
     forbidden: 'この画面を見る権限がありません。', loadFailed: '読み込めませんでした。', actFailed: '処理できませんでした。もう一度お試しください。',

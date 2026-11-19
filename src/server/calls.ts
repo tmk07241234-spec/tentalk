@@ -1,7 +1,8 @@
 import { MAX_AVOID, consentStatus, type Consent, type ConsentStatus } from '@/domain/consent';
 import { LANGS, type Lang } from '@/domain/languages';
 import { isSuspended, type ModerationRecord } from '@/domain/moderation';
-import { pickQueuePartner, queueKey, seekKey, type QueueEntry } from '@/domain/queue';
+import { priorityDelay, withDefaults, withSkip, type PracticeStats } from '@/domain/practice';
+import { QUEUE_STALE_MS, pickQueuePartner, queueKey, seekKey, type QueueEntry } from '@/domain/queue';
 import { HttpError } from './auth';
 import { alertOperators } from './operators';
 import { firestore, type Data } from './firestore';
@@ -51,18 +52,25 @@ const newId = () => crypto.randomUUID().replace(/-/g, '').slice(0, 20);
  * compatible person, or (re)places our entry in the queue.
  */
 export async function searchStep(uid: string, req: MatchRequest): Promise<{ callId: string } | { waiting: true }> {
-  const docs = await firestore.getMany([`users/${uid}/private/state`, `users/${uid}/private/moderation`]);
+  const docs = await firestore.getMany([`users/${uid}/private/state`, `users/${uid}/private/moderation`, `stats/${uid}`]);
   if (isSuspended(docs[`users/${uid}/private/moderation`] as ModerationRecord | null)) throw new HttpError(403, 'suspended');
+  const stats = withDefaults(docs[`stats/${uid}`] as Partial<PracticeStats> | null);
+  const now = Date.now();
+  // Ending calls early pauses quick matches for a while (domain/practice).
+  if (stats.pausedUntil > now) throw new HttpError(403, 'paused');
   const state = docs[`users/${uid}/private/state`];
   const blocked = Array.isArray(state?.blocked) ? (state.blocked as string[]) : [];
   const { avoid, ...prefs } = req;
-  const me: QueueEntry = { uid, ...prefs, blocked: [...new Set([...blocked, ...avoid])], updatedAt: Date.now(), callId: null };
+  const base = { uid, ...prefs, blocked: [...new Set([...blocked, ...avoid])], updatedAt: now, callId: null };
 
   // EAS Hosting allows only a few outside requests per API call, so a step makes one
   // attempt; when two people collide, the losing side tries again on its next step.
   const tx = await firestore.begin();
   try {
     const mine = await firestore.get(`queue/${uid}`, tx);
+    // Waiting time counts from the first step of this search; low trust or many skips wait a little longer.
+    const since = typeof mine?.since === 'number' && now - (mine.updatedAt as number) < QUEUE_STALE_MS ? mine.since : now;
+    const me: QueueEntry = { ...base, since, holdUntil: since + priorityDelay(stats, now) };
     if (mine?.callId) {
       await firestore.commit([{ delete: `queue/${uid}` }], tx);
       return { callId: mine.callId as string };
@@ -107,9 +115,14 @@ export async function consentStep(uid: string, callId: string, accept: unknown):
   if ((accept === true || accept === false) && consent[uid] !== accept && consent[uid] !== false) {
     const tx = await firestore.begin();
     try {
-      const fresh = ((await firestore.get(`calls/${callId}`, tx)) ?? call) as unknown as CallRecord;
+      const got = await firestore.getMany([`calls/${callId}`, `stats/${uid}`], tx);
+      const fresh = (got[`calls/${callId}`] ?? call) as unknown as CallRecord;
       consent = { ...(fresh.consent ?? {}), [uid]: accept };
-      await firestore.commit([{ set: `calls/${callId}`, data: { ...fresh, consent } as unknown as Data }], tx);
+      await firestore.commit([
+        { set: `calls/${callId}`, data: { ...fresh, consent } as unknown as Data },
+        // Skips are counted: people who skip a lot wait longer to be matched.
+        ...(accept === false ? [{ set: `stats/${uid}`, data: withSkip(withDefaults(got[`stats/${uid}`] as Partial<PracticeStats> | null), Date.now()) as unknown as Data }] : []),
+      ], tx);
     } catch (e) {
       // Both chose at the same moment: this side's choice is sent again on the next step.
       if (!String(e).includes(': 409')) throw e;

@@ -1,6 +1,7 @@
 import { handle, isAdmin, requireAdmin } from '@/server/auth';
 import { actOnReport, listReports } from '@/server/moderation';
 import { rememberOperator } from '@/server/operators';
+import { dailyCounts } from '@/server/practice';
 import { purgeExpired } from '@/server/retention';
 import { closeInquiry, listInquiries } from '@/server/support';
 
@@ -15,6 +16,7 @@ export async function GET(request: Request) {
     }
     await requireAdmin(request);
     if (new URL(request.url).searchParams.get('inquiries')) return listInquiries();
+    if (new URL(request.url).searchParams.get('counts')) return dailyCounts();
     return listReports();
   });
 }
