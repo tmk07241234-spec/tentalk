@@ -44,7 +44,7 @@ How it works:
 - A question card each call, so beginners don't run out of things to say
 - No messaging, no likes, no timeline – no social media features at all. You can follow someone only after you finish a 10-minute call with them
 
-It's free, with no ads. It's new, so there aren't many people yet – the best time to find a partner is [通話タイム：例 9 pm JST / 12 pm UK / 7 am US Eastern].
+It's free, with no ads. It's brand new, so there aren't many people yet – if nobody is online when you try, please check back later.
 
 App Store: https://apps.apple.com/app/id6830054286
 
@@ -73,7 +73,7 @@ Hi mods, I'm the solo developer of Tentalk, a free iPhone app (no ads) for speak
 ・いいね・タイムラインなどのSNS要素なし。話す練習だけに特化
 ・毎回お題が出るから、初心者でも会話が続く
 
-無料・広告なしです。まだ始まったばかりなので、[通話タイム：例 毎晩21時]に来てもらえるとつながりやすいです🙏
+無料・広告なしです。始まったばかりでまだ人は少ないですが、ぜひ一度のぞいてみてください🙏
 
 https://apps.apple.com/app/id6830054286
 
