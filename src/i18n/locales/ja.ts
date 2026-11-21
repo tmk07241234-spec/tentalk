@@ -62,6 +62,7 @@ const ja = {
   },
   person: { native: '{{lang}}ネイティブ', languageOnly: '語学のみ', online: 'オンライン', trusted: '信頼済み', new: '新規' },
   call: {
+    previewPip: '相手が見つかったよ。声を聞いてから決めてね', previewNoteShort: '2人とも「話す」を選ぶと始まります', previewQuit: 'やめる', onlyLangShort: '{{lang}}だけ', partnerSpeaking: '{{name}}さんが話しています', youSpeaking: 'あなたが話しています',
     failure: { mic: 'マイクが使えません', network: 'つながりませんでした', suspended: '通話を利用できません', paused: 'クイックマッチはお休み中です' }, failureBody: { mic: 'ブラウザか端末の設定で、Tentalk のマイクを許可してから、もう一度お試しください。', network: '通信の状態を確かめて、もう一度お試しください。', suspended: 'ガイドラインへの違反により、{{date}}まで通話を利用できません。', paused: '10分以内に自分で通話を終えることが続いたため、しばらくクイックマッチを使えません。ホームで再開の時刻を確認できます。プロフィールからのリクエストは使えます。' },
     exchangeLangs: '{{learn}}と{{native}}、どちらで話してもOK。お題は自分の学習言語で表示されます', partnerDrew: '{{name}}さんが出したお題', nextQuestionIn: '次のお題（{{s}}秒後）',
     joining: '相手が見つかりました。つないでいます…', audioBlocked: '相手の声を出すには、ボタンを押してください', audioOn: '音声をオン',
@@ -134,12 +135,14 @@ const ja = {
     sentTitle: 'リクエストを送りました', sentBody: '{{name}}さんが承認すると着信でお知らせします。30秒以内に出ると通話が始まります。出られなかった場合も24時間は通知から通話できます。', ok: 'OK',
   },
   notifications: {
+    emptyTitle: 'いまは静かです', emptyBody: '通話のリクエストが届いたときや、だれかにフォローされたときに、ここでお知らせします。', emptyTip: '通知をオンにしておくと、リクエストを見逃しません', openSettings: '通知の設定 ›',
     title: '通知', empty: '通知はまだありません。', welcome: 'Tentalkへようこそ！まずはクイックマッチで最初の10分を話してみましょう。', theme: '今週のテーマは「おすすめの映画」です。',
     followed: '{{name}}さんがあなたをフォローしました', accepted: '{{name}}さんがリクエストを承認しました', call: '通話する', incoming: '{{name}}さんが10分話したいそうです',
     accept: '承認して通話', decline: '今は無理', expired: '期限切れ', done: '対応済み', reportResult: '通報の確認が完了しました。違反が認められたため、相手に措置を取りました。ご協力ありがとうございます。', reportDismissed: '通報の確認が完了しました。今回は違反は確認できませんでした。ご協力ありがとうございます。', penalty: 'あなたへの通報を確認し、コミュニティガイドラインへの違反が認められました。信頼スコアが下がりました。', suspended: 'ガイドラインへの重大な違反が認められたため、{{date}}まで通話を利用できません。', falseReport: 'あなたの通報は事実と異なると判断されました。信頼スコアが下がりました。',
     justNow: 'たった今', minutes: '{{n}}分前', hours: '{{n}}時間前', days: '{{n}}日前', devIncoming: '開発用: リクエストが届く',
   },
   connections: {
+    emptyTitle: '話すほど、つながりが増える', emptyFollowersTitle: 'まだフォロワーはいません', emptyCta: 'さっそく話してみる', steps: { talk: '話す', talkSub: '10分の通話をする', finish: '10分話しきる', finishSub: '最後まで話せたら', follow: 'フォローできる', followSub: 'また話したい人とつながる' },
     title: 'つながり', note: 'フォローできるのは10分話しきった相手だけ。つながりは話すことで増えていきます。',
     mutual: '相互フォロー', following: 'フォロー中', followers: 'フォロワー', mutualTag: '相互フォロー',
     empty_mutual: 'おたがいにフォローしている人がここに表示されます。',
@@ -147,6 +150,7 @@ const ja = {
     empty_followers: 'あなたをフォローした人がここに表示されます。',
   },
   history: {
+    emptyTitle: '最初の10分を話してみよう', emptyBody: '話した相手と時間が、ここに残っていきます。', emptyExample: '話すと、こんなふうに残ります', exampleName: 'Minho（見本）', exampleLine: '練習仲間 · 10分完走 · 昨日', emptyCta: 'クイックマッチで話す',
     title: '履歴', empty: 'まだ通話していません。', note: 'クイックマッチで2人とも10分以上話した相手は、ここからいつでもプロフィールを見てフォローできます。',
     random: 'クイックマッチ', direct: 'リクエスト', open: 'フォローできます', hidden: '10分未満', view: '見る', unknown: '相手',
   },

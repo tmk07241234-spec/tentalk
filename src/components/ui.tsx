@@ -48,14 +48,15 @@ export function Card({ children, style }: { children: ReactNode; style?: ViewSty
   return <View style={[{ backgroundColor: c.surface, borderRadius: radius.lg, padding: space.lg, gap: space.sm }, style]}>{children}</View>;
 }
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+/** `sun` is the warm yellow call button (1.2). */
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'sun';
 
 export function Button({ label, onPress, variant = 'secondary', disabled, loading, icon, small }: {
   label: string; onPress: () => void; variant?: ButtonVariant; disabled?: boolean; loading?: boolean; icon?: ReactNode; small?: boolean;
 }) {
   const c = useColors();
-  const bg = { primary: c.learn, secondary: c.surface2, ghost: 'transparent', danger: c.bad }[variant];
-  const fg = variant === 'primary' || variant === 'danger' ? '#FFFFFF' : c.ink;
+  const bg = { primary: c.learn, secondary: c.surface2, ghost: 'transparent', danger: c.bad, sun: c.sun }[variant];
+  const fg = variant === 'primary' || variant === 'danger' ? '#FFFFFF' : variant === 'sun' ? c.sunInk : c.ink;
   return (
     <Pressable
       accessibilityRole="button"

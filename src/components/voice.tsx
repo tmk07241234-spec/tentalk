@@ -7,6 +7,8 @@ import {
 } from 'expo-audio';
 import { useTranslation } from 'react-i18next';
 
+import { barShape } from './waves';
+
 import { Body, Button, ErrorText } from '@/components/ui';
 import { VOICE_MAX_SECONDS, VOICE_MIN_SECONDS } from '@/domain/profile';
 import type { VoiceIntro } from '@/state/store';
@@ -20,6 +22,7 @@ export function VoicePlayer({ voice, label }: { voice: VoiceIntro; label?: strin
   const status = useAudioPlayerStatus(player);
   const duration = status.duration || voice.seconds;
   const progress = duration ? Math.min(1, status.currentTime / duration) : 0;
+  const bars = barShape(28, (voice.uri.length % 7) + 2);
 
   // Rewind at the end so the next tap plays from the start.
   useEffect(() => {
@@ -33,14 +36,17 @@ export function VoicePlayer({ voice, label }: { voice: VoiceIntro; label?: strin
 
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={`${label ?? t('voice.title')} ${status.playing ? t('voice.pause') : t('voice.play')}`} onPress={toggle}
-      style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.surface2, borderRadius: radius.md, padding: space.sm }}>
-      <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.learn, alignItems: 'center', justifyContent: 'center' }}>
+      style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.buddySoft, borderRadius: radius.md, padding: space.sm }}>
+      <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.buddy, alignItems: 'center', justifyContent: 'center' }}>
         <Ionicons name={status.playing ? 'pause' : 'play'} size={18} color="#FFFFFF" />
       </View>
-      <View style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: c.line, overflow: 'hidden' }}>
-        <View style={{ width: `${progress * 100}%`, height: 6, backgroundColor: c.learn }} />
+      {/* A still waveform that fills in as the intro plays. */}
+      <View style={{ flex: 1, height: 26, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        {bars.map((h, i) => (
+          <View key={i} style={{ width: 3, height: 26 * h, borderRadius: 2, backgroundColor: i / bars.length < progress ? c.buddy : c.line }} />
+        ))}
       </View>
-      <Text style={{ color: c.muted, fontSize: 12, fontVariant: ['tabular-nums'] }}>{label ?? t('voice.title')} · 0:{String(Math.round(voice.seconds)).padStart(2, '0')}</Text>
+      <Text style={{ color: c.muted, fontSize: 12, fontVariant: ['tabular-nums'] }}>0:{String(Math.round(voice.seconds)).padStart(2, '0')}</Text>
     </Pressable>
   );
 }

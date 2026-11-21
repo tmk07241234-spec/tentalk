@@ -1,11 +1,12 @@
 import { Pressable, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
-import { Pip } from '@/components/Pip';
+import { EmptyState } from '@/components/EmptyState';
 import { Pill, useNow, useRelativeTime } from '@/components/people';
-import { Body, Card, Screen, Title } from '@/components/ui';
+import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { formatClock } from '@/domain/callRules';
 import { usePeopleList } from '@/services/people';
 import { useApp } from '@/state/store';
@@ -26,10 +27,20 @@ export default function History() {
       <Title>{t('history.title')}</Title>
       <Body small muted>{t('history.note')}</Body>
       {list.length === 0 ? (
-        <View style={{ alignItems: 'center', gap: space.md, paddingVertical: space.xl }}>
-          <Pip pose="think" size={96} />
-          <Body muted>{t('history.empty')}</Body>
-        </View>
+        <EmptyState pose="think" title={t('history.emptyTitle')} body={t('history.emptyBody')}>
+          {/* A faded example of what a finished call looks like here. */}
+          <View accessible accessibilityLabel={t('history.emptyExample')} style={{ gap: 6 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md, borderRadius: 18, borderWidth: 1.5, borderStyle: 'dashed', borderColor: c.line, opacity: 0.6 }}>
+              <Avatar name="M" color="#1F8A5B" avatar="side-0-1-1" size={36} />
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: c.ink, fontWeight: '700' }}>{t('history.exampleName')}</Text>
+                <Text style={{ color: c.muted, fontSize: 12 }}>{t('history.exampleLine')}</Text>
+              </View>
+            </View>
+            <Text style={{ color: c.muted, fontSize: 12, textAlign: 'center' }}>{t('history.emptyExample')}</Text>
+          </View>
+          <Button variant="sun" icon={<Ionicons name="call" size={18} color={c.sunInk} />} label={t('history.emptyCta')} onPress={() => router.push({ pathname: '/call', params: { kind: 'random' } })} />
+        </EmptyState>
       ) : null}
       {list.map((h) => {
         const p = people.find((x) => x.id === h.partnerId);

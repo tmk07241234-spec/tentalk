@@ -64,6 +64,7 @@ const en: Translation = {
   },
   person: { native: 'Native {{lang}}', languageOnly: 'Language only', online: 'Online', trusted: 'Trusted', new: 'New' },
   call: {
+    previewPip: 'Found someone! Listen to their voice, then decide', previewNoteShort: 'The call starts when you both choose Talk', previewQuit: 'Quit', onlyLangShort: '{{lang}} only', partnerSpeaking: '{{name}} is speaking', youSpeaking: 'You are speaking',
     failure: { mic: 'The microphone is blocked', network: 'Couldn’t connect', suspended: 'Calls are unavailable', paused: 'Quick matches are paused' }, failureBody: { mic: 'Allow Tentalk to use the microphone in your browser or device settings, then try again.', network: 'Check your connection and try again.', suspended: 'Because of a guideline violation, you can’t make calls until {{date}}.', paused: 'You ended several calls yourself before 10 minutes, so quick matches are paused for a while. Home shows when they open again. Requests from profiles still work.' },
     exchangeLangs: 'Speak {{learn}} or {{native}}, whichever you like. Questions show in the language you are learning', partnerDrew: 'Drawn by {{name}}', nextQuestionIn: 'Next question ({{s}}s)',
     joining: 'Found someone. Connecting…', audioBlocked: 'Tap the button to hear your partner', audioOn: 'Turn on sound',
@@ -136,12 +137,14 @@ const en: Translation = {
     sentTitle: 'Request sent', sentBody: 'When {{name}} accepts, you’ll get a ring. Answer within 30 seconds to start. If you miss it, you can still call from Alerts for 24 hours.', ok: 'OK',
   },
   notifications: {
+    emptyTitle: 'All quiet for now', emptyBody: 'You will see call requests and new followers here.', emptyTip: 'Turn on notifications so you never miss a request', openSettings: 'Notification settings ›',
     title: 'Alerts', empty: 'No alerts yet.', welcome: 'Welcome to Tentalk! Start with a quick match and talk for your first 10 minutes.', theme: 'This week’s theme is “a movie you’d recommend.”',
     followed: '{{name}} followed you', accepted: '{{name}} accepted your request', call: 'Call', incoming: '{{name}} wants to talk for 10 minutes',
     accept: 'Accept and call', decline: 'Not now', expired: 'Expired', done: 'Done', reportResult: 'We reviewed your report. A violation was confirmed and we took action. Thank you.', reportDismissed: 'We reviewed your report and found no violation this time. Thank you for telling us.', penalty: 'A report about you was reviewed and found to break the Community Guidelines. Your trust score went down.', suspended: 'Because of a serious guideline violation, you can’t make calls until {{date}}.', falseReport: 'Your report was found to be untrue. Your trust score went down.',
     justNow: 'Just now', minutes: '{{n}} min ago', hours: '{{n}} h ago', days: '{{n}} d ago', devIncoming: 'Dev: receive a request',
   },
   connections: {
+    emptyTitle: 'Talk more, connect more', emptyFollowersTitle: 'No followers yet', emptyCta: 'Start talking', steps: { talk: 'Talk', talkSub: 'Have a 10-minute call', finish: 'Finish 10 minutes', finishSub: 'Talk until the end', follow: 'Follow', followSub: 'Keep in touch with people you want to talk to again' },
     title: 'Connections', note: 'You can follow only people you finished a 10-minute call with, so connections grow by talking.',
     mutual: 'Mutual', following: 'Following', followers: 'Followers', mutualTag: 'Mutual',
     empty_mutual: 'People who follow each other with you appear here.',
@@ -149,6 +152,7 @@ const en: Translation = {
     empty_followers: 'People who follow you appear here.',
   },
   history: {
+    emptyTitle: 'Try your first 10 minutes', emptyBody: 'The people you talk with and your time will show up here.', emptyExample: 'After a call, it looks like this', exampleName: 'Minho (example)', exampleLine: 'Practice buddy · 10 minutes done · Yesterday', emptyCta: 'Talk with quick match',
     title: 'History', empty: 'No calls yet.', note: 'If you both talked for 10 minutes or more in a quick match, you can open their profile and follow them from here anytime.',
     random: 'Quick match', direct: 'Request', open: 'Can follow', hidden: 'Under 10 minutes', view: 'View', unknown: 'Partner',
   },

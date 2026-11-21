@@ -64,6 +64,7 @@ const es: Translation = {
   },
   person: { native: 'Nativo de {{lang}}', languageOnly: 'Solo idiomas', online: 'En línea', trusted: 'De confianza', new: 'Nuevo' },
   call: {
+    previewPip: '¡Encontramos a alguien! Escucha su voz y decide', previewNoteShort: 'La llamada empieza cuando los dos eligen Hablar', previewQuit: 'Salir', onlyLangShort: 'solo {{lang}}', partnerSpeaking: '{{name}} está hablando', youSpeaking: 'Estás hablando',
     failure: { mic: 'El micrófono está bloqueado', network: 'No se pudo conectar', suspended: 'Las llamadas no están disponibles', paused: 'Las llamadas rápidas están en pausa' }, failureBody: { mic: 'Permite que Tentalk use el micrófono en el navegador o en los ajustes del dispositivo e inténtalo de nuevo.', network: 'Revisa tu conexión e inténtalo de nuevo.', suspended: 'Por una infracción de las normas, no puedes hacer llamadas hasta el {{date}}.', paused: 'Terminaste varias llamadas tú antes de 10 minutos, así que las llamadas rápidas están en pausa un tiempo. En Inicio ves cuándo vuelven. Las solicitudes desde perfiles siguen funcionando.' },
     exchangeLangs: 'Habla en {{learn}} o en {{native}}, como prefieras. Las preguntas se muestran en el idioma que aprendes', partnerDrew: 'La sacó {{name}}', nextQuestionIn: 'Siguiente pregunta ({{s}} s)',
     joining: 'Encontramos a alguien. Conectando…', audioBlocked: 'Toca el botón para oír a tu compañero', audioOn: 'Activar sonido',
@@ -136,12 +137,14 @@ const es: Translation = {
     sentTitle: 'Solicitud enviada', sentBody: 'Cuando {{name}} acepte, te avisaremos con una llamada. Contesta en 30 segundos para empezar. Si no puedes, podrás llamar desde Avisos durante 24 horas.', ok: 'OK',
   },
   notifications: {
+    emptyTitle: 'Todo tranquilo por ahora', emptyBody: 'Aquí verás las solicitudes de llamada y los nuevos seguidores.', emptyTip: 'Activa las notificaciones para no perderte ninguna solicitud', openSettings: 'Ajustes de notificaciones ›',
     title: 'Avisos', empty: 'Todavía no hay avisos.', welcome: '¡Te damos la bienvenida! Empieza con una llamada rápida y habla tus primeros 10 minutos.', theme: 'El tema de esta semana es “una película que recomiendes”.',
     followed: '{{name}} empezó a seguirte', accepted: '{{name}} aceptó tu solicitud', call: 'Llamar', incoming: '{{name}} quiere hablar 10 minutos',
     accept: 'Aceptar y llamar', decline: 'Ahora no', expired: 'Caducada', done: 'Atendida', reportResult: 'Revisamos tu denuncia. Se confirmó una infracción y tomamos medidas. Gracias.', reportDismissed: 'Revisamos tu denuncia y esta vez no encontramos ninguna infracción. Gracias por avisarnos.', penalty: 'Revisamos una denuncia sobre ti y se confirmó que incumpliste las normas de la comunidad. Tu puntuación de confianza bajó.', suspended: 'Por una infracción grave de las normas, no puedes hacer llamadas hasta el {{date}}.', falseReport: 'Se determinó que tu denuncia no era cierta. Tu puntuación de confianza bajó.',
     justNow: 'Ahora mismo', minutes: 'hace {{n}} min', hours: 'hace {{n}} h', days: 'hace {{n}} d', devIncoming: 'Dev: recibir una solicitud',
   },
   connections: {
+    emptyTitle: 'Cuanto más hablas, más conexiones', emptyFollowersTitle: 'Aún no tienes seguidores', emptyCta: 'Empieza a hablar', steps: { talk: 'Habla', talkSub: 'Haz una llamada de 10 minutos', finish: 'Completa 10 minutos', finishSub: 'Habla hasta el final', follow: 'Sigue', followSub: 'Conecta con quien quieras volver a hablar' },
     title: 'Contactos', note: 'Solo puedes seguir a quienes completaron contigo una llamada de 10 minutos: tus contactos crecen hablando.',
     mutual: 'Mutuos', following: 'Siguiendo', followers: 'Seguidores', mutualTag: 'Mutuo',
     empty_mutual: 'Aquí aparecen las personas que se siguen contigo.',
@@ -149,6 +152,7 @@ const es: Translation = {
     empty_followers: 'Aquí aparecen las personas que te siguen.',
   },
   history: {
+    emptyTitle: 'Prueba tus primeros 10 minutos', emptyBody: 'Aquí verás con quién hablaste y cuánto tiempo.', emptyExample: 'Después de una llamada se ve así', exampleName: 'Minho (ejemplo)', exampleLine: 'Compañero de práctica · 10 minutos completos · Ayer', emptyCta: 'Hablar ahora (Rápida)',
     title: 'Historial', empty: 'Todavía no has hecho llamadas.', note: 'Si en una llamada rápida hablaron 10 minutos o más, aquí puedes ver su perfil y seguirle cuando quieras.',
     random: 'Rápida', direct: 'Solicitud', open: 'Puedes seguir', hidden: 'Menos de 10 minutos', view: 'Ver', unknown: 'Compañero',
   },

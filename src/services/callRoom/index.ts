@@ -9,8 +9,8 @@ export interface CallRoomEvents {
   onPartnerJoined: () => void;
   onPartnerLeft: () => void;
   onMessage: (m: CallMessage) => void;
-  /** Whether anyone in the call is speaking right now. */
-  onSpeaking: (anyone: boolean) => void;
+  /** Who is speaking right now: me, the partner, both or neither. */
+  onSpeaking: (who: { me: boolean; partner: boolean }) => void;
   /** The browser blocked sound until the user taps something. */
   onAudioBlocked: (blocked: boolean) => void;
   /** Lost the connection for good (LiveKit already retried). */
@@ -42,7 +42,10 @@ export async function joinCallRoom(url: string, token: string, events: CallRoomE
       detach.get(track.sid ?? '')?.();
       detach.delete(track.sid ?? '');
     })
-    .on(RoomEvent.ActiveSpeakersChanged, (speakers: Participant[]) => events.onSpeaking(speakers.length > 0))
+    .on(RoomEvent.ActiveSpeakersChanged, (speakers: Participant[]) => {
+      const me = speakers.some((p) => p.identity === room.localParticipant.identity);
+      events.onSpeaking({ me, partner: speakers.length > (me ? 1 : 0) });
+    })
     .on(RoomEvent.AudioPlaybackStatusChanged, () => events.onAudioBlocked(!room.canPlaybackAudio))
     .on(RoomEvent.DataReceived, (payload) => {
       try {

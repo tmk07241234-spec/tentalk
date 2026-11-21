@@ -27,7 +27,7 @@ function useReduceMotion() {
   return reduce;
 }
 
-export function Pip({ pose = 'happy', tone = 'learn', size = 96, motion = 'idle' }: {
+export function Pip({ pose = 'happy', tone = 'buddy', size = 96, motion = 'idle' }: {
   pose?: PipPose; tone?: PipTone; size?: number; motion?: 'idle' | 'bounce' | 'none';
 }) {
   const reduce = useReduceMotion();

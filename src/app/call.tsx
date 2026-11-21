@@ -27,6 +27,7 @@ import { joinCallRoom, type CallMessage, type CallRoom } from '@/services/callRo
 import { CONSENT_SECONDS } from '@/domain/consent';
 import { LevelBars } from '@/components/level';
 import { VoicePlayer } from '@/components/voice';
+import { SpeakingRings, VoiceBars } from '@/components/waves';
 import { PracticeRecord } from '@/components/people';
 import { useStats } from '@/services/stats';
 import { callConsent, callInfo, findSamplePartner, matchmaking, searchRandomCall } from '@/services/matchmaking';
@@ -34,7 +35,7 @@ import { loadPerson, usePerson } from '@/services/people';
 import { setInCall } from '@/services/presence';
 import { cancelRequest, requests, sendRequest, watchRequest, type RequestAnswer } from '@/services/requests';
 import { useActiveLearning, useApp, type HistoryEntry } from '@/state/store';
-import { CALL_BG, space, useColors } from '@/theme/colors';
+import { CALL_BG, radius, space, useColors } from '@/theme/colors';
 
 /** A new question card stays this long before either person can draw the next one. */
 const QUESTION_COOLDOWN_SECONDS = 20;
@@ -96,6 +97,8 @@ export default function Call() {
   // The mode the server decided for a live call (direct calls: from both people's languages).
   const [serverMode, setServerMode] = useState<Mode | null>(null);
   const [audioBlocked, setAudioBlocked] = useState(false);
+  // Who is speaking in a live call, for the waveform and the rings.
+  const [talking, setTalking] = useState({ me: false, partner: false });
   const [failure, setFailure] = useState<'mic' | 'network' | 'suspended' | 'paused' | null>(null);
   // Quick match: the matched call shown for a decision before it starts (guideline 1.2).
   const [previewId, setPreviewId] = useState<string | null>(null);
@@ -333,7 +336,7 @@ export default function Call() {
         onPartnerJoined: () => { if (!joined) { joined = true; startCall(); } },
         onPartnerLeft: () => endFromRoom('partner_left'),
         onMessage: (m) => messageFromRoom(m),
-        onSpeaking: (anyone) => { speaking.current = anyone; },
+        onSpeaking: (who) => { speaking.current = who.me || who.partner; setTalking(who); },
         onAudioBlocked: setAudioBlocked,
         onDisconnected: () => endFromRoom('connection_lost'),
       }).catch((e: unknown) => {
@@ -385,33 +388,42 @@ export default function Call() {
     const p = partner;
     // (partnerStats is loaded above for the partner shown here)
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: c.bg, padding: space.xl, gap: space.lg, justifyContent: 'center' }}>
-        <Title>{t('call.previewTitle')}</Title>
-        <Card style={{ alignItems: 'center', gap: space.sm }}>
-          {p ? (
-            <>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-                <Avatar name={p.name} color={p.color} avatar={p.avatar} photoUri={p.photoUri} size={44} />
-                <Text style={{ color: c.ink, fontSize: 22, fontWeight: '700' }}>{p.name}</Text>
+      <SafeAreaView style={{ flex: 1, backgroundColor: c.bg }}>
+        <ScrollView contentContainerStyle={{ padding: space.lg, gap: space.md, flexGrow: 1, justifyContent: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+            <Pip pose="happy" tone="buddy" size={52} motion="none" />
+            <SpeechBubble text={t('call.previewPip')} />
+          </View>
+          <Card style={{ alignItems: 'center', gap: space.sm, paddingVertical: space.xl }}>
+            {p ? (
+              <>
+                <Avatar name={p.name} color={p.color} avatar={p.avatar} photoUri={p.photoUri} size={92} />
+                <Text accessibilityRole="header" style={{ color: c.ink, fontSize: 22, fontWeight: '800' }}>{p.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <Text style={{ color: c.muted }}>{t('person.native', { lang: t(`lang.${p.native}`) })} · {t(`lang.${p.learn}`)}</Text>
+                  <LevelBars level={p.level} />
+                </View>
+                {/* The voice and the practice record come first: how someone speaks and practises, not how they look. */}
+                {p.voice ? <View style={{ alignSelf: 'stretch' }}><VoicePlayer voice={p.voice} /></View> : null}
+                <PracticeRecord stats={live ? partnerStats : sampleStats(p)} fallbackCalls={p.calls} />
+                {p.bio ? <Body style={{ textAlign: 'center' }}>{p.bio}</Body> : null}
+              </>
+            ) : <Body muted>{t('call.joining')}</Body>}
+          </Card>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.sm }}>
+            {myChoice === true ? null : (
+              <View style={{ width: 34, height: 34, borderRadius: 17, borderWidth: 3, borderColor: c.coral, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: c.coral, fontWeight: '800', fontSize: 13, fontVariant: ['tabular-nums'] }}>{previewLeft}</Text>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Text style={{ color: c.muted }}>{t('person.native', { lang: t(`lang.${p.native}`) })} · {t(`lang.${p.learn}`)}</Text>
-                <LevelBars level={p.level} />
-              </View>
-              {/* Practice record first, then the voice: how someone practises and speaks, not how they look. */}
-              <PracticeRecord stats={live ? partnerStats : sampleStats(p)} fallbackCalls={p.calls} />
-              {p.voice ? <View style={{ alignSelf: 'stretch' }}><VoicePlayer voice={p.voice} /></View> : null}
-              {p.bio ? <Body style={{ textAlign: 'center' }}>{p.bio}</Body> : null}
-
-            </>
-          ) : <Body muted>{t('call.joining')}</Body>}
-        </Card>
-        {myChoice === true
-          ? <Body muted style={{ textAlign: 'center' }}>{t('call.previewWaiting', { name: p?.name ?? '' })}</Body>
-          : <Body muted style={{ textAlign: 'center' }}>{t('call.previewNote', { s: previewLeft })}</Body>}
-        <Button variant="primary" label={t('call.previewTalk')} disabled={!p || myChoice === true} onPress={() => { setSkippedNotice(false); choose(true); }} />
-        <Button label={t('call.previewSkip')} onPress={() => choose(false)} />
-        <Button variant="ghost" label={t('common.cancel')} onPress={() => { choose(false); router.back(); }} />
+            )}
+            <Body small muted style={{ flexShrink: 1 }}>{myChoice === true ? t('call.previewWaiting', { name: p?.name ?? '' }) : t('call.previewNoteShort')}</Body>
+          </View>
+          <Button variant="sun" icon={<Ionicons name="call" size={18} color={c.sunInk} />} label={t('call.previewTalk')} disabled={!p || myChoice === true} onPress={() => { setSkippedNotice(false); choose(true); }} />
+          <Button label={t('call.previewSkip')} onPress={() => choose(false)} />
+          <Pressable accessibilityRole="button" onPress={() => { choose(false); router.back(); }} style={{ alignSelf: 'center', padding: space.sm }}>
+            <Text style={{ color: c.muted, fontSize: 14 }}>{t('call.previewQuit')}</Text>
+          </Pressable>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -525,68 +537,65 @@ export default function Call() {
   const order = meFirst ? [t('call.you'), partner.name] : [partner.name, t('call.you')];
   // A new card stays up for a moment, so neither person can skip the other's topic right away.
   const nextIn = Math.ceil(question.at + QUESTION_COOLDOWN_SECONDS - elapsed);
+  // Sample calls take turns every few seconds so the screen shows how a real call looks.
+  const sampleTurn = !devSilent && Math.floor(elapsed / 5) % 2 === 0;
+  const partnerTalking = live ? talking.partner : sampleTurn;
+  const meTalking = live ? talking.me : !devSilent && !sampleTurn;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: bg }}>
-      <View style={{ flex: 1, padding: space.lg, gap: space.md }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Pill text={nudge ? t('call.aiActive') : t('call.aiIdle')} />
-          <Pill text={buddy ? t('home.buddy') : t('home.exchange')} />
+      <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ padding: space.lg, gap: space.md }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm }}>
+          <Pill text={buddy ? `${t('home.buddy')} · ${t('call.onlyLangShort', { lang: t(`lang.${lang}`) })}` : `${t('home.exchange')} · ${t(`lang.${lang}`)} / ${t(`lang.${profile.native}`)}`} />
+          <Text accessibilityRole="timer" style={{ color: '#fff', fontSize: 12, fontWeight: '700', fontVariant: ['tabular-nums'], backgroundColor: 'rgba(255,255,255,0.16)', borderRadius: 99, paddingHorizontal: 10, paddingVertical: 3, overflow: 'hidden' }}>
+            {required ? t('call.required', { time: formatClock(REQUIRED_SECONDS - elapsed) }) : `${t('call.extended')} · ${formatClock(elapsed)}`}
+          </Text>
+        </View>
+        <View style={{ height: 5, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
+          <View style={{ height: 5, width: `${Math.min(100, (elapsed / REQUIRED_SECONDS) * 100)}%`, backgroundColor: c.sun }} />
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
-          <Avatar name={partner.name} color={partner.color} avatar={partner.avatar} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16 }}>{partner.name}</Text>
-            <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>
-              {t('person.native', { lang: t(`lang.${partner.native}`) })}
-            </Text>
+        <View style={{ alignItems: 'center', gap: 6, marginTop: space.sm }}>
+          <View style={{ width: 176, height: 176, alignItems: 'center', justifyContent: 'center' }}>
+            <SpeakingRings active={partnerTalking} size={176} color={c.sun} />
+            <Avatar name={partner.name} color={partner.color} avatar={partner.avatar} photoUri={partner.photoUri} size={104} />
           </View>
-        </View>
-
-        <View style={{ alignItems: 'center', gap: space.sm, marginVertical: space.md }}>
-          <Text accessibilityRole="timer" style={{ color: '#fff', fontSize: 44, fontWeight: '700', fontVariant: ['tabular-nums'] }}>{formatClock(elapsed)}</Text>
-          <View style={{ height: 6, alignSelf: 'stretch', borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.18)', overflow: 'hidden' }}>
-            <View style={{ height: 6, width: `${Math.min(100, (elapsed / REQUIRED_SECONDS) * 100)}%`, backgroundColor: required ? '#fff' : '#7CF0B5' }} />
-          </View>
-          <Text style={{ color: 'rgba(255,255,255,0.85)', fontSize: 12 }}>
-            {required ? t('call.required', { time: formatClock(REQUIRED_SECONDS - elapsed) }) : t('call.extended')}
+          <Text style={{ color: '#fff', fontWeight: '800', fontSize: 20 }}>{partner.name}</Text>
+          <VoiceBars active={partnerTalking} color={c.sun} count={26} height={24} />
+          <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>
+            {partnerTalking ? t('call.partnerSpeaking', { name: partner.name }) : meTalking ? t('call.youSpeaking') : t('person.native', { lang: t(`lang.${partner.native}`) })}
           </Text>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: space.sm }}>
-          <Text style={{ color: '#fff', fontSize: 13, textAlign: 'center' }}>
-            {buddy ? t('call.onlyLang', { lang: t(`lang.${lang}`) }) : t('call.exchangeLangs', { learn: t(`lang.${lang}`), native: t(`lang.${profile.native}`) })}
-          </Text>
-        </View>
-
-        <View style={{ backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 18, padding: space.md, gap: 6 }}>
+        <View style={{ backgroundColor: '#FBF7EF', borderRadius: radius.lg, padding: space.md, gap: 6 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: space.sm }}>
-            <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: '700' }}>{t('call.question')}</Text>
-            <Text numberOfLines={1} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, flexShrink: 1 }}>{t('call.order', { first: order[0], second: order[1] })}</Text>
+            <Text style={{ color: '#9A6210', fontSize: 11, fontWeight: '800' }}>{t('call.question')}</Text>
+            <Text numberOfLines={1} style={{ color: '#756E64', fontSize: 11, flexShrink: 1 }}>{t('call.order', { first: order[0], second: order[1] })}</Text>
           </View>
-          {question.by === 'partner' ? <Text style={{ color: '#FFD166', fontSize: 11, fontWeight: '700' }}>{t('call.partnerDrew', { name: partner.name })}</Text> : null}
-          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16, lineHeight: 22 }}>{shown.q}</Text>
+          {question.by === 'partner' ? <Text style={{ color: '#9A6210', fontSize: 11, fontWeight: '700' }}>{t('call.partnerDrew', { name: partner.name })}</Text> : null}
+          <Text style={{ color: '#24221F', fontWeight: '800', fontSize: 16, lineHeight: 22 }}>{shown.q}</Text>
           {shown.options ? (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
               <OptionChip label={shown.options[0]} />
-              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>vs</Text>
+              <Text style={{ color: '#756E64', fontSize: 12 }}>vs</Text>
               <OptionChip label={shown.options[1]} />
             </View>
           ) : null}
-          <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{shown.hint}</Text>
+          <Text style={{ color: '#756E64', fontSize: 12 }}>{shown.hint}</Text>
           {canTranslate && translate ? (
-            <View style={{ borderLeftWidth: 2, borderLeftColor: 'rgba(255,255,255,0.5)', paddingLeft: space.sm, gap: 2 }}>
-              <Text style={{ color: '#fff', fontSize: 13 }}>{mine.q}</Text>
-              {mine.options ? <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>{mine.options.join(' vs ')}</Text> : null}
+            <View style={{ borderLeftWidth: 2, borderLeftColor: '#E2D9CA', paddingLeft: space.sm, gap: 2 }}>
+              <Text style={{ color: '#24221F', fontSize: 13 }}>{mine.q}</Text>
+              {mine.options ? <Text style={{ color: '#756E64', fontSize: 12 }}>{mine.options.join(' vs ')}</Text> : null}
             </View>
           ) : null}
-          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>{t('call.questionNote')}</Text>
+          <Text style={{ color: '#9A9288', fontSize: 11 }}>{t('call.questionNote')}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: 2 }}>
-            <GlassButton label={nextIn > 0 ? t('call.nextQuestionIn', { s: nextIn }) : t('call.nextQuestion')} disabled={nextIn > 0} onPress={drawQuestion} />
             {canTranslate ? (
-              <GlassButton label={translate ? t('call.hideTranslation') : t('call.showTranslation', { lang: t(`uiLangName.${uiLang}`) })} onPress={() => setTranslate((v) => !v)} />
+              <CardChip label={translate ? t('call.hideTranslation') : t('call.showTranslation', { lang: t(`uiLangName.${uiLang}`) })} onPress={() => setTranslate((v) => !v)} />
             ) : null}
+            <CardChip label={nextIn > 0 ? t('call.nextQuestionIn', { s: nextIn }) : t('call.nextQuestion')} disabled={nextIn > 0} onPress={drawQuestion} />
+            <CardChip icon="bulb-outline" label={t('call.help')} onPress={() => setSheet('help')} />
           </View>
         </View>
 
@@ -614,10 +623,16 @@ export default function Call() {
           </View>
         ) : null}
 
-        <View style={{ marginTop: 'auto', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: space.lg }}>
+      </ScrollView>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: space.lg, paddingHorizontal: space.lg, paddingVertical: space.md }}>
           <RoundButton icon="flag-outline" label={t('call.report')} onPress={() => setSheet('report')} />
-          <RoundButton icon="chatbox-ellipses-outline" label={t('call.help')} onPress={() => setSheet('help')} />
           <RoundButton icon={muted ? 'mic-off' : 'mic-outline'} label={t('call.mute')} onPress={() => { const m = !muted; setMuted(m); void room.current?.setMuted(m); }} active={muted} />
+          <View style={{ alignItems: 'center', gap: 3 }} accessible accessibilityLabel={meTalking ? t('call.youSpeaking') : t('call.you')}>
+            <View style={{ borderRadius: 99, borderWidth: 2, borderColor: meTalking ? c.sun : 'rgba(255,255,255,0.4)' }}>
+              <Avatar name={profile.name} color={profile.color} avatar={profile.avatar} photoUri={profile.photoUri} size={40} />
+            </View>
+            <VoiceBars active={meTalking && !muted} color="#FFFFFF" count={8} height={10} barWidth={2.5} seed={2} />
+          </View>
           {!required && kind === 'random' ? (
             <Pressable accessibilityRole="button" onPress={() => end('hangup')} style={{ backgroundColor: '#fff', borderRadius: 99, paddingHorizontal: 18, height: 50, justifyContent: 'center' }}>
               <Text style={{ color: '#111', fontWeight: '700' }}>{t('call.nextPerson')}</Text>
@@ -674,6 +689,16 @@ function GlassButton({ label, onPress, disabled }: { label: string; onPress: () 
     <Pressable accessibilityRole="button" accessibilityState={{ disabled: !!disabled }} disabled={disabled} onPress={onPress}
       style={{ backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: 99, paddingHorizontal: 14, paddingVertical: 6, opacity: disabled ? 0.5 : 1 }}>
       <Text style={{ color: '#fff', fontWeight: '700', fontSize: 12 }}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function CardChip({ label, onPress, disabled, icon }: { label: string; onPress: () => void; disabled?: boolean; icon?: React.ComponentProps<typeof Ionicons>['name'] }) {
+  return (
+    <Pressable accessibilityRole="button" accessibilityState={{ disabled: !!disabled }} disabled={disabled} onPress={onPress}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#EFE9DE', borderRadius: 99, paddingHorizontal: 11, paddingVertical: 6, opacity: disabled ? 0.55 : 1 }}>
+      {icon ? <Ionicons name={icon} size={13} color="#9A6210" /> : null}
+      <Text style={{ color: '#24221F', fontSize: 12, fontWeight: '700' }}>{label}</Text>
     </Pressable>
   );
 }

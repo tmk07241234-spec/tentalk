@@ -64,6 +64,7 @@ const ko: Translation = {
   },
   person: { native: '{{lang}} 원어민', languageOnly: '어학 전용', online: '온라인', trusted: '신뢰됨', new: '신규' },
   call: {
+    previewPip: '상대를 찾았어요. 목소리를 듣고 정해요', previewNoteShort: '두 사람 모두 "대화하기"를 고르면 시작돼요', previewQuit: '그만두기', onlyLangShort: '{{lang}}만', partnerSpeaking: '{{name}}님이 말하고 있어요', youSpeaking: '내가 말하고 있어요',
     failure: { mic: '마이크를 쓸 수 없어요', network: '연결하지 못했어요', suspended: '통화를 이용할 수 없어요', paused: '빠른 통화를 잠시 쉬고 있어요' }, failureBody: { mic: '브라우저나 기기 설정에서 Tentalk의 마이크를 허용한 뒤 다시 시도해 주세요.', network: '네트워크 상태를 확인하고 다시 시도해 주세요.', suspended: '가이드라인 위반으로 {{date}}까지 통화를 이용할 수 없어요.', paused: '10분 안에 스스로 통화를 끝내는 일이 이어져서 한동안 빠른 통화를 이용할 수 없어요. 다시 열리는 시간은 홈에서 확인할 수 있어요. 프로필에서 보내는 요청은 이용할 수 있어요.' },
     exchangeLangs: '{{learn}}와 {{native}}, 어느 쪽으로 말해도 괜찮아요. 질문은 내가 배우는 언어로 보여요', partnerDrew: '{{name}}님이 꺼낸 질문', nextQuestionIn: '다음 질문 ({{s}}초 후)',
     joining: '상대를 찾았어요. 연결 중…', audioBlocked: '상대 목소리를 들으려면 버튼을 눌러 주세요', audioOn: '소리 켜기',
@@ -136,12 +137,14 @@ const ko: Translation = {
     sentTitle: '요청을 보냈어요', sentBody: '{{name}}님이 수락하면 전화로 알려 드려요. 30초 안에 받으면 통화가 시작돼요. 놓쳐도 24시간 동안 알림에서 통화할 수 있어요.', ok: '확인',
   },
   notifications: {
+    emptyTitle: '지금은 조용해요', emptyBody: '통화 요청이 오거나 누군가 나를 팔로우하면 여기에서 알려 드려요.', emptyTip: '알림을 켜 두면 요청을 놓치지 않아요', openSettings: '알림 설정 ›',
     title: '알림', empty: '아직 알림이 없어요.', welcome: 'Tentalk에 오신 걸 환영해요! 먼저 빠른 통화로 첫 10분을 대화해 보세요.', theme: '이번 주 테마는 “추천하고 싶은 영화”예요.',
     followed: '{{name}}님이 나를 팔로우했어요', accepted: '{{name}}님이 요청을 수락했어요', call: '통화하기', incoming: '{{name}}님이 10분 대화하고 싶대요',
     accept: '수락하고 통화', decline: '지금은 안 돼요', expired: '만료됨', done: '처리됨', reportResult: '신고 검토가 끝났어요. 위반이 확인되어 상대에게 조치했어요. 협조해 주셔서 감사해요.', reportDismissed: '신고 검토가 끝났어요. 이번에는 위반이 확인되지 않았어요. 알려 주셔서 감사해요.', penalty: '나에 대한 신고를 검토한 결과 커뮤니티 가이드라인 위반이 확인됐어요. 신뢰 점수가 내려갔어요.', suspended: '가이드라인을 심각하게 위반해 {{date}}까지 통화를 이용할 수 없어요.', falseReport: '내 신고가 사실과 다르다고 판단됐어요. 신뢰 점수가 내려갔어요.',
     justNow: '방금', minutes: '{{n}}분 전', hours: '{{n}}시간 전', days: '{{n}}일 전', devIncoming: '개발용: 요청 받기',
   },
   connections: {
+    emptyTitle: '이야기할수록 연결이 늘어요', emptyFollowersTitle: '아직 팔로워가 없어요', emptyCta: '바로 이야기해 보기', steps: { talk: '이야기하기', talkSub: '10분 통화하기', finish: '10분 끝까지', finishSub: '끝까지 이야기하면', follow: '팔로우하기', followSub: '또 이야기하고 싶은 사람과 연결' },
     title: '연결', note: '팔로우는 10분 대화를 끝까지 한 상대만 할 수 있어요. 연결은 대화로 늘어나요.',
     mutual: '맞팔로우', following: '팔로잉', followers: '팔로워', mutualTag: '맞팔로우',
     empty_mutual: '서로 팔로우한 사람이 여기에 표시돼요.',
@@ -149,6 +152,7 @@ const ko: Translation = {
     empty_followers: '나를 팔로우한 사람이 여기에 표시돼요.',
   },
   history: {
+    emptyTitle: '첫 10분을 이야기해 봐요', emptyBody: '이야기한 상대와 시간이 여기에 남아요.', emptyExample: '통화하면 이렇게 남아요', exampleName: 'Minho (예시)', exampleLine: '연습 파트너 · 10분 완주 · 어제', emptyCta: '빠른 매칭으로 이야기하기',
     title: '기록', empty: '아직 통화하지 않았어요.', note: '빠른 통화에서 둘 다 10분 이상 대화한 상대는 여기서 언제든 프로필을 보고 팔로우할 수 있어요.',
     random: '빠른 매칭', direct: '요청', open: '팔로우 가능', hidden: '10분 미만', view: '보기', unknown: '상대',
   },

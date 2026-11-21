@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Linking, Platform, Pressable, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 import { Avatar } from '@/components/Avatar';
-import { Pip } from '@/components/Pip';
+import { EmptyState } from '@/components/EmptyState';
 import { useNow, useRelativeTime } from '@/components/people';
 import { Body, Button, Card, Screen, Title } from '@/components/ui';
 import { SAMPLE_PARTNERS } from '@/data/samplePartners';
@@ -58,10 +58,18 @@ export default function Notifications() {
     <Screen>
       <Title>{t('notifications.title')}</Title>
       {visible.length === 0 ? (
-        <View style={{ alignItems: 'center', gap: space.md, paddingVertical: space.xl }}>
-          <Pip pose="sleepy" size={96} />
-          <Body muted>{t('notifications.empty')}</Body>
-        </View>
+        <EmptyState pose="sleepy" title={t('notifications.emptyTitle')} body={t('notifications.emptyBody')}>
+          {Platform.OS !== 'web' ? (
+            <Pressable accessibilityRole="button" onPress={() => void Linking.openSettings()}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, backgroundColor: c.surface, borderRadius: 18, padding: space.md }}>
+              <Ionicons name="notifications-outline" size={22} color={c.sunText} />
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: c.ink, fontSize: 13 }}>{t('notifications.emptyTip')}</Text>
+                <Text style={{ color: c.buddy, fontWeight: '700', fontSize: 13, marginTop: 2 }}>{t('notifications.openSettings')}</Text>
+              </View>
+            </Pressable>
+          ) : null}
+        </EmptyState>
       ) : null}
       {visible.map((n) => {
         const p = n.partnerId ? people.find((x) => x.id === n.partnerId) : undefined;
