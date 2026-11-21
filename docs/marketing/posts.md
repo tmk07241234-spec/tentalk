@@ -10,6 +10,8 @@
 
 ## 守ること
 
+- 広告では「出会い目的なし」とは言わない（運営が完全には防げないため）。打ち出すのは、必ず10分話す通話・SNS要素なし・チャットなしでいきなり通話・スピーキング練習に特化、の4点。
+
 - 「自分が作ったアプリ」だと必ず書く（Reddit では隠すと削除・凍結の対象）。
 - 利用者数や評価を盛らない。知人に高評価を頼まない（App Store の規約違反）。
 - 18歳以上のアプリなので、高校生が多い場には投稿しない。
@@ -28,20 +30,19 @@
 
 ### r/SideProject・r/iosapps 用（英語）
 
-**Title:** I built a language app where you can only talk – 10-minute voice calls, no chat, no dating
+**Title:** I built a language app where you can only talk – every call is a full 10 minutes, no chat, no feed
 
 **Body:**
 
 Hi! I'm a solo developer from Japan, and I made Tentalk, a free iPhone app for speaking practice.
 
-Most language exchange apps turn into chat apps (or dating apps). I wanted the opposite: a place where you just talk.
+Most language exchange apps turn into chat or social apps. I wanted the opposite: a place built only for speaking practice, where you go straight into a call.
 
 How it works:
-- 1-on-1 voice calls of 10 minutes, in English, Japanese, Korean or Spanish
+- 1-on-1 voice calls in English, Japanese, Korean or Spanish, and every call is a full 10 minutes (leaving early has consequences), so you actually practise
 - Before a call you hear the other person's voice intro and see their practice record, then choose Talk or Skip
 - A question card each call, so beginners don't run out of things to say
-- No messaging, no timeline. You can follow someone only after you finish a 10-minute call with them
-- Flirting or dating approaches at first contact are not allowed; report and block are always one tap away
+- No messaging, no likes, no timeline – no social media features at all. You can follow someone only after you finish a 10-minute call with them
 
 It's free, with no ads. It's new, so there aren't many people yet – the best time to find a partner is [通話タイム：例 9 pm JST / 12 pm UK / 7 am US Eastern].
 
@@ -51,7 +52,7 @@ I'd love honest feedback, especially on what would make you come back for a seco
 
 ### r/LearnJapanese の Self-Promo スレッド用（英語・コメント）
 
-I made a free iPhone app for Japanese speaking practice: Tentalk. You get 10-minute 1-on-1 voice calls with native Japanese speakers who are learning English (language exchange, half and half), or with other Japanese learners (Japanese only). Each call has a question card with an English translation, plus help phrases when you get stuck. No chat and no dating – just talking. Free, no ads. (I'm the developer.) https://apps.apple.com/app/id6830054286
+I made a free iPhone app for Japanese speaking practice: Tentalk. You get 10-minute 1-on-1 voice calls with native Japanese speakers who are learning English (language exchange, half and half), or with other Japanese learners (Japanese only). Each call has a question card with an English translation, plus help phrases when you get stuck. No chat and no feed – you go straight into a call, and every call is a full 10 minutes. Free, no ads. (I'm the developer.) https://apps.apple.com/app/id6830054286
 
 ### r/languagelearning の管理者へのメッセージ（英語）
 
@@ -67,9 +68,10 @@ Hi mods, I'm the solo developer of Tentalk, a free iPhone app (no ads) for speak
 
 1日10分、英語を「話す」練習ができるアプリを個人で作りました。
 
-・1対1の音声通話を10分だけ
+・チャットなし。いきなり1対1の音声通話から
+・毎回かならず10分話しきる（途中で抜けられない）
+・いいね・タイムラインなどのSNS要素なし。話す練習だけに特化
 ・毎回お題が出るから、初心者でも会話が続く
-・チャットなし、出会い目的なし。フォローできるのは10分話しきった相手だけ
 
 無料・広告なしです。まだ始まったばかりなので、[通話タイム：例 毎晩21時]に来てもらえるとつながりやすいです🙏
 
@@ -77,13 +79,13 @@ https://apps.apple.com/app/id6830054286
 
 #英語学習 #英会話 #スピーキング #個人開発
 
-（画像：`ja-square-1.png` か `ja-square-2.png`）
+（画像：`ja-square-2.png` か `ja-square-3.png`）
 
 ### English
 
 I built a free app for speaking practice: 10-minute 1-on-1 voice calls in English, Japanese, Korean or Spanish.
 
-No chat. No dating. A question card keeps it going, and you can only follow people you finished a call with.
+No chat, no feed – straight into a call, and every call is a full 10 minutes. Built only for speaking practice.
 
 https://apps.apple.com/app/id6830054286
 
@@ -95,13 +97,13 @@ https://apps.apple.com/app/id6830054286
 
 **日本語キャプション**
 
-1日10分、話すだけの語学アプリ。お題があるから初心者でも続く。チャットも出会い目的もなし🗣️
+チャットなし、SNSなし、いきなり通話。毎回10分話しきる、スピーキング練習だけのアプリ🗣️
 無料・広告なし｜プロフィールのリンクから
 #英語学習 #英会話 #語学 #スピーキング練習 #韓国語勉強 #スペイン語 #個人開発
 
 **English caption**
 
-A language app for 10-minute talks. Question cards keep it going. No chat, no dating 🗣️
+No chat, no feed – straight into a 10-minute call. Built only for speaking practice 🗣️
 Free, no ads – link in bio
 #languagelearning #learnjapanese #speakingpractice #languageexchange #indiedev
 

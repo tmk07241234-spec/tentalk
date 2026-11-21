@@ -8,12 +8,12 @@ const pip = fs.readFileSync('/home/user/tentalk/scripts/store/pip-wave.svg', 'ut
 const icon = 'data:image/png;base64,' + fs.readFileSync('/home/user/tentalk/assets/icon.png').toString('base64');
 const T = {
   ja: { slides: [['1日10分、\n話す練習。', '英語・韓国語・スペイン語・日本語を\n1対1の音声通話で', '1-home', '#0E6E59'],
-    ['チャットなし。\n出会い目的なし。', 'あるのは10分の会話だけ。\nフォローできるのは話しきった相手だけ', '2-match', '#C9603F'],
-    ['お題があるから、\n初心者でも続く。', '毎回のお題カードと\n困ったときのお助けフレーズ', '3-call', '#1A35A0']],
+    ['チャットなし。\nSNSなし。\nいきなり通話。', 'いいねもタイムラインもなし。\nあるのは10分の会話だけ', '2-match', '#C9603F'],
+    ['毎回10分、\n話しきる。', '途中で抜けない10分通話と\n毎回のお題で、話す力だけを鍛える', '3-call', '#1A35A0']],
     end: ['Tentalk', '10分話すだけの語学アプリ', 'App Store で無料'] },
   en: { slides: [['Speak a language,\n10 minutes a day', 'One-on-one voice calls in English,\nJapanese, Korean and Spanish', '1-home', '#0E6E59'],
-    ['No chat.\nNo dating.', 'Just 10 minutes of real talk.\nFollow only people you\nfinished a call with', '2-match', '#C9603F'],
-    ['Questions keep\nit going', 'A question card every call,\nand phrases for when you’re stuck', '3-call', '#1A35A0']],
+    ['No chat.\nNo feed.\nJust talk.', 'No likes, no timeline.\nJust 10 minutes of\nreal conversation', '2-match', '#C9603F'],
+    ['Every call,\na full 10 minutes', 'A question card keeps it going.\nBuilt only for speaking practice', '3-call', '#1A35A0']],
     end: ['Tentalk', 'A language app for 10-minute talks', 'Free on the App Store'] },
 };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n/g, '<br>');
