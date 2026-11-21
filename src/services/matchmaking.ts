@@ -37,7 +37,8 @@ export function findSamplePartner(id: string): Partner | undefined {
 }
 
 /** How long a random search runs before showing "no one found". */
-export const SEARCH_TIMEOUT_MS = 90_000;
+/** Long enough for someone told by a push (domain/wake) to open the app and join. */
+export const SEARCH_TIMEOUT_MS = 180_000;
 const STEP_MS = 2500;
 
 export interface CallInfo {
@@ -53,10 +54,13 @@ export interface CallInfo {
  */
 export async function searchRandomCall(req: MatchRequest, signal: AbortSignal): Promise<string | null> {
   const until = Date.now() + SEARCH_TIMEOUT_MS;
+  let woke = false;
   try {
     while (!signal.aborted && Date.now() < until) {
       const r = await api<{ callId?: string; waiting?: true }>('/api/match', req);
       if (r.callId) return r.callId;
+      // Nobody waiting at the start: let a few possible partners know (at most every 10 minutes, see domain/wake).
+      if (!woke) { woke = true; void api('/api/call-wake', req).catch(() => {}); }
       await new Promise((ok) => setTimeout(ok, STEP_MS));
     }
   } finally {

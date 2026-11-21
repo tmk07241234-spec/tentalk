@@ -175,7 +175,7 @@ const es: Translation = {
       none: 'No te llegan solicitudes. Puedes usar llamadas rápidas y enviar solicitudes tú.',
     },
     noConnections: 'Aún no tienes contactos. Sigue a alguien tras una llamada completa de 10 minutos para elegirlo aquí.',
-    notifications: 'Notificaciones', notifyAccepted: 'Cuando aceptan una solicitud mía', notifyFollowed: 'Cuando alguien me sigue', notifyTheme: 'Tema semanal y novedades',
+    notifications: 'Notificaciones', notifyAccepted: 'Cuando aceptan una solicitud mía', notifyFollowed: 'Cuando alguien me sigue', notifyTheme: 'Tema semanal y novedades', notifySearching: 'Cuando alguien busca pareja de práctica', notifySearchingNote: 'Cuando alguien con quien podrías hablar espera en Rápida (nunca de noche, como máximo cada 3 horas)',
     notificationsNote: 'Los avisos de solicitudes recibidas siguen lo elegido en «Quién puede pedirte una llamada».',
   },
   avatarPicker: { initial: 'Inicial', choosePhoto: 'Elegir una foto', changePhoto: 'Cambiar foto', noPhoto: 'Sin foto', note: 'Elige cualquier foto de tu galería. Sin foto, se muestra una ilustración o tu inicial.', illustration: 'Ilustración', background: 'Fondo', hair: 'Peinado', hairColor: 'Color de pelo', skin: 'Tono de piel', outfit: 'Ropa', },

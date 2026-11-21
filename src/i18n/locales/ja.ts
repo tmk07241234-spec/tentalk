@@ -173,7 +173,7 @@ const ja = {
       none: 'リクエストは届きません。クイックマッチと、自分から送るリクエストは使えます。',
     },
     noConnections: 'つながりのある人がまだいません。10分話しきった相手をフォローすると選べるようになります。',
-    notifications: '通知', notifyAccepted: '送ったリクエストが承認されたとき', notifyFollowed: 'フォローされたとき', notifyTheme: '今週のテーマとお知らせ',
+    notifications: '通知', notifyAccepted: '送ったリクエストが承認されたとき', notifyFollowed: 'フォローされたとき', notifyTheme: '今週のテーマとお知らせ', notifySearching: '誰かが相手を探しているとき', notifySearchingNote: '話せる相手がクイックマッチで待っているときにお知らせ（夜間は送りません・3時間に1回まで）',
     notificationsNote: '届いたリクエストの通知は、上の「受け付ける相手」で決まります。',
   },
   avatarPicker: { initial: '頭文字', choosePhoto: '写真を選ぶ', changePhoto: '写真を変える', noPhoto: '写真を使わない場合', note: 'フォトライブラリから好きな写真を選べます。写真を使わない場合は、イラストか頭文字になります。', illustration: 'イラスト', background: '背景の色', hair: '髪型', hairColor: '髪の色', skin: '肌の色', outfit: '服の色', },

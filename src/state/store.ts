@@ -94,7 +94,7 @@ export interface Settings {
   requestsFrom: RequestPolicy;
   requestAllowList: string[];
   /** Notifications I want besides incoming requests. Push uses the same switches once it exists. */
-  notify: { accepted: boolean; followed: boolean; theme: boolean };
+  notify: { accepted: boolean; followed: boolean; theme: boolean; /** Pushes when someone who could be matched is searching (1.3). */ searching: boolean };
 }
 
 export interface AppState {
@@ -164,7 +164,7 @@ export interface AppState {
 export const DEFAULT_SETTINGS: Settings = {
   languageOnly: true, languageOnlyPartners: true, matchLevel: false,
   requestsFrom: 'everyone', requestAllowList: [],
-  notify: { accepted: true, followed: true, theme: true },
+  notify: { accepted: true, followed: true, theme: true, searching: true },
 };
 
 /** Saved settings from an older version lack newer fields; fill them with defaults. */

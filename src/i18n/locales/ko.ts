@@ -175,7 +175,7 @@ const ko: Translation = {
       none: '요청이 오지 않아요. 빠른 통화와 내가 보내는 요청은 쓸 수 있어요.',
     },
     noConnections: '아직 연결된 사람이 없어요. 10분 대화를 끝까지 한 상대를 팔로우하면 고를 수 있어요.',
-    notifications: '알림', notifyAccepted: '보낸 요청이 승인됐을 때', notifyFollowed: '누군가 나를 팔로우했을 때', notifyTheme: '이번 주 테마와 소식',
+    notifications: '알림', notifyAccepted: '보낸 요청이 승인됐을 때', notifyFollowed: '누군가 나를 팔로우했을 때', notifyTheme: '이번 주 테마와 소식', notifySearching: '누군가 상대를 찾을 때', notifySearchingNote: '이야기할 수 있는 사람이 빠른 매칭에서 기다릴 때 알려 드려요 (밤에는 보내지 않고, 3시간에 한 번까지)',
     notificationsNote: '받은 요청 알림은 위의 “통화 요청을 받을 상대”에 따라 정해져요.',
   },
   avatarPicker: { initial: '이니셜', choosePhoto: '사진 고르기', changePhoto: '사진 바꾸기', noPhoto: '사진을 쓰지 않을 때', note: '사진 보관함에서 원하는 사진을 고를 수 있어요. 사진이 없으면 일러스트나 이니셜로 표시돼요.', illustration: '일러스트', background: '배경 색', hair: '헤어스타일', hairColor: '머리 색', skin: '피부 톤', outfit: '옷 색', },

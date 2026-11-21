@@ -73,6 +73,7 @@ export default function SettingsScreen() {
         <SwitchRow label={t('appSettings.notifyAccepted')} value={settings.notify.accepted} onChange={(v) => notify({ accepted: v })} />
         <SwitchRow label={t('appSettings.notifyFollowed')} value={settings.notify.followed} onChange={(v) => notify({ followed: v })} />
         <SwitchRow label={t('appSettings.notifyTheme')} value={settings.notify.theme} onChange={(v) => notify({ theme: v })} />
+        <SwitchRow label={t('appSettings.notifySearching')} note={t('appSettings.notifySearchingNote')} value={settings.notify.searching} onChange={(v) => notify({ searching: v })} />
         <Body small muted>{t('appSettings.notificationsNote')}</Body>
       </Card>
 

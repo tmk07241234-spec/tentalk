@@ -175,7 +175,7 @@ const en: Translation = {
       none: 'No requests reach you. You can still use quick matches and send requests yourself.',
     },
     noConnections: 'No connections yet. Follow someone after a full 10-minute call to pick them here.',
-    notifications: 'Notifications', notifyAccepted: 'When a request I sent is accepted', notifyFollowed: 'When someone follows me', notifyTheme: 'Weekly theme and news',
+    notifications: 'Notifications', notifyAccepted: 'When a request I sent is accepted', notifyFollowed: 'When someone follows me', notifyTheme: 'Weekly theme and news', notifySearching: 'When someone is looking for a partner', notifySearchingNote: 'When someone you could talk with is waiting in quick match (never at night, at most once every 3 hours)',
     notificationsNote: 'Incoming request notifications follow “Who can send you call requests” above.',
   },
   avatarPicker: { initial: 'Initial', choosePhoto: 'Choose a photo', changePhoto: 'Change photo', noPhoto: 'Without a photo', note: 'Pick any photo from your library. Without one, you get an illustration or your initial.', illustration: 'Illustration', background: 'Background', hair: 'Hair', hairColor: 'Hair colour', skin: 'Skin tone', outfit: 'Clothes', },

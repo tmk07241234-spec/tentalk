@@ -1,12 +1,12 @@
 import { AppState } from 'react-native';
 import { doc, updateDoc } from 'firebase/firestore';
 
+import { ONLINE_WINDOW_MS } from '@/domain/presence';
 import { useApp } from '@/state/store';
 import { db } from './firebase/db';
 
 const HEARTBEAT_MS = 60_000;
-/** Someone seen within this window counts as online. */
-export const ONLINE_WINDOW_MS = 150_000;
+export { ONLINE_WINDOW_MS };
 
 let inCall = false;
 
