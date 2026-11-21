@@ -22,7 +22,9 @@ service cloud.firestore {
         && request.resource.data.bio is string
         && request.resource.data.bio.size() <= 300
         && (!('hobbies' in request.resource.data) || request.resource.data.hobbies.size() <= 20)
-        && (!('learning' in request.resource.data) || request.resource.data.learning.size() <= 3);
+        && (!('learning' in request.resource.data) || request.resource.data.learning.size() <= 3)
+        && (!('avatar' in request.resource.data) || request.resource.data.avatar == null
+            || (request.resource.data.avatar is string && request.resource.data.avatar.size() <= 24));
       allow delete: if isOwner(uid);
 
       // Settings, follows, blocks, call history and trust score: owner only.
