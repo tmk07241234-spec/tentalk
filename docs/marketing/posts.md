@@ -44,7 +44,9 @@ How it works:
 - A question card each call, so beginners don't run out of things to say
 - No messaging, no likes, no timeline – no social media features at all. You can follow someone only after you finish a 10-minute call with them
 
-It's free, with no ads. It's brand new, so there aren't many people yet – if nobody is online when you try, please check back later.
+It's free, with no ads. It's brand new, so there aren't many people yet. When you start a search and nobody is waiting, a few people you could talk with get a gentle notification, so give it a couple of minutes.
+
+(I built it with the help of AI coding tools; the idea, design decisions and testing are mine.)
 
 App Store: https://apps.apple.com/app/id6830054286
 
