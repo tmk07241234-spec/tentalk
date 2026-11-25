@@ -36,7 +36,12 @@
 
 Hi! I'm a solo developer from Japan, and I made Tentalk, a free iPhone app for speaking practice.
 
-Most language exchange apps turn into chat or social apps. I wanted the opposite: a place built only for speaking practice, where you go straight into a call.
+Why I built it: I've used a lot of language exchange apps, and they kept letting me down in the same ways.
+- Most of them work like social media. Profiles, likes and posts decide who gets attention, so some people hardly ever get a message.
+- For actually improving, a 1-on-1 call was by far the best practice. But getting close enough to someone to call them takes a lot of chatting first.
+- And once you do become "call every day" partners, that can turn into its own pressure.
+
+So I wanted something simpler: skip the small talk over text and the social games, and just start speaking practice with a call.
 
 How it works:
 - 1-on-1 voice calls in English, Japanese, Korean or Spanish, and every call is a full 10 minutes (leaving early has consequences), so you actually practise
